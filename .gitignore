@@ -1,0 +1,5 @@
+/server/.env
+/server/node_modules/
+/.idea/vcs.xml
+/.idea/modules.xml
+/.idea/flash-cards.iml
