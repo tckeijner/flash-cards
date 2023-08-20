@@ -1,6 +1,6 @@
 import * as express from 'express';
 import * as mongodb from 'mongodb';
-import {collections} from './database';
+import { collections } from './database';
 
 export const userRouter = express.Router();
 userRouter.use(express.json());
@@ -10,7 +10,7 @@ userRouter.get('/', async (_req, res) => {
     try {
         const users = await collections.users.find({}).toArray();
         res.status(200).send(users);
-    } catch(error) {
+    } catch (error) {
         res.status(500).send(error.message);
     }
 });
@@ -37,6 +37,13 @@ userRouter.get('/:id', async (req, res) => {
 userRouter.post('/', async (req, res) => {
     try {
         const user = req.body;
+        const isUsernameTaken = await collections.users.findOne({ username: user.username })
+        if (isUsernameTaken) {
+            res.status(409).send(`Username ${user.username} is already taken`);
+            return;
+        }
+
+
         const result = await collections.users.insertOne(user);
 
         if (result.acknowledged) {

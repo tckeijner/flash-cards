@@ -1,38 +1,37 @@
-import {Component} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {AccountService} from "../account.service";
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { AccountService, AccountServiceErrors } from "../account.service";
 
 @Component({
     selector: 'app-create-account',
-    template: `
-        <div>
-            <form [formGroup]="createAccountForm" (ngSubmit)="submitForm()">
-                <label for="username">Username</label>
-                <input type="text" id="username" formControlName="username" required>
-                <label for="password">Password</label>
-                <input type="password" id="password" formControlName="password" required>
-                <button type="submit">Submit</button>
-            </form>
-        </div>
-    `,
-    styles: [
-    ]
+    templateUrl: 'create-account.component.html',
+    styles: []
 })
 export class CreateAccountComponent {
     createAccountForm: FormGroup;
+    showUsernameTaken = false;
+    accountCreatedMessage: null | string = null;
 
     constructor(
         private accountService: AccountService
     ) {
-        this.createAccountForm = new FormGroup<any>({
+        this.createAccountForm = new FormGroup({
             username: new FormControl('', Validators.required),
             password: new FormControl('', Validators.required),
-        })
+        });
     }
 
     submitForm() {
-        this.accountService.createUser(this.createAccountForm.value).subscribe(result => {
-            console.log(result);
-        });
+        this.accountService.createUser(this.createAccountForm.value).subscribe({
+            next: (() => {
+                this.accountCreatedMessage = `Account created with username ${this.createAccountForm.value.username}`
+                this.showUsernameTaken = false;
+            }),
+            error: (error: Error) => {
+                if (error.message === AccountServiceErrors.UsernameTaken) {
+                    this.showUsernameTaken = true
+                }
+            }
+        })
     }
 }

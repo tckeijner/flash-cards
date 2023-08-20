@@ -1,0 +1,10 @@
+<div>
+    <form [formGroup]="createAccountForm" (ngSubmit)="submitForm()">
+        <label for="username">Username</label>
+        <input type="text" id="username" formControlName="username" required>
+        <label for="password">Password</label>
+        <input type="password" id="password" formControlName="password" required>
+        <button type="submit">Submit</button>
+    </form>
+    <div *ngIf="accountCreatedMessage">{{accountCreatedMessage}}</div>
+</div>
