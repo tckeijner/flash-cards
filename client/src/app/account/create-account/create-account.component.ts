@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AccountService, AccountServiceErrors } from "../account.service";
+import { confirmPasswordValidator } from "./create-account.validators";
 
 @Component({
     selector: 'app-create-account',
@@ -8,23 +9,41 @@ import { AccountService, AccountServiceErrors } from "../account.service";
     styles: []
 })
 export class CreateAccountComponent {
-    createAccountForm: FormGroup;
+    form: FormGroup;
     showUsernameTaken = false;
     accountCreatedMessage: null | string = null;
+    wasValidated = false;
 
     constructor(
         private accountService: AccountService
     ) {
-        this.createAccountForm = new FormGroup({
-            username: new FormControl('', Validators.required),
-            password: new FormControl('', Validators.required),
-        });
+        this.form = new FormGroup({
+            username: new FormControl(null, [
+                Validators.required,
+                Validators.minLength(6),
+                Validators.maxLength(20)
+            ]),
+            password: new FormControl(null, [
+                Validators.required,
+                Validators.minLength(8),
+                Validators.maxLength(20)
+
+            ]),
+            passwordConfirm: new FormControl(null, [
+                Validators.required
+            ]),
+        }, [confirmPasswordValidator]);
     }
 
     submitForm() {
-        this.accountService.createUser(this.createAccountForm.value).subscribe({
+        this.wasValidated = true;
+        if (this.form.invalid) {
+            return;
+        }
+
+        this.accountService.createUser(this.form.value).subscribe({
             next: (() => {
-                this.accountCreatedMessage = `Account created with username ${this.createAccountForm.value.username}`
+                this.accountCreatedMessage = `Account created with username ${this.form.value.username}`
                 this.showUsernameTaken = false;
             }),
             error: (error: Error) => {
