@@ -1,45 +1,47 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { AccountService, AccountServiceErrors } from "../account.service";
-import { confirmPasswordValidator } from "./create-account.validators";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { AccountService } from "../account.service";
+import { confirmPasswordValidator, createIsUsernameTakenValidator } from "./create-account.validators";
 
 @Component({
     selector: 'app-create-account',
     templateUrl: 'create-account.component.html',
-    styles: []
 })
 export class CreateAccountComponent {
     form: FormGroup;
     showUsernameTaken = false;
     accountCreatedMessage: null | string = null;
     wasValidated = false;
+    errorMessage: null | string = null;
 
     constructor(
-        private accountService: AccountService
+        private accountService: AccountService,
+        private fb: FormBuilder
     ) {
-        this.form = new FormGroup({
-            username: new FormControl(null, [
+        this.form = fb.group({
+            username: [null, [
                 Validators.required,
                 Validators.minLength(6),
                 Validators.maxLength(20)
-            ]),
-            password: new FormControl(null, [
+            ], [
+                createIsUsernameTakenValidator(this.accountService)
+            ]],
+            password: [null, [
                 Validators.required,
-                Validators.minLength(8),
+                Validators.minLength(6),
                 Validators.maxLength(20)
-
-            ]),
-            passwordConfirm: new FormControl(null, [
-                Validators.required
-            ]),
-        }, [confirmPasswordValidator]);
+            ]],
+            passwordConfirm: [null, [
+                Validators.required,
+                confirmPasswordValidator
+            ]]
+        });
     }
 
     submitForm() {
         this.wasValidated = true;
-        if (this.form.invalid) {
-            return;
-        }
+        console.log(this.form.controls['username'].errors)
+        if (this.form.invalid) { return; }
 
         this.accountService.createUser(this.form.value).subscribe({
             next: (() => {
@@ -47,9 +49,7 @@ export class CreateAccountComponent {
                 this.showUsernameTaken = false;
             }),
             error: (error: Error) => {
-                if (error.message === AccountServiceErrors.UsernameTaken) {
-                    this.showUsernameTaken = true
-                }
+                this.errorMessage = error.message;
             }
         })
     }
