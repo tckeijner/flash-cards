@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CreateAccountComponent } from "./create-account/create-account.component";
 import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
+import { CreateAccountComponent } from "./create-account/create-account.component";
 import { AccountService } from "./account.service";
 
 

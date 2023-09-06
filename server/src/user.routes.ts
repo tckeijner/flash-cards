@@ -33,6 +33,19 @@ userRouter.get('/:id', async (req, res) => {
     }
 });
 
+// GET check availability of the username
+userRouter.get('/checkAvailability/:username', async (req, res) => {
+    try {
+        const username = req?.params?.username;
+        // findOne is used to return one user with the provided username
+        const isUsernameTaken = await collections.users.findOne({ username });
+        // send false if the name is already taken
+        res.status(200).send(!isUsernameTaken);
+    } catch (error) {
+        res.status(500).send('Internal server error');
+    }
+});
+
 // POST to create a new user
 userRouter.post('/', async (req, res) => {
     try {
