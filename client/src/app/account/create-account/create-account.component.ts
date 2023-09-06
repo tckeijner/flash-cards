@@ -18,7 +18,7 @@ export class CreateAccountComponent {
         private accountService: AccountService,
         private fb: FormBuilder
     ) {
-        this.form = fb.group({
+        this.form = this.fb.group({
             username: [null, [
                 Validators.required,
                 Validators.minLength(6),
