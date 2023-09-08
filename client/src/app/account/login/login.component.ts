@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Store } from "@ngrx/store";
 import { AccountActions } from "../../state/account.actions";
 import { AccountDataModel } from "../account.model";
+import { Router } from "@angular/router";
 
 @Component({
     selector: 'app-login',
@@ -19,8 +20,10 @@ export class LoginComponent {
     constructor(
         private accountService: AccountService,
         private fb: FormBuilder,
-        private store: Store
+        private store: Store,
+        private router: Router
     ) {
+        // create a formgroup
         this.form = this.fb.group({
             username: [null],
             password: [null],
@@ -29,12 +32,15 @@ export class LoginComponent {
 
     submitForm() {
         this.wasValidated = true;
+        // Cancel submission if the form is invalid
         if (this.form.invalid) { return; }
 
         this.accountService.login(this.form.value).subscribe({
             next: ((accountData) => {
+                // Load account data (username, token) into the store.
                 this.store.dispatch(AccountActions.loadAccountData(accountData))
-                this.loginSuccessfulMessage = `User logged in`
+                // navigate to the Collections page after login
+                this.router.navigate(['collections']);
             }),
             error: (error) => {
                 this.errorMessage = error.error;

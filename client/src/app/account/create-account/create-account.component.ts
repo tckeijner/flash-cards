@@ -9,8 +9,8 @@ import { confirmPasswordValidator, createIsUsernameTakenValidator } from "./crea
 })
 export class CreateAccountComponent {
     form: FormGroup;
-    showUsernameTaken = false;
     accountCreatedMessage: null | string = null;
+    accountCreated = false;
     wasValidated = false;
     errorMessage: null | string = null;
 
@@ -18,6 +18,7 @@ export class CreateAccountComponent {
         private accountService: AccountService,
         private fb: FormBuilder
     ) {
+        // Create a formgroup with the required validators
         this.form = this.fb.group({
             username: [null, [
                 Validators.required,
@@ -40,12 +41,15 @@ export class CreateAccountComponent {
 
     submitForm() {
         this.wasValidated = true;
+        // Cancel submission if form is invalid
         if (this.form.invalid) { return; }
+        // disable the form before sending the request
+        this.form.disable();
 
         this.accountService.createUser(this.form.value).subscribe({
             next: (() => {
                 this.accountCreatedMessage = `Account created with username ${this.form.value.username}`
-                this.showUsernameTaken = false;
+                this.accountCreated = true;
             }),
             error: (error: Error) => {
                 this.errorMessage = error.message;

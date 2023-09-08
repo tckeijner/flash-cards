@@ -2,7 +2,7 @@
     <form class="col needs-validation"  [formGroup]="form" (ngSubmit)="submitForm()" novalidate>
         <div class="m-2">
             <div class="input-group has-validation" >
-                <input class="form-control" [ngClass]="{ 'is-invalid': wasValidated && form.controls['username'].errors }"
+                <input class="form-control disabled" [ngClass]="{ 'is-invalid': wasValidated && form.controls['username'].errors }"
                        type="text" id="username" formControlName="username" placeholder="Username">
                 <div *ngIf="form.controls['username'].errors?.['required']" class="invalid-feedback">Username is required</div>
                 <div *ngIf="form.controls['username'].errors?.['minlength'] || form.controls['username'].errors?.['maxlength']"
@@ -28,8 +28,11 @@
                 <div *ngIf="form.controls['passwordConfirm'].errors?.['passwordNotEqual']" class="invalid-feedback">Passwords do not match</div>
             </div>
         </div>
-        <button class="btn btn-primary m-2" type="submit">Submit</button>
-        <div class="m-2" *ngIf="accountCreatedMessage">{{ accountCreatedMessage }}</div>
-        <div class="m-2 alert alert-danger" *ngIf="errorMessage">{{ errorMessage }}</div>
+        <div class="d-grid g-2">
+            <button class="btn btn-primary m-2" type="submit" [disabled]="accountCreated">Submit</button>
+            <div class="m-2 alert alert-info" *ngIf="accountCreatedMessage">{{ accountCreatedMessage }}</div>
+            <div class="m-2 alert alert-danger" *ngIf="errorMessage">{{ errorMessage }}</div>
+            <button *ngIf="accountCreated" class="btn btn-primary m-2" type="button"><a class="routerLink" routerLink="/login">Login</a></button>
+        </div>
     </form>
 </div>
