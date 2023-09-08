@@ -40,7 +40,6 @@ export class CreateAccountComponent {
 
     submitForm() {
         this.wasValidated = true;
-        console.log(this.form.controls['username'].errors)
         if (this.form.invalid) { return; }
 
         this.accountService.createUser(this.form.value).subscribe({

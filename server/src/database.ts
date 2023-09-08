@@ -1,8 +1,9 @@
 import * as mongodb from 'mongodb';
-import {User} from './user';
+import { AuthenticationToken, User } from './user';
 
 export const collections: {
-    users?: mongodb.Collection<User>
+    users?: mongodb.Collection<User>,
+    authentication?: mongodb.Collection<AuthenticationToken>
 } = {};
 
 /**
@@ -14,12 +15,14 @@ export async function connectToDatabase(uri: string) {
     await client.connect();
 
     const db = client.db('flashcards');
-    await applySchemaValidation(db);
+    await applySchemaValidationUser(db);
+    await applySchemaValidationAuthentication(db);
 
     collections.users = db.collection<User>('users');
+    collections.authentication = db.collection<AuthenticationToken>('authentication');
 }
 
-async function applySchemaValidation(db: mongodb.Db) {
+async function applySchemaValidationUser(db: mongodb.Db) {
     const jsonSchema = {
         $jsonSchema: {
             bsonType: 'object',
@@ -47,6 +50,36 @@ async function applySchemaValidation(db: mongodb.Db) {
     }).catch(async (error: mongodb.MongoServerError) => {
         if (error.codeName === 'NamespaceNotFound') {
             await db.createCollection('users', {validator: jsonSchema});
+        }
+    });
+}
+
+async function applySchemaValidationAuthentication(db: mongodb.Db) {
+    const jsonSchema = {
+        $jsonSchema: {
+            bsonType: 'object',
+            required: ['userId', 'token'],
+            additionalProperties: false,
+            properties: {
+                _id: {},
+                userId: {
+                    bsonType: 'string',
+                    description: "'User ID' is required and is a string",
+                },
+                position: {
+                    bsonType: 'objectId',
+                    description: "'token' is required and is an objectId",
+                },
+            },
+        },
+    };
+
+    await db.command({
+        collMod: 'authentication',
+        validator: jsonSchema
+    }).catch(async (error: mongodb.MongoServerError) => {
+        if (error.codeName === 'NamespaceNotFound') {
+            await db.createCollection('authentication', {validator: jsonSchema});
         }
     });
 }

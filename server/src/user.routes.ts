@@ -1,19 +1,10 @@
 import * as express from 'express';
 import * as mongodb from 'mongodb';
+import * as crypto from 'crypto';
 import { collections } from './database';
 
 export const userRouter = express.Router();
 userRouter.use(express.json());
-
-// GET for all users
-userRouter.get('/', async (_req, res) => {
-    try {
-        const users = await collections.users.find({}).toArray();
-        res.status(200).send(users);
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
-});
 
 // GET to get one user by ID
 userRouter.get('/:id', async (req, res) => {
@@ -50,7 +41,7 @@ userRouter.get('/checkAvailability/:username', async (req, res) => {
 userRouter.post('/', async (req, res) => {
     try {
         const user = req.body;
-        const isUsernameTaken = await collections.users.findOne({ username: user.username })
+        const isUsernameTaken = await collections.users.findOne({ username: user.username });
         if (isUsernameTaken) {
             res.status(409).send(`Username ${user.username} is already taken`);
             return;
@@ -68,3 +59,26 @@ userRouter.post('/', async (req, res) => {
         res.status(400).send(error.message);
     }
 });
+
+userRouter.post('/login', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        const user = await collections.users.findOne({ username });
+        if (!user) {
+            res.status(404).send('Username not found.');
+        } else if (user.password !== password) {
+            res.status(401).send('Incorrect password.');
+        } else if (user.password === password) {
+            // crypto.randomUUID generates a unique string to use as authentication token for future requests
+            const token = crypto.randomUUID().toString();
+            // store the token together with the user id in the authentication collection
+            await collections.authentication.insertOne({ userId: user._id, token });
+            res.status(200).send({ username: user.username, userId: user._id, token });
+        } else {
+            res.status(500).send('Unknown error has occurred.')
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal server error')
+    }
+})

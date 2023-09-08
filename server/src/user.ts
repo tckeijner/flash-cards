@@ -5,3 +5,9 @@ export interface User {
     password: string;
     _id?: mongodb.ObjectId;
 }
+
+export interface AuthenticationToken {
+    _id?: mongodb.ObjectId;
+    userId: mongodb.ObjectId;
+    token: string;
+}
