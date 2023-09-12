@@ -1,0 +1,22 @@
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Create new deck</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <form class="col needs-validation" [formGroup]="form" (ngSubmit)="submitForm()">
+            <div class="mb-3">
+                <div class="input-group has-validation">
+                    <input class="form-control" type="text" id="name"
+                           formControlName="name" placeholder="Deck name">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
+    </div>
+</ng-template>
+
+<button class="btn btn-lg btn-outline-primary" (click)="open(content)">Create new deck</button>
+

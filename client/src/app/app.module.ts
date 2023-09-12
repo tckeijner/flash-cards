@@ -8,6 +8,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { StoreModule } from '@ngrx/store';
 import { accountReducer } from "./state/account.reducer";
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { DecksModule } from "./decks/decks.module";
 
 @NgModule({
     declarations: [
@@ -17,6 +18,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
         BrowserModule,
         AppRoutingModule,
         AccountModule,
+        DecksModule,
         NgbModule,
         StoreModule.forRoot({ account: accountReducer}, {}),
         StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })

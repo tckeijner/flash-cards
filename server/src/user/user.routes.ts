@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as mongodb from 'mongodb';
 import * as crypto from 'crypto';
-import { collections } from './database';
+import { collections } from '../database/database';
 
 export const userRouter = express.Router();
 userRouter.use(express.json());
@@ -72,7 +72,7 @@ userRouter.post('/login', async (req, res) => {
             // crypto.randomUUID generates a unique string to use as authentication token for future requests
             const token = crypto.randomUUID().toString();
             // store the token together with the user id in the authentication collection
-            await collections.authentication.insertOne({ userId: user._id, token });
+            await collections.users.updateOne({ username }, { $set: { token }})
             res.status(200).send({ username: user.username, userId: user._id, token });
         } else {
             res.status(500).send('Unknown error has occurred.')
