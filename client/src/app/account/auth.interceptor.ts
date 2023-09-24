@@ -2,6 +2,7 @@ import { HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http"
 import { Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { selectToken } from "../state/account.selectors";
+import { TOKEN_KEY } from "./auth.service";
 
 @Injectable()
 /**
@@ -19,8 +20,9 @@ export class AuthInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler) {
         // if there is an authentication token present, set it to the Authorization header.
         // Otherwise leave the request unchanged.
-        const authReq = this.token ? req.clone({
-            headers: req.headers.set('Authorization', this.token)
+        const token = localStorage.getItem(TOKEN_KEY);
+        const authReq = token ? req.clone({
+            headers: req.headers.set('Authorization', token)
         }) : req;
 
         return next.handle(authReq);

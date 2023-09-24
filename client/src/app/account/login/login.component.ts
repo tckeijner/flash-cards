@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
-import { AccountService } from "../account.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Store } from "@ngrx/store";
 import { AccountActions } from "../../state/account.actions";
-import { AccountDataModel } from "../account.model";
 import { Router } from "@angular/router";
+import { AuthService } from "../auth.service";
 
 @Component({
     selector: 'app-login',
@@ -18,7 +17,7 @@ export class LoginComponent {
     loginSuccessfulMessage: null | string = null;
 
     constructor(
-        private accountService: AccountService,
+        private authService: AuthService,
         private fb: FormBuilder,
         private store: Store,
         private router: Router
@@ -35,7 +34,7 @@ export class LoginComponent {
         // Cancel submission if the form is invalid
         if (this.form.invalid) { return; }
 
-        this.accountService.login(this.form.value).subscribe({
+        this.authService.login(this.form.value).subscribe({
             next: ((accountData) => {
                 // Load account data (username, token) into the store.
                 this.store.dispatch(AccountActions.loadAccountData(accountData))

@@ -25,9 +25,4 @@ export class AccountService {
     createUser(user: UserAccount) {
         return this.httpClient.post(`${this.baseUrl}`, user, { responseType: 'text' });
     }
-
-    login(user: UserAccount): Observable<AccountDataModel> {
-        return this.httpClient.post<{token: string, expiresIn: number, userId: string, username: string}>(
-            `${this.baseUrl}/login`, user, { responseType: `json` }) as Observable<AccountDataModel>;
-    }
 }
