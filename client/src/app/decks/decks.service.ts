@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpResponse } from "@angular/common/http";
 import { Store } from "@ngrx/store";
 import { selectAccount } from "../state/account.selectors";
-import { map, switchMap } from "rxjs";
+import { map, Observable, switchMap } from "rxjs";
 import { Deck } from "./deck.model";
 
 @Injectable({
@@ -17,30 +17,21 @@ export class DecksService {
     ) {
     }
 
-    createDeck(deck: Deck) {
-        return this.createBaseRequest().pipe(
-            switchMap(baseRequest =>
-                this.httpClient.post(`${this.baseUrl}`, {
-                    ...baseRequest,
-                    deck
-                }, { responseType: 'text' })
-            )
-        );
+    getAllDecks() {
+        return this.httpClient.get<Deck[]>(this.baseUrl, { responseType: 'json' })
     }
 
-    isDecknameAvailable(deckname: string) {
-        return this.createBaseRequest().pipe(
-            switchMap(baseRequest =>
-                this.httpClient.post(`${this.baseUrl}/checkAvailability/${deckname}`, baseRequest)
-            )
+    createDeck(deck: Deck) {
+        return this.httpClient.post(
+            this.baseUrl,
+            { deck },
+            { responseType: 'text' }
         )
     }
 
-    createBaseRequest() {
-        return this.store.select(selectAccount).pipe(
-            map(accountData =>
-                ({ username: accountData.username, token: accountData.token })
-            )
-        );
+    isDecknameAvailable(deckname: string) {
+        return this.httpClient.get(
+            `${this.baseUrl}/checkAvailability/${deckname}`
+        )
     }
 }

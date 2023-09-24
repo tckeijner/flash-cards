@@ -1,22 +1,24 @@
 <ng-template #content let-modal>
     <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title">Create new deck</h4>
-        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+        <h4 class="modal-title" id="add-deck-modal">Create new deck</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
     </div>
     <div class="modal-body">
         <form class="col needs-validation" [formGroup]="form" (ngSubmit)="submitForm()">
             <div class="mb-3">
                 <div class="input-group has-validation">
-                    <input class="form-control" type="text" id="name"
-                           formControlName="name" placeholder="Deck name">
+                    <input class="form-control" [ngClass]="{ 'is-invalid': wasValidated && form.controls['name'].errors }"
+                           type="text" id="name" formControlName="name" placeholder="Deck name">
+                    <div *ngIf="form.controls['name'].errors?.['deckNameTaken']" class="invalid-feedback">You already have a deck with this name</div>
                 </div>
             </div>
+            <button type="submit" class="btn btn-primary">Save</button>
         </form>
     </div>
     <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" (click)="modal.close('Save click')">Save</button>
     </div>
 </ng-template>
 
-<button class="btn btn-lg btn-outline-primary" (click)="open(content)">Create new deck</button>
-
+<button class="m-2 btn btn-lg btn-outline-primary" (click)="open(content)">Create new deck</button>
+<div class="m-2 alert alert-info" *ngIf="deckCreatedResult">{{ deckCreatedResult }}</div>
+<div *ngFor="let deck of decks$ | async">{{deck.name}}</div>

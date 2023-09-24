@@ -1,15 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DecksService } from "./decks.service";
 import { ModalDismissReasons, NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { createIsDeckNameTakenValidator } from "./decks.validators";
+import { Observable } from "rxjs";
+import { Deck } from "./deck.model";
 
 @Component({
     selector: 'app-decks',
     templateUrl: 'decks.component.html'
 })
-export class DecksComponent {
+export class DecksComponent implements OnInit {
     form: FormGroup;
     closeResult = '';
+    wasValidated = false;
+    deckCreatedResult: null | string = null
+    decks$: Observable<Deck[]>;
 
     constructor(
         private fb: FormBuilder,
@@ -17,35 +23,29 @@ export class DecksComponent {
         private modalService: NgbModal
     ) {
         this.form = this.fb.group({
-            name: [null, [Validators.required]]
+            name: [null, [
+                Validators.required,
+            ], [
+                createIsDeckNameTakenValidator(decksService)
+            ]]
         });
+
+        this.decks$ = this.decksService.getAllDecks();
     };
 
-    open(content: any) {
-        this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
-            (result) => {
-                this.closeResult = `Closed with: ${result}`;
-            },
-            (reason) => {
-                this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-            },
-        );
+    ngOnInit() {
+
     }
 
-    private getDismissReason(reason: any): string {
-        if (reason === ModalDismissReasons.ESC) {
-            return 'by pressing ESC';
-        } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-            return 'by clicking on a backdrop';
-        } else {
-            return `with: ${reason}`;
-        }
+    open(content: any) {
+        this.modalService.open(content, { ariaLabelledBy: 'add-deck-modal' })
     }
 
     submitForm() {
+        this.wasValidated = true;
         this.decksService.createDeck(this.form.value).subscribe({
             next: ((res) => {
-                console.log(res)
+                this.modalService.dismissAll(res);
             }),
             error: (error: Error) => {
                 console.log(error)

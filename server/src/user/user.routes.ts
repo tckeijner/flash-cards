@@ -2,6 +2,7 @@ import * as express from 'express';
 import * as mongodb from 'mongodb';
 import * as crypto from 'crypto';
 import { collections } from '../database/database';
+import jwt from "jsonwebtoken";
 
 export const userRouter = express.Router();
 userRouter.use(express.json());
@@ -70,9 +71,13 @@ userRouter.post('/login', async (req, res) => {
             res.status(401).send('Incorrect password.');
         } else if (user.password === password) {
             // crypto.randomUUID generates a unique string to use as authentication token for future requests
-            const token = crypto.randomUUID().toString();
-            // store the token together with the user id in the authentication collection
+            const token = jwt.sign(
+                { userId: user._id },
+                'secret',
+                {expiresIn: '1h'}
+            );
             await collections.users.updateOne({ username }, { $set: { token }})
+            res.cookie('token', token, {})
             res.status(200).send({ username: user.username, userId: user._id, token });
         } else {
             res.status(500).send('Unknown error has occurred.')

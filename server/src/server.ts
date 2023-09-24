@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv';
 import cors from 'cors';
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import { connectToDatabase } from './database/database';
 import { userRouter } from "./user/user.routes";
 import { deckRouter } from "./deck/deck.routes";
@@ -18,6 +19,7 @@ connectToDatabase(ATLAS_URI)
     .then(() => {
         const app = express();
         app.use(cors());
+        app.use(cookieParser());
 
         app.use('/users', userRouter);
         app.use('/decks', deckRouter);

@@ -9,6 +9,8 @@ import { StoreModule } from '@ngrx/store';
 import { accountReducer } from "./state/account.reducer";
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { DecksModule } from "./decks/decks.module";
+import { AuthInterceptor } from "./account/auth.interceptor";
+import { HTTP_INTERCEPTORS } from "@angular/common/http";
 
 @NgModule({
     declarations: [
@@ -23,7 +25,13 @@ import { DecksModule } from "./decks/decks.module";
         StoreModule.forRoot({ account: accountReducer}, {}),
         StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })
     ],
-    providers: [],
+    providers: [
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true
+        }
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {
