@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DecksService } from "./decks.service";
-import { ModalDismissReasons, NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { createIsDeckNameTakenValidator } from "./decks.validators";
 import { Observable } from "rxjs";
 import { Deck } from "./deck.model";
@@ -10,7 +10,7 @@ import { Deck } from "./deck.model";
     selector: 'app-decks',
     templateUrl: 'decks.component.html'
 })
-export class DecksComponent implements OnInit {
+export class DecksComponent {
     form: FormGroup;
     closeResult = '';
     wasValidated = false;
@@ -32,10 +32,6 @@ export class DecksComponent implements OnInit {
 
         this.decks$ = this.decksService.getAllDecks();
     };
-
-    ngOnInit() {
-
-    }
 
     open(content: any) {
         this.modalService.open(content, { ariaLabelledBy: 'add-deck-modal' })
