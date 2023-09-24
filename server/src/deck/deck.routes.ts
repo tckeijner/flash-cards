@@ -9,8 +9,11 @@ deckRouter.get('/', async (req, res) => {
     try {
         const token = req?.headers.authorization;
         const user = await collections.users.findOne({ token });
-        if (!user) { res.status(401).send('Unauthorized'); }
-        res.status(200).send(user.decks);
+        if (!user) {
+            res.status(401).send('Unauthorized');
+        } else {
+            res.status(200).send(user.decks ?? []);
+        }
     }
     catch (error) {
         res.status(500).send(error.message);
@@ -48,9 +51,10 @@ deckRouter.get('/checkAvailability/:name', async (req, res) => {
         const user = await collections.users.findOne({ token });
         if (!user) {
             res.status(401).send('Unauthorized');
+        } else {
+            const isDecknameTaken = user.decks?.some(deck => deck.name === name);
+            res.status(200).send(!isDecknameTaken);
         }
-        const isDecknameTaken = user.decks.some(deck => deck.name === name);
-        res.status(200).send(!isDecknameTaken);
     } catch (error) {
         res.status(500).send('Internal server error');
     }
