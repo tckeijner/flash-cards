@@ -1,8 +1,8 @@
 import * as express from 'express';
 import * as mongodb from 'mongodb';
-import * as crypto from 'crypto';
 import { collections } from '../database/database';
 import jwt from "jsonwebtoken";
+import { StatusMessage } from "../enums";
 
 export const userRouter = express.Router();
 userRouter.use(express.json());
@@ -18,7 +18,7 @@ userRouter.get('/:id', async (req, res) => {
         if (user) {
             res.status(200).send(user);
         } else {
-            res.status(404).send(`No user found with id ${id}`);
+            res.status(404).send(StatusMessage.InternalServerError);
         }
     } catch (error) {
         res.status(404).send(error.message);
@@ -34,7 +34,7 @@ userRouter.get('/checkAvailability/:username', async (req, res) => {
         // send false if the name is already taken
         res.status(200).send(!isUsernameTaken);
     } catch (error) {
-        res.status(500).send('Internal server error');
+        res.status(500).send(StatusMessage.InternalServerError);
     }
 });
 
@@ -52,9 +52,9 @@ userRouter.post('/', async (req, res) => {
         const result = await collections.users.insertOne(user);
 
         if (result.acknowledged) {
-            res.status(201).send(`Created new user with ID ${result.insertedId}`);
+            res.status(201).send(StatusMessage.UserCreated);
         } else {
-            res.status(500).send('User creation failed');
+            res.status(500).send(StatusMessage.InternalServerError);
         }
     } catch (error) {
         res.status(400).send(error.message);
@@ -66,7 +66,7 @@ userRouter.post('/login', async (req, res) => {
         const { username, password } = req.body;
         const user = await collections.users.findOne({ username });
         if (!user) {
-            res.status(404).send('Username not found.');
+            res.status(404).send(StatusMessage.NotFound);
         } else if (user.password !== password) {
             res.status(401).send('Incorrect password.');
         } else if (user.password === password) {
@@ -80,10 +80,10 @@ userRouter.post('/login', async (req, res) => {
             res.cookie('token', token, {})
             res.status(200).send({ username: user.username, userId: user._id, token });
         } else {
-            res.status(500).send('Unknown error has occurred.')
+            res.status(500).send(StatusMessage.InternalServerError)
         }
     } catch (error) {
         console.log(error);
-        res.status(500).send('Internal server error')
+        res.status(500).send(StatusMessage.InternalServerError)
     }
 })

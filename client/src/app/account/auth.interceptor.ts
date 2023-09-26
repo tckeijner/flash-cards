@@ -1,7 +1,7 @@
 import { HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { selectToken } from "../state/account.selectors";
+import { selectToken } from "../state/account/account.selectors";
 import { TOKEN_KEY } from "./auth.service";
 
 @Injectable()

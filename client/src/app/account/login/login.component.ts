@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup } from "@angular/forms";
 import { Store } from "@ngrx/store";
-import { AccountActions } from "../../state/account.actions";
+import { AccountActions } from "../../state/account/account.actions";
 import { Router } from "@angular/router";
 import { AuthService } from "../auth.service";
 

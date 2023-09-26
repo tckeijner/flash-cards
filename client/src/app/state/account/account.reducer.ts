@@ -1,4 +1,4 @@
-import { AccountDataModel } from "../account/account.model";
+import { AccountDataModel } from "../../account/account.model";
 import { createReducer, on } from "@ngrx/store";
 import { AccountActions } from "./account.actions";
 

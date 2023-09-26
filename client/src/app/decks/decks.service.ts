@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Store } from "@ngrx/store";
-import { selectAccount } from "../state/account.selectors";
-import { map, Observable, switchMap } from "rxjs";
+import { tap } from "rxjs";
 import { Deck } from "./deck.model";
+import { DecksActions } from "../state/decks/decks.actions";
 
 @Injectable({
     providedIn: 'root'
@@ -26,12 +26,23 @@ export class DecksService {
             this.baseUrl,
             { deck },
             { responseType: 'text' }
+        ).pipe(
+            tap(() => this.store.dispatch(DecksActions.loadDecks()))
         )
     }
 
     isDecknameAvailable(deckname: string) {
         return this.httpClient.get(
             `${this.baseUrl}/checkAvailability/${deckname}`
+        )
+    }
+
+    deleteDeck(id: string) {
+        return this.httpClient.delete(
+            `${this.baseUrl}/${id}`,
+            { responseType: 'text' }
+        ).pipe(
+            tap(() => this.store.dispatch(DecksActions.loadDecks()))
         )
     }
 }

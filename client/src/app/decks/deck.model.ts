@@ -1,5 +1,5 @@
 export interface Deck {
-    _id?: string;
+    _id: string;
     name: string;
     cards: Card[]
 }

@@ -1,10 +1,10 @@
 <ng-template #content let-modal>
     <div class="modal-header">
         <h4 class="modal-title" id="add-deck-modal">Create new deck</h4>
-        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.close('CANCEL')"></button>
     </div>
     <div class="modal-body">
-        <form class="col needs-validation" [formGroup]="form" (ngSubmit)="submitForm()">
+        <form class="col needs-validation" [formGroup]="form">
             <div class="mb-3">
                 <div class="input-group has-validation">
                     <input class="form-control" [ngClass]="{ 'is-invalid': wasValidated && form.controls['name'].errors }"
@@ -12,13 +12,44 @@
                     <div *ngIf="form.controls['name'].errors?.['deckNameTaken']" class="invalid-feedback">You already have a deck with this name</div>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary">Save</button>
         </form>
     </div>
     <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="modal.close('SAVE')">Save</button>
+    </div>
+
+</ng-template>
+
+<ng-template #removeContent let-deleteModal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="delete-deck-modal">Delete deck</h4>
+        <button type="button" class="btn btn-close" aria-label="Close" (click)="deleteModal.close('CANCEL')"></button>
+    </div>
+    <div class="modal-body">
+        Are you sure?
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" aria-label="Cancel" (click)="deleteModal.close('CANCEL')">Cancel</button>
+        <button type="button" class="btn btn-primary" aria-label="Confirm" (click)="deleteModal.close('CONFIRM')">Confirm</button>
+
     </div>
 </ng-template>
 
-<button class="m-2 btn btn-lg btn-outline-primary" (click)="open(content)">Create new deck</button>
+<button class="m-2 btn btn-lg btn-outline-primary" (click)="onClickAddDeck(content)">Create new deck</button>
+<div class="m-2 alert alert-info" *ngIf="deckDeletedResult">{{ deckDeletedResult }}</div>
 <div class="m-2 alert alert-info" *ngIf="deckCreatedResult">{{ deckCreatedResult }}</div>
-<div *ngFor="let deck of decks$ | async">{{deck.name}}</div>
+<ul class="m-2 list-group" *ngIf="decks$ | async as decks">
+    <li *ngFor="let deck of decks" class="list-group-item">
+        <div class="container text-start">
+            <div class="row justify-content-between">
+                <div class="col-2">{{ deck.name }}</div>
+                <div class="col-2">
+                    <div class="row">
+                        <i class="col-1 bi bi-pencil"></i>
+                        <i class="col-1 bi bi-trash" (click)="onClickDelete(removeContent, deck._id)"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>
