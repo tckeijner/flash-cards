@@ -36,8 +36,6 @@
 </ng-template>
 
 <button class="m-2 btn btn-lg btn-outline-primary" (click)="onClickAddDeck(content)">Create new deck</button>
-<div class="m-2 alert alert-info" *ngIf="deckDeletedResult">{{ deckDeletedResult }}</div>
-<div class="m-2 alert alert-info" *ngIf="deckCreatedResult">{{ deckCreatedResult }}</div>
 <ul class="m-2 list-group" *ngIf="decks$ | async as decks">
     <li *ngFor="let deck of decks" class="list-group-item">
         <div class="container text-start">
@@ -45,7 +43,7 @@
                 <div class="col-2">{{ deck.name }}</div>
                 <div class="col-2">
                     <div class="row">
-                        <i class="col-1 bi bi-pencil"></i>
+                        <i class="col-1 bi bi-pencil" (click)="onClickEdit(deck._id)"></i>
                         <i class="col-1 bi bi-trash" (click)="onClickDelete(removeContent, deck._id)"></i>
                     </div>
                 </div>
@@ -53,3 +51,9 @@
         </div>
     </li>
 </ul>
+
+<ngb-toast class="m-2 position-fixed bottom-0 end-0"
+           *ngFor="let toast of toasts; let i = index"
+           [autohide]="true" [delay]="5000"
+           (hidden)="toasts.splice(i, 1)">{{toast}}
+</ngb-toast>

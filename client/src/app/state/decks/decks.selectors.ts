@@ -7,3 +7,8 @@ export const selectDecks = createSelector(
     selectDeckState,
     state => state?.decks
 )
+
+export const selectDeckById = (id: string) => createSelector(
+    selectDeckState,
+    state => state.decks.find(deck => deck._id === id)
+)

@@ -8,6 +8,7 @@ import { Deck } from "./deck.model";
 import { Store } from "@ngrx/store";
 import { selectDecks } from "../state/decks/decks.selectors";
 import { DecksActions } from "../state/decks/decks.actions";
+import { Router } from "@angular/router";
 
 @Component({
     selector: 'app-decks',
@@ -17,16 +18,16 @@ import { DecksActions } from "../state/decks/decks.actions";
 export class DecksComponent implements OnInit {
     form: FormGroup;
     wasValidated = false;
-    deckCreatedResult: string;
-    deckDeletedResult: string;
     errorMessage: string;
     decks$: Observable<Deck[]>;
+    toasts: string[] = [];
 
     constructor(
         private fb: FormBuilder,
         private decksService: DecksService,
         private modalService: NgbModal,
-        private store: Store
+        private store: Store,
+        private router: Router
     ) {
         this.form = this.fb.group({
             name: [null, [
@@ -54,7 +55,7 @@ export class DecksComponent implements OnInit {
                         next: (res => {
                             this.modalService.dismissAll(res);
                             this.form.reset();
-                            this.deckCreatedResult = res;
+                            this.toasts.push(res);
                         }),
                         error: (error: Error) => this.errorMessage = error.message
                     });
@@ -68,11 +69,15 @@ export class DecksComponent implements OnInit {
             result => {
                 if (result === 'CONFIRM') {
                     this.decksService.deleteDeck(id).subscribe({
-                        next: (res => this.deckDeletedResult = res),
+                        next: (res => this.toasts.push(res)),
                         error: (error: Error) => this.errorMessage = error.message
                     })
                 }
             }
         )
+    }
+
+    onClickEdit(id: string) {
+        this.router.navigate(['decks', id])
     }
 }

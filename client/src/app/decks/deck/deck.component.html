@@ -1,0 +1,6 @@
+<div *ngIf="deck$ | async; let deck;">
+    <h1 class="h1 m-2">Edit deck</h1>
+    <form>
+        <div class="m-2">{{ deck.name }}</div>
+    </form>
+</div>

@@ -22,4 +22,8 @@ export class AuthService {
                 tap(result => localStorage.setItem(TOKEN_KEY, result.token))
         ) as Observable<AccountDataModel>;
     }
+
+    isAuthenticated() {
+        return this.httpClient.get<boolean>(`http://localhost:5200/users/isAuthenticated`, {})
+    }
 }

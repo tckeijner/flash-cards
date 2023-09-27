@@ -39,7 +39,7 @@ export class LoginComponent {
                 // Load account data (username, token) into the store.
                 this.store.dispatch(AccountActions.loadAccountData(accountData))
                 // navigate to the Collections page after login
-                this.router.navigate(['collections']);
+                this.router.navigate(['decks']);
             }),
             error: (error) => {
                 this.errorMessage = error.error;

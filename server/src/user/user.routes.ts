@@ -1,29 +1,10 @@
 import * as express from 'express';
-import * as mongodb from 'mongodb';
 import { collections } from '../database/database';
-import jwt from "jsonwebtoken";
+import * as crypto from 'crypto';
 import { StatusMessage } from "../enums";
 
 export const userRouter = express.Router();
 userRouter.use(express.json());
-
-// GET to get one user by ID
-userRouter.get('/:id', async (req, res) => {
-    try {
-        const id = req?.params?.id;
-        const query = { _id: new mongodb.ObjectId(id) };
-        // findOne is used to return one user with the proved ID
-        const user = await collections.users.findOne(query);
-
-        if (user) {
-            res.status(200).send(user);
-        } else {
-            res.status(404).send(StatusMessage.InternalServerError);
-        }
-    } catch (error) {
-        res.status(404).send(error.message);
-    }
-});
 
 // GET check availability of the username
 userRouter.get('/checkAvailability/:username', async (req, res) => {
@@ -70,12 +51,7 @@ userRouter.post('/login', async (req, res) => {
         } else if (user.password !== password) {
             res.status(401).send('Incorrect password.');
         } else if (user.password === password) {
-            // crypto.randomUUID generates a unique string to use as authentication token for future requests
-            const token = jwt.sign(
-                { userId: user._id },
-                'secret',
-                {expiresIn: '1h'}
-            );
+            const token = crypto.randomUUID().toString(); // TODO: implement JWT
             await collections.users.updateOne({ username }, { $set: { token }})
             res.cookie('token', token, {})
             res.status(200).send({ username: user.username, userId: user._id, token });
@@ -85,5 +61,20 @@ userRouter.post('/login', async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).send(StatusMessage.InternalServerError)
+    }
+})
+
+userRouter.get('/isAuthenticated', async (req, res) => {
+    try {
+        const token = req?.headers.authorization;
+        const user = await collections.users.findOne({ token });
+        if (user) {
+            res.status(200).send(true);
+            return;
+        }
+        res.status(200).send(false);
+    }
+    catch (error) {
+        res.status(500).send(StatusMessage.InternalServerError);
     }
 })
