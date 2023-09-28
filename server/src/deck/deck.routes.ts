@@ -81,3 +81,27 @@ deckRouter.delete('/:id', async (req, res) => {
         res.status(500).send(StatusMessage.InternalServerError);
     }
 })
+
+deckRouter.put('/', async (req, res) => {
+    try {
+        const token = req.headers.authorization;
+        const deck = req.body;
+        deck._id = new ObjectId(deck._id);
+        const user = await collections.users.findOne({ token });
+        if (user) {
+            const result = await collections.users.updateOne(
+                { '_id': user._id },
+                { $set: { 'decks.$[deck]': deck } },
+                { arrayFilters: [{ 'deck._id': new ObjectId(deck._id) }] }
+            )
+            const updatedUser = await collections.users.findOne({ token })
+            if (result) {
+                res.status(200).send(updatedUser.decks);
+                return;
+            }
+            res.status(500).send(StatusMessage.InternalServerError);
+        }
+    } catch (error) {
+        res.status(500).send(StatusMessage.InternalServerError)
+    }
+})

@@ -18,11 +18,14 @@ export const initialState: DeckState = {
 
 export const deckReducer = createReducer(
     initialState,
+
+    // Reducers for Load Decks
     on(DecksActions.loadDecks, (state) => {
         return ({
             ...state,
             loading: true,
-            loaded: false
+            loaded: false,
+            error: null
         })
     }),
     on(DecksActions.loadDecksSuccess, (state, { decks }) => {
@@ -30,7 +33,8 @@ export const deckReducer = createReducer(
             ...state,
             decks,
             loading: false,
-            loaded: true
+            loaded: true,
+            error: null
         })
     }),
     on(DecksActions.loadDecksFailed, (state, { error }) => {
@@ -40,5 +44,32 @@ export const deckReducer = createReducer(
             loaded: false,
             error
         })
-    })
+    }),
+
+    // Reducers for Update Decks
+    on(DecksActions.updateDeck, (state) => {
+        return ({
+            ...state,
+            loading: true,
+            loaded: false,
+            error: null
+        })
+    }),
+    on(DecksActions.updateDeckSuccess, (state, { decks }) => {
+        return ({
+            ...state,
+            decks,
+            loading: false,
+            loaded: true,
+            error: null
+        })
+    }),
+    on(DecksActions.updateDeckFailed, (state, { error }) => {
+        return ({
+            ...state,
+            loading: false,
+            loaded: false,
+            error
+        })
+    }),
 );

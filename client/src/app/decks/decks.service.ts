@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { Store } from "@ngrx/store";
-import { tap } from "rxjs";
+import { Observable, tap } from "rxjs";
 import { Deck } from "./deck.model";
 import { DecksActions } from "../state/decks/decks.actions";
 
@@ -44,5 +44,13 @@ export class DecksService {
         ).pipe(
             tap(() => this.store.dispatch(DecksActions.loadDecks()))
         )
+    }
+
+    updateDeck(deck: Deck): Observable<Deck[]> {
+        return this.httpClient.put<Deck[]>(
+            `${this.baseUrl}`,
+            deck,
+            { responseType: 'json' }
+        );
     }
 }
