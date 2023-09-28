@@ -5,7 +5,6 @@ import { Store } from "@ngrx/store";
 import { selectDeckById } from "../../state/decks/decks.selectors";
 import { Observable } from "rxjs";
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { DecksService } from "../decks.service";
 import { DecksActions } from "../../state/decks/decks.actions";
 
 @Component({
