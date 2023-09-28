@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Card, Deck } from "../deck.model";
 import { Store } from "@ngrx/store";
 import { selectDeckById } from "../../state/decks/decks.selectors";
@@ -18,6 +18,7 @@ export class DeckComponent implements OnInit {
 
     constructor(
         private route: ActivatedRoute,
+        private router: Router,
         private store: Store,
         private fb: FormBuilder,
     ) {}
@@ -64,6 +65,10 @@ export class DeckComponent implements OnInit {
     onClickSave() {
         const deck = { ...this.deck, ...this.form.value } as Deck;
         this.store.dispatch(DecksActions.updateDeck({ deck }));
+    }
+
+    onClickCancel() {
+        this.router.navigate(['decks']);
     }
 
     deleteCard(index: number) {

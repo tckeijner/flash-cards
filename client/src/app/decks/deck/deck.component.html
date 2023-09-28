@@ -15,6 +15,9 @@
                 <div class="col">
                     <button class="btn btn-primary" (click)="onClickSave()">Save</button>
                 </div>
+                <div class="col">
+                    <button class="btn btn-secondary" (click)="onClickCancel()">Cancel</button>
+                </div>
             </div>
         </div>
 
@@ -27,6 +30,7 @@
                     <label for="back-{{ i }}" class="m-2 form-label">Back</label>
                     <input type="text" class="form-control" id="back-{{ i }}" placeholder="Back text"
                            formControlName="back">
+                    <button class="btn btn-primary" (click)="deleteCard(i)"><i class="bi bi-trash"></i></button>
                 </div>
             </div>
         </div>
