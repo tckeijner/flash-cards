@@ -67,11 +67,14 @@ deckRouter.delete('/:id', async (req, res) => {
         const user = await collections.users.findOne({ token });
         const _id = new ObjectId(req?.params?.id);
         if (user) {
-            await collections.users.updateOne(
+            const result = await collections.users.updateOne(
                 {_id: user._id},
                 { $pull: { decks: { _id } } }
             );
-            res.status(200).send(StatusMessage.DeckDeleted);
+            const updatedUser = await collections.users.findOne({ token })
+            if (result) {
+                res.status(200).send(updatedUser.decks);
+            }
         } else {
             res.status(401).send(StatusMessage.Unauthorized);
         }

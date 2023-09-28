@@ -46,7 +46,7 @@ export const deckReducer = createReducer(
         })
     }),
 
-    // Reducers for Update Decks
+    // Reducers for Update Deck
     on(DecksActions.updateDeck, (state) => {
         return ({
             ...state,
@@ -65,6 +65,33 @@ export const deckReducer = createReducer(
         })
     }),
     on(DecksActions.updateDeckFailed, (state, { error }) => {
+        return ({
+            ...state,
+            loading: false,
+            loaded: false,
+            error
+        })
+    }),
+
+    // Reducers for Remove Deck
+    on(DecksActions.removeDeck, (state) => {
+        return ({
+            ...state,
+            loading: true,
+            loaded: false,
+            error: null
+        })
+    }),
+    on(DecksActions.removeDeckSuccess, (state, { decks }) => {
+        return ({
+            ...state,
+            decks,
+            loading: false,
+            loaded: true,
+            error: null
+        })
+    }),
+    on(DecksActions.removeDeckFailed, (state, { error }) => {
         return ({
             ...state,
             loading: false,

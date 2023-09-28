@@ -39,8 +39,6 @@ export class DecksComponent implements OnInit {
     };
 
     ngOnInit() {
-        // Dispatching loadDecks will start the action chain that retrieves decks from the API and stores it.
-        this.store.dispatch(DecksActions.loadDecks());
         // Selector is an observable, will automatically update on changes/reload
         this.decks$ = this.store.select(selectDecks);
     }
@@ -68,10 +66,7 @@ export class DecksComponent implements OnInit {
         this.modalService.open(content, { ariaLabelledBy: 'delete-deck-modal' }).result.then(
             result => {
                 if (result === 'CONFIRM') {
-                    this.decksService.deleteDeck(id).subscribe({
-                        next: (res => this.toasts.push(res)),
-                        error: (error: Error) => this.errorMessage = error.message
-                    })
+                    this.store.dispatch(DecksActions.removeDeck({ id }))
                 }
             }
         )

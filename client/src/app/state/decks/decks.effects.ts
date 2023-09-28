@@ -16,7 +16,7 @@ export class DecksEffects {
                 )
             )
         )
-    )
+    );
     updateDeck$ = createEffect(() =>
         this.actions$.pipe(
             ofType(DecksActions.updateDeck),
@@ -27,7 +27,18 @@ export class DecksEffects {
                 )
             )
         )
-    )
+    );
+    removeDeck$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(DecksActions.removeDeck),
+            switchMap(action => this.decksService.deleteDeck(action.id)
+                .pipe(
+                    map(decks => (DecksActions.removeDeckSuccess({ decks }))),
+                    catchError(error => EMPTY)
+                )
+            )
+        )
+    );
 
     constructor(
         private actions$: Actions,

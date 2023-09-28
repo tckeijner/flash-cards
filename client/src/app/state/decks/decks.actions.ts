@@ -10,5 +10,8 @@ export const DecksActions = createActionGroup({
         'Update Deck': props<{deck: Deck}>(),
         'Update Deck Success': props<{ decks: Deck[] }>(),
         'Update Deck Failed': props<{ error: string }>(),
+        'Remove Deck': props<{id: string}>(),
+        'Remove Deck Success': props<{ decks: Deck[] }>(),
+        'Remove Deck Failed': props<{ error: string }>(),
     }
 })

@@ -38,9 +38,9 @@ export class DecksService {
     }
 
     deleteDeck(id: string) {
-        return this.httpClient.delete(
+        return this.httpClient.delete<Deck[]>(
             `${this.baseUrl}/${id}`,
-            { responseType: 'text' }
+            { responseType: 'json' }
         ).pipe(
             tap(() => this.store.dispatch(DecksActions.loadDecks()))
         )
