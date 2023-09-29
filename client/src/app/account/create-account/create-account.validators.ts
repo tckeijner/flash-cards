@@ -3,6 +3,10 @@ import { map } from "rxjs";
 
 import { AccountService } from "../account.service";
 
+/**
+ * Checks if the value in Confirm password is equal the to password field.
+ * @param control
+ */
 export const confirmPasswordValidator: ValidatorFn = (control: AbstractControl) => {
     if (control.value && control.value !== control.parent?.value['password']) {
         return { passwordNotEqual: true };

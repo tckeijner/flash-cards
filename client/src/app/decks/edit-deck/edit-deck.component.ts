@@ -7,10 +7,10 @@ import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DecksActions } from "../../state/decks/decks.actions";
 
 @Component({
-    selector: 'app-cards',
-    templateUrl: 'deck.component.html'
+    selector: 'app-edit-deck',
+    templateUrl: 'edit-deck.component.html'
 })
-export class DeckComponent implements OnInit {
+export class EditDeckComponent implements OnInit {
     deck?: Deck;
     form: FormGroup;
 
@@ -23,8 +23,10 @@ export class DeckComponent implements OnInit {
 
 
     ngOnInit() {
+        // Get the deckId from the url parameters
         const deckId = this.route.snapshot.paramMap.get('id');
         if (deckId) {
+            // Use the deckId to get the correct deck from the store
             this.store.select(selectDeckById(deckId)).subscribe(deck => {
                 this.deck = deck;
                 this.initForm();
@@ -32,6 +34,10 @@ export class DeckComponent implements OnInit {
         }
     }
 
+    /**
+     * Use the formbuilder to build the formGroup
+     * @private
+     */
     private initForm() {
         this.form = this.fb.group({
             name: [this.deck?.name, [
@@ -51,6 +57,11 @@ export class DeckComponent implements OnInit {
         return this.form.get('cards') as FormArray;
     }
 
+    /**
+     * Adds a formControl for a card to the cards formArray.
+     * Can be used for both existing and new cards.
+     * @param card
+     */
     addCard(card?: Card) {
         const cardForm = this.fb.group({
             front: [card?.front ?? null, [Validators.required]],
@@ -59,11 +70,18 @@ export class DeckComponent implements OnInit {
         this.cards.push(cardForm);
     }
 
+    /**
+     * Updates the deck through the store, will also trigger a request to save
+     * it in the database
+     */
     onClickSave() {
         const deck = { ...this.deck, ...this.form.value } as Deck;
         this.store.dispatch(DecksActions.updateDeck({ deck }));
     }
 
+    /**
+     * Go back to the decks page without saving
+     */
     onClickCancel() {
         this.router.navigate(['decks']);
     }
@@ -71,6 +89,4 @@ export class DeckComponent implements OnInit {
     deleteCard(index: number) {
         this.cards.removeAt(index);
     }
-
-    protected readonly FormGroup = FormGroup;
 }

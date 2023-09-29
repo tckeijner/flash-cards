@@ -4,14 +4,14 @@ import { DecksComponent } from './decks.component';
 import { ReactiveFormsModule } from "@angular/forms";
 import { RouterLink } from "@angular/router";
 import { NgbToast } from "@ng-bootstrap/ng-bootstrap";
-import { DeckComponent } from "./deck/deck.component";
+import { EditDeckComponent } from "./edit-deck/edit-deck.component";
 import { ReviewDeckComponent } from './review-deck/review-deck.component';
 
 
 @NgModule({
     declarations: [
         DecksComponent,
-        DeckComponent,
+        EditDeckComponent,
         ReviewDeckComponent
     ],
     imports: [
@@ -22,7 +22,7 @@ import { ReviewDeckComponent } from './review-deck/review-deck.component';
     ],
     exports: [
         DecksComponent,
-        DeckComponent
+        EditDeckComponent
     ]
 })
 export class DecksModule {

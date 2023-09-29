@@ -4,7 +4,7 @@ import { CreateAccountComponent } from "./account/create-account/create-account.
 import { LoginComponent } from "./account/login/login.component";
 import { WelcomeComponent } from "./account/welcome/welcome.component";
 import { DecksComponent } from "./decks/decks.component";
-import { DeckComponent } from "./decks/deck/deck.component";
+import { EditDeckComponent } from "./decks/edit-deck/edit-deck.component";
 import { ReviewDeckComponent } from "./decks/review-deck/review-deck.component";
 
 const routes: Routes = [
@@ -12,7 +12,7 @@ const routes: Routes = [
     { path: 'create-account', component: CreateAccountComponent },
     { path: 'login', component: LoginComponent },
     { path: 'decks', component: DecksComponent },
-    { path: 'decks/:id', component: DeckComponent },
+    { path: 'decks/:id', component: EditDeckComponent },
     { path: 'decks/study/:id', component: ReviewDeckComponent }
 ];
 
