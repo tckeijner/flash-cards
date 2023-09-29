@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Card, Deck } from "../deck.model";
 import { Store } from "@ngrx/store";
 import { selectDeckById } from "../../state/decks/decks.selectors";
-import { Observable } from "rxjs";
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DecksActions } from "../../state/decks/decks.actions";
 
@@ -12,7 +11,6 @@ import { DecksActions } from "../../state/decks/decks.actions";
     templateUrl: 'deck.component.html'
 })
 export class DeckComponent implements OnInit {
-    deck$: Observable<Deck | undefined>;
     deck?: Deck;
     form: FormGroup;
 
@@ -27,7 +25,6 @@ export class DeckComponent implements OnInit {
     ngOnInit() {
         const deckId = this.route.snapshot.paramMap.get('id');
         if (deckId) {
-            this.deck$ = this.store.select(selectDeckById(deckId))
             this.store.select(selectDeckById(deckId)).subscribe(deck => {
                 this.deck = deck;
                 this.initForm();

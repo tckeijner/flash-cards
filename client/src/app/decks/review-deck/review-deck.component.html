@@ -1,0 +1,26 @@
+<button routerLink="/decks" class="m-2 btn btn-outline-primary">< Decks</button>
+
+<div *ngIf="currentCard" class="card m-2">
+    <div class="card-header">Card {{currentCardIndex + 1}}</div>
+    <div class="card-body">
+        <p class="card-text">{{ currentCard.front }}</p>
+    </div>
+    <div class="card-body">
+        <p class="card-text blur" [ngClass]="{ blur }">{{ currentCard.back}}</p>
+    </div>
+</div>
+
+<div class="container position-absolute bottom-0">
+    <div class="m-2 row">
+        <div class="btn-group">
+            <button class="btn btn-outline-primary"
+                    (click)="previousCard()"
+                    [disabled]="currentCardIndex < 1">< Previous</button>
+            <button class="btn btn-outline-primary"
+                    (click)="toggleBlur()">{{ blur ? 'Reveal' : 'Hide' }}</button>
+            <button class="btn btn-outline-primary"
+                    (click)="nextCard()"
+                    [disabled]="!deck || currentCardIndex >= deck.cards.length - 1">Next ></button>
+        </div>
+    </div>
+</div>

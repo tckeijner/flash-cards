@@ -75,4 +75,8 @@ export class DecksComponent implements OnInit {
     onClickEdit(id: string) {
         this.router.navigate(['decks', id])
     }
+
+    onClickStudy(id: string) {
+        this.router.navigate(['decks', 'study', id])
+    }
 }
