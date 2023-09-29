@@ -2,10 +2,15 @@ import { AccountDataModel } from "../../account/account.model";
 import { createReducer, on } from "@ngrx/store";
 import { AccountActions } from "./account.actions";
 
-export const initialState: AccountDataModel = {
+export interface AccountState extends AccountDataModel {
+    loggedOut: boolean;
+}
+
+export const initialState: AccountState = {
     username: null,
     userId: null,
-    token: null
+    token: null,
+    loggedOut: false
 }
  export const accountReducer = createReducer(
      initialState,
@@ -13,6 +18,13 @@ export const initialState: AccountDataModel = {
          return ({
              ...state,
              ...accountData
+         })
+     }),
+     on(AccountActions.logoutComplete, (state) => {
+         return ({
+             ...state,
+             ...initialState,
+             loggedOut: true
          })
      })
  )

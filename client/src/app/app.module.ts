@@ -19,6 +19,7 @@ import { selectDeckState } from "./state/decks/decks.selectors";
 import { AuthService } from "./account/auth.service";
 import { filter } from "rxjs";
 import { Router } from "@angular/router";
+import { AccountEffects } from "./state/account/account.effects";
 
 /**
  * This custom provider will perform an authentication check on init.
@@ -65,7 +66,7 @@ export function initAuthentication (authService: AuthService, store: Store, rout
         NgbModule,
         StoreModule.forRoot({ account: accountReducer, decks: deckReducer }, {}),
         StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
-        EffectsModule.forRoot(DecksEffects)
+        EffectsModule.forRoot(DecksEffects, AccountEffects)
     ],
     providers: [
         {

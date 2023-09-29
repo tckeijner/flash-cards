@@ -64,6 +64,28 @@ userRouter.post('/login', async (req, res) => {
     }
 })
 
+userRouter.put('/logout', async (req, res) => {
+    try {
+        const token = req?.headers.authorization;
+        if (token) {
+            const result = await collections.users.updateOne(
+                { token },
+                { $unset: { token: '', tokenExpiresAt: '' } }
+            );
+            if (result) {
+                res.status(200).send('Logout successful');
+            } else {
+                res.status(200).send('Invalid token, user logged out.')
+            }
+            return;
+        }
+        res.status(400).send('Bad request');
+    } catch (error) {
+        res.status(500).send(StatusMessage.InternalServerError);
+    }
+
+})
+
 userRouter.get('/isAuthenticated', async (req, res) => {
     try {
         const token = req?.headers.authorization;

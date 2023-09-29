@@ -32,6 +32,13 @@ export class AuthService {
      * Sends the token to the server to check if it is still valid.
      */
     isAuthenticated() {
-        return this.httpClient.get<boolean>(`http://localhost:5200/users/isAuthenticated`, {})
+        return this.httpClient.get<boolean>(`${this.baseUrl}/isAuthenticated`, {});
+    }
+
+    /**
+     * Sends a logout request to the server.
+     */
+    logout() {
+        return this.httpClient.put(`${this.baseUrl}/logout`, {}, { responseType: 'text'} );
     }
 }

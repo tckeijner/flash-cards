@@ -1,3 +1,23 @@
+<app-navbar></app-navbar>
+
+<button class="m-2 btn btn-outline-primary" (click)="onClickAddDeck(content)">Create new deck</button>
+<ul class="m-2 list-group" *ngIf="decks$ | async as decks">
+    <li *ngFor="let deck of decks" class="list-group-item">
+        <div class="container text-start">
+            <div class="row justify-content-between">
+                <div class="col-2">{{ deck.name }}</div>
+                <div class="col-2">
+                    <div class="row">
+                        <i class="col-1 bi bi-book" (click)="onClickStudy(deck._id)"></i>
+                        <i class="col-1 bi bi-pencil" (click)="onClickEdit(deck._id)"></i>
+                        <i class="col-1 bi bi-trash" (click)="onClickDelete(removeContent, deck._id)"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>
+
 <ng-template #content let-modal>
     <div class="modal-header">
         <h4 class="modal-title" id="add-deck-modal">Create new deck</h4>
@@ -34,24 +54,6 @@
 
     </div>
 </ng-template>
-
-<button class="m-2 btn btn-outline-primary" (click)="onClickAddDeck(content)">Create new deck</button>
-<ul class="m-2 list-group" *ngIf="decks$ | async as decks">
-    <li *ngFor="let deck of decks" class="list-group-item">
-        <div class="container text-start">
-            <div class="row justify-content-between">
-                <div class="col-2">{{ deck.name }}</div>
-                <div class="col-2">
-                    <div class="row">
-                        <i class="col-1 bi bi-book" (click)="onClickStudy(deck._id)"></i>
-                        <i class="col-1 bi bi-pencil" (click)="onClickEdit(deck._id)"></i>
-                        <i class="col-1 bi bi-trash" (click)="onClickDelete(removeContent, deck._id)"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </li>
-</ul>
 
 <ngb-toast class="m-2 position-fixed bottom-0 end-0"
            *ngFor="let toast of toasts; let i = index"

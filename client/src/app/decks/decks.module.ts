@@ -6,6 +6,7 @@ import { RouterLink } from "@angular/router";
 import { NgbToast } from "@ng-bootstrap/ng-bootstrap";
 import { EditDeckComponent } from "./edit-deck/edit-deck.component";
 import { ReviewDeckComponent } from './review-deck/review-deck.component';
+import { NavbarModule } from "../navbar/navbar.module";
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import { ReviewDeckComponent } from './review-deck/review-deck.component';
         ReactiveFormsModule,
         RouterLink,
         NgbToast,
+        NavbarModule,
     ],
     exports: [
         DecksComponent,
