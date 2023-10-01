@@ -1,10 +1,14 @@
 import { createActionGroup, emptyProps, props } from "@ngrx/store";
-import { AccountDataModel } from "../../account/account.model";
 
 export const AccountActions = createActionGroup({
     source: 'Account',
     events: {
-        'Load Account Data': props<AccountDataModel>(),
+        'Login': props<{ username: string, password: string }>(),
+        'Login Successful': props<{ username: string, userId: string }>(),
+        'Login Failed': props<{ error: string }>(),
+        'Load Account Data': emptyProps(),
+        'Load Account Data Success': props<{ username: string, userId: string }>(),
+        'Load Account Data Failure': props<{ error: string }>(),
         'Logout': emptyProps(),
         'Logout Complete': emptyProps(),
     }

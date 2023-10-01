@@ -3,7 +3,9 @@ import { FormBuilder, FormGroup } from "@angular/forms";
 import { Store } from "@ngrx/store";
 import { AccountActions } from "../../state/account/account.actions";
 import { Router } from "@angular/router";
-import { AuthService } from "../auth.service";
+import { isLoggedIn, loginError } from "../../state/account/account.selectors";
+import { filter, first } from "rxjs";
+import { DecksActions } from "../../state/decks/decks.actions";
 
 @Component({
     selector: 'app-login',
@@ -17,7 +19,6 @@ export class LoginComponent {
     loginSuccessfulMessage: null | string = null;
 
     constructor(
-        private authService: AuthService,
         private fb: FormBuilder,
         private store: Store,
         private router: Router
@@ -34,16 +35,21 @@ export class LoginComponent {
         // Cancel submission if the form is invalid
         if (this.form.invalid) { return; }
 
-        this.authService.login(this.form.value).subscribe({
-            next: ((accountData) => {
-                // Load account data (username, token) into the store.
-                this.store.dispatch(AccountActions.loadAccountData(accountData))
-                // navigate to the Collections page after login
-                this.router.navigate(['decks']);
-            }),
-            error: (error) => {
-                this.errorMessage = error.error;
-            }
+        this.store.dispatch(AccountActions.login(this.form.value));
+        this.store.select(isLoggedIn).pipe(
+            filter(isLoggedIn => isLoggedIn),
+            first()
+        ).subscribe(() => {
+            this.store.dispatch(DecksActions.loadDecks());
+            this.router.navigate(['decks']);
+        });
+
+        this.store.select(loginError).pipe(
+            filter(error => !!error),
+            first()
+        ).subscribe(error => {
+            this.errorMessage = error;
         })
+
     }
 }

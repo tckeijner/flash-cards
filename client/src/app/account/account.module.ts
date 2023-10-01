@@ -7,6 +7,8 @@ import { AccountService } from "./account.service";
 import { LoginComponent } from './login/login.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { RouterLink } from "@angular/router";
+import { ManageAccountComponent } from './manage-account/manage-account.component';
+import { NavbarModule } from "../navbar/navbar.module";
 
 
 @NgModule({
@@ -14,12 +16,14 @@ import { RouterLink } from "@angular/router";
         CreateAccountComponent,
         LoginComponent,
         WelcomeComponent,
+        ManageAccountComponent,
     ],
     imports: [
         CommonModule,
         HttpClientModule,
         ReactiveFormsModule,
         RouterLink,
+        NavbarModule,
     ],
     providers: [
         AccountService,

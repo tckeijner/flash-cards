@@ -17,9 +17,11 @@ import { DecksEffects } from "./state/decks/decks.effects";
 import { DecksActions } from "./state/decks/decks.actions";
 import { selectDeckState } from "./state/decks/decks.selectors";
 import { AuthService } from "./account/auth.service";
-import { filter } from "rxjs";
+import { combineLatest, filter } from "rxjs";
 import { Router } from "@angular/router";
 import { AccountEffects } from "./state/account/account.effects";
+import { AccountActions } from "./state/account/account.actions";
+import { selectAccount } from "./state/account/account.selectors";
 
 /**
  * This custom provider will perform an authentication check on init.
@@ -33,21 +35,23 @@ import { AccountEffects } from "./state/account/account.effects";
 export function initAuthentication (authService: AuthService, store: Store, router: Router) {
     return () => new Promise(resolve => {
         if (!localStorage['authenticationToken']) {
-            router.navigateByUrl('/')
+            router.navigateByUrl('/');
             resolve(true);
             return;
         }
         authService.isAuthenticated().subscribe(isAuthenticated => {
             if (isAuthenticated) {
                 store.dispatch(DecksActions.loadDecks());
-                store.select(selectDeckState).pipe(
-                    filter(({ loaded }) => loaded)
-                ).subscribe(() => {
-                    router.navigateByUrl('/decks');
-                    resolve(true)
+                store.dispatch(AccountActions.loadAccountData());
+                combineLatest([
+                    store.select(selectDeckState).pipe(filter(({ loaded }) => loaded)),
+                    store.select(selectAccount).pipe(filter(({ loaded }) => loaded))
+                ])
+                .subscribe(() => {
+                    resolve(true);
                 })
             } else {
-                router.navigateByUrl('/')
+                router.navigateByUrl('/');
                 resolve(true);
             }
         })

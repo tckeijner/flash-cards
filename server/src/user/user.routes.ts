@@ -100,3 +100,44 @@ userRouter.get('/isAuthenticated', async (req, res) => {
         res.status(500).send(StatusMessage.InternalServerError);
     }
 })
+
+userRouter.put('/updateUser', async (req, res) => {
+    try {
+        const { username, password } = req?.body;
+        const token = req?.headers.authorization;
+        const { _id } = await collections.users.findOne({ token });
+
+        if (!_id) {
+            res.status(400).send(StatusMessage.Unauthorized);
+            return;
+        }
+
+        if (username) {
+            await collections.users.updateOne({ _id }, { $set: { username } })
+        }
+        if (password) {
+            await collections.users.updateOne({ _id }, { $set: { password } })
+        }
+
+        res.status(200).send(StatusMessage.UserUpdated);
+    }
+    catch (error) {
+        res.status(500).send(StatusMessage.InternalServerError);
+    }
+})
+
+userRouter.get('/getAccounData', async (req, res) => {
+    try {
+        const token = req?.headers.authorization;
+        const { username, _id} = await collections.users.findOne({ token });
+
+        if (username || _id) {
+            res.status(200).send({ username, _id });
+            return;
+        }
+        res.status(404).send('Not found');
+    }
+    catch (error) {
+        res.status(500).send(error);
+    }
+})

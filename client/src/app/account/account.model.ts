@@ -1,5 +1,5 @@
 export interface AccountDataModel {
-    username: string | null;
-    userId: string | null;
-    token: string | null;
+    username: string;
+    userId: string;
+    token: string;
 }

@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import { catchError, map, Observable } from "rxjs";
-import { AccountDataModel } from "./account.model";
 
 export interface UserAccount {
     username: string;
@@ -20,9 +18,17 @@ export class AccountService {
         return this.httpClient.get(
             `${this.baseUrl}/checkAvailability/${username}`,
         );
-    }
+    };
 
     createUser(user: UserAccount) {
         return this.httpClient.post(`${this.baseUrl}`, user, { responseType: 'text' });
-    }
+    };
+
+    loadAccountData() {
+        return this.httpClient.get<{ username: string, _id: string }>(`${this.baseUrl}/getAccounData`, { responseType: 'json' });
+    };
+
+    updateUser(user: UserAccount) {
+        return this.httpClient.put(`${this.baseUrl}/updateUser`, user, { responseType: 'text' });
+    };
 }

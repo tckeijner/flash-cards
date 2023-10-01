@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import { Observable, tap } from "rxjs";
+import { Observable } from "rxjs";
 import { AccountDataModel } from "./account.model";
 import { UserAccount } from "./account.service";
 
@@ -22,10 +22,7 @@ export class AuthService {
      */
     login(user: UserAccount): Observable<AccountDataModel> {
         return this.httpClient.post<{token: string, expiresIn: number, userId: string, username: string}>(
-            `${this.baseUrl}/login`, user, { responseType: `json` }).pipe(
-                // The token is saved in the localStorage. This way it can re-authenticate when reinitializing the app
-                tap(result => localStorage.setItem(TOKEN_KEY, result.token))
-        ) as Observable<AccountDataModel>;
+            `${this.baseUrl}/login`, user, { responseType: `json` }) as Observable<AccountDataModel>;
     }
 
     /**

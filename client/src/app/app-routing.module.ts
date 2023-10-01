@@ -6,6 +6,7 @@ import { WelcomeComponent } from "./account/welcome/welcome.component";
 import { DecksComponent } from "./decks/decks.component";
 import { EditDeckComponent } from "./decks/edit-deck/edit-deck.component";
 import { ReviewDeckComponent } from "./decks/review-deck/review-deck.component";
+import { ManageAccountComponent } from "./account/manage-account/manage-account.component";
 
 const routes: Routes = [
     { path: '', component: WelcomeComponent },
@@ -13,7 +14,8 @@ const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'decks', component: DecksComponent },
     { path: 'decks/:id', component: EditDeckComponent },
-    { path: 'decks/study/:id', component: ReviewDeckComponent }
+    { path: 'decks/study/:id', component: ReviewDeckComponent },
+    { path: 'account', component: ManageAccountComponent }
 ];
 
 @NgModule({

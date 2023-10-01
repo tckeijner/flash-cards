@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { NavbarComponent } from "./navbar.component";
 import { CommonModule } from "@angular/common";
 import { StoreModule } from "@ngrx/store";
+import { RouterLink } from "@angular/router";
 
 @NgModule({
     declarations: [
@@ -9,7 +10,8 @@ import { StoreModule } from "@ngrx/store";
     ],
     imports: [
         CommonModule,
-        StoreModule
+        StoreModule,
+        RouterLink
     ],
     exports: [
         NavbarComponent
