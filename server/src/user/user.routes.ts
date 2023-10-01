@@ -105,21 +105,21 @@ userRouter.put('/updateUser', async (req, res) => {
     try {
         const { username, password } = req?.body;
         const token = req?.headers.authorization;
-        const { _id } = await collections.users.findOne({ token });
+        const user = await collections.users.findOne({ token });
 
-        if (!_id) {
+        if (!user._id) {
             res.status(400).send(StatusMessage.Unauthorized);
             return;
         }
 
         if (username) {
-            await collections.users.updateOne({ _id }, { $set: { username } })
+            await collections.users.updateOne({ _id: user._id }, { $set: { username } })
         }
         if (password) {
-            await collections.users.updateOne({ _id }, { $set: { password } })
+            await collections.users.updateOne({ _id: user._id }, { $set: { password } })
         }
 
-        res.status(200).send(StatusMessage.UserUpdated);
+        res.status(200).send({ username: user.username });
     }
     catch (error) {
         res.status(500).send(StatusMessage.InternalServerError);

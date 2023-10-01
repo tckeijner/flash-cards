@@ -76,5 +76,29 @@ export const initialState: AccountState = {
              loading: false,
              error
          })
+     }),
+     on(AccountActions.updateUser, (state) => {
+         return ({
+             ...state,
+             loading: true,
+             error: null,
+             loaded: false
+         })
+     }),
+     on(AccountActions.updateUserSuccess, (state, { username }) => {
+         return ({
+             ...state,
+             username,
+             loading: false,
+             loaded: true
+         })
+     }),
+     on(AccountActions.updateUserFailure, (state, { error }) => {
+         return ({
+             ...state,
+             loading: false,
+             loaded: false,
+             error
+         })
      })
  )

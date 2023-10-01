@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AccountService } from "../account.service";
-import { confirmPasswordValidator, createIsUsernameTakenValidator } from "./create-account.validators";
+import { confirmPasswordValidator, createIsUsernameTakenValidator } from "../account.validators";
 
 @Component({
     selector: 'app-create-account',

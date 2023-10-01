@@ -10,12 +10,91 @@
     <tr>
         <td>Username</td>
         <td>{{account.username}}</td>
-        <td><button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button></td>
+        <td>
+            <button class="btn btn-sm btn-outline-primary" (click)="modalService.open(changeUsernameContent)">
+                <i class="bi bi-pencil"></i>
+            </button>
+        </td>
     </tr>
     <tr>
         <td>Password</td>
         <td>*******</td>
-        <td><button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button></td>
+        <td>
+            <button class="btn btn-sm btn-outline-primary" (click)="modalService.open(changePasswordContent)">
+                <i class="bi bi-pencil"></i>
+            </button>
+        </td>
     </tr>
     </tbody>
 </table>
+
+<ng-template #changeUsernameContent let-usernameModal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="change-username-modal">Change username</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="usernameModal.close('CANCEL')"></button>
+    </div>
+    <div class="modal-body">
+        <form class="col needs-validation" [formGroup]="usernameForm">
+            <div class="mb-2">
+                <div class="input-group has-validation">
+                    <input class="form-control"
+                           [ngClass]="{ 'is-invalid': wasValidated && usernameForm.controls['username'].errors }"
+                           type="text" id="username" formControlName="username" placeholder="Username">
+                    <div *ngIf="usernameForm.controls['username'].errors?.['usernameTaken']" class="invalid-feedback">
+                        Username already taken
+                    </div>
+                    <div *ngIf="usernameForm.controls['username'].errors?.['required']" class="invalid-feedback">
+                        Username is required
+                    </div>
+                    <div *ngIf="usernameForm.controls['username'].errors?.['minlength'] || usernameForm.controls['username'].errors?.['maxlength']"
+                         class="invalid-feedback">Username must be between 6 and 20 characters long
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" [disabled]="disableSave" (click)="saveForm(usernameForm)">Save</button>
+    </div>
+</ng-template>
+
+<ng-template #changePasswordContent let-passwordModal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="change-password-modal">Change password</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="passwordModal.close('CANCEL')"></button>
+    </div>
+    <div class="modal-body">
+        <form class="container needs-validation" [formGroup]="passwordForm">
+            <div class="mb-2">
+                <div class="input-group has-validation">
+                    <input class="form-control"
+                           [ngClass]="{ 'is-invalid': wasValidated && passwordForm.controls['password'].errors }"
+                           type="password" id="password" formControlName="password" placeholder="Password">
+                    <div *ngIf="passwordForm.controls['password'].errors?.['required']" class="invalid-feedback">
+                        Password is required
+                    </div>
+                    <div *ngIf="passwordForm.controls['password'].errors?.['minlength'] || passwordForm.controls['password'].errors?.['maxlength']"
+                         class="invalid-feedback">Password must be between 6 and 20 characters long
+                    </div>
+                </div>
+            </div>
+            <div class="mb-2">
+                <div class="input-group has-validation">
+                    <input class="form-control"
+                           [ngClass]="{ 'is-invalid': wasValidated && passwordForm.controls['passwordConfirm'].errors }"
+                           type="password" id="passwordConfirm" formControlName="passwordConfirm"
+                           placeholder="Confirm password">
+                    <div *ngIf="passwordForm.controls['passwordConfirm'].errors?.['required']" class="invalid-feedback">
+                        Please confirm your password
+                    </div>
+                    <div *ngIf="passwordForm.controls['passwordConfirm'].errors?.['passwordNotEqual']"
+                         class="invalid-feedback">Passwords do not match
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" (click)="saveForm(passwordForm)">Save</button>
+    </div>
+</ng-template>

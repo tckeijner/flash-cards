@@ -11,5 +11,8 @@ export const AccountActions = createActionGroup({
         'Load Account Data Failure': props<{ error: string }>(),
         'Logout': emptyProps(),
         'Logout Complete': emptyProps(),
+        'Update User': props<{ username?: string, password?: string }>(),
+        'Update User Success': props<{ username: string }>(),
+        'Update User Failure': props<{ error: string }>(),
     }
 })

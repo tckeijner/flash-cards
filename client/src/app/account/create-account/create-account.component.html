@@ -24,7 +24,6 @@
                 <input class="form-control" [ngClass]="{ 'is-invalid': wasValidated && form.controls['passwordConfirm'].errors }"
                        type="password" id="passwordConfirm" formControlName="passwordConfirm" placeholder="Confirm password">
                 <div *ngIf="form.controls['passwordConfirm'].errors?.['required']" class="invalid-feedback">Please confirm your password</div>
-
                 <div *ngIf="form.controls['passwordConfirm'].errors?.['passwordNotEqual']" class="invalid-feedback">Passwords do not match</div>
             </div>
         </div>

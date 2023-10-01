@@ -51,6 +51,19 @@ export class AccountEffects {
         )
     );
 
+    updateUser$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(AccountActions.updateUser),
+            switchMap(props => this.accountService.updateUser(props)
+                .pipe(
+                    map(result =>
+                        AccountActions.updateUserSuccess({ username: result.username })),
+                    catchError((error: HttpErrorResponse) =>
+                        of(AccountActions.updateUserFailure({ error: error.error })))
+                ))
+        )
+    );
+
     constructor(
         private actions$: Actions,
         private authService: AuthService,

@@ -28,7 +28,7 @@ export class AccountService {
         return this.httpClient.get<{ username: string, _id: string }>(`${this.baseUrl}/getAccounData`, { responseType: 'json' });
     };
 
-    updateUser(user: UserAccount) {
-        return this.httpClient.put(`${this.baseUrl}/updateUser`, user, { responseType: 'text' });
+    updateUser(user: { username?: string, password?: string }) {
+        return this.httpClient.put<{username: string}>(`${this.baseUrl}/updateUser`, user, { responseType: 'json' });
     };
 }
