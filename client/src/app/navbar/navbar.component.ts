@@ -1,4 +1,4 @@
-import { Component} from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { AccountActions } from "../state/account/account.actions";
 import { isLoggedOut } from "../state/account/account.selectors";
@@ -10,6 +10,8 @@ import { Router } from "@angular/router";
     templateUrl: 'navbar.component.html'
 })
 export class NavbarComponent {
+    @Input() title = 'Flash Cards';
+
     constructor(
         private store: Store,
         private router: Router

@@ -1,38 +1,40 @@
-<app-navbar></app-navbar>
+<app-navbar [title]="'Flash Cards - Edit deck'"></app-navbar>
 
-<div *ngIf="deck;">
-    <h1 class="h1 m-2">Edit deck</h1>
+<div class="container" *ngIf="deck;">
     <form [formGroup]="form">
-        <div class="m-2">
-            <label for="name" class="form-label">Deck name</label>
-            <input type="text" class="form-control" id="name" placeholder="Enter deck name" formControlName="name">
+        <div class="row mt-4">
+            <div class="col">
+                <label for="name" class="form-label">Deck name</label>
+                <input type="text" class="form-control" id="name" placeholder="Enter deck name" formControlName="name">
+            </div>
         </div>
 
-        <div class="container">
-            <div class="row">
-                <div class="col"><h2 class="h2">Cards</h2></div>
-                <div class="col">
-                    <button class="btn btn-primary" (click)="addCard()">+</button>
-                </div>
-                <div class="col">
+        <div class="row justify-content-between mt-4">
+            <div class="col-1"><h2 class="h2">Cards</h2></div>
+            <div class="col d-flex justify-content-end">
+                <div class="btn-group">
+                    <button class="btn btn-outline-primary" (click)="addCard()">+ Add</button>
                     <button class="btn btn-primary" (click)="onClickSave()">Save</button>
-                </div>
-                <div class="col">
                     <button class="btn btn-secondary" (click)="onClickCancel()">Cancel</button>
                 </div>
             </div>
         </div>
 
-        <div formArrayName="cards">
-            <div *ngFor="let card of cards.controls; let i = index" class="m-2 card">
-                <div [formGroupName]="i" class="container">
-                    <label for="front-{{ i }}" class="m-2 form-label">Front</label>
-                    <input type="text" class="form-control" id="front-{{ i }}" placeholder="Front text"
-                           formControlName="front">
-                    <label for="back-{{ i }}" class="m-2 form-label">Back</label>
-                    <input type="text" class="form-control" id="back-{{ i }}" placeholder="Back text"
-                           formControlName="back">
-                    <button class="btn btn-primary" (click)="deleteCard(i)"><i class="bi bi-trash"></i></button>
+        <div class="row" formArrayName="cards">
+            <div class="col">
+                <div *ngFor="let card of cards.controls; let i = index" class="mt-4 card">
+                    <div [formGroupName]="i" class="container">
+                        <label for="front-{{ i }}" class="m-2 form-label">Front</label>
+                        <input type="text" class="form-control" id="front-{{ i }}" placeholder="Front text"
+                               formControlName="front">
+                        <label for="back-{{ i }}" class="m-2 form-label">Back</label>
+                        <input type="text" class="form-control" id="back-{{ i }}" placeholder="Back text"
+                               formControlName="back">
+                        <div class="d-flex justify-content-end">
+                            <button class="m-2 btn btn-primary" (click)="deleteCard(i)"><i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

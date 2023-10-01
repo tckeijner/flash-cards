@@ -24,6 +24,9 @@ deckRouter.get('/', async (req, res) => {
 deckRouter.post('/', async (req, res) => {
     try {
         const { deck } = req?.body;
+        if (!deck.cards) {
+            deck.cards = [];
+        }
         const token = req?.headers.authorization;
         const user = await collections.users.findOne({ token });
         if (!user) {

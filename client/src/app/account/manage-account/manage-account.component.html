@@ -1,32 +1,40 @@
-<app-navbar></app-navbar>
+<app-navbar [title]="'Flash Cards - Account'"></app-navbar>
 
-<table *ngIf="account$ | async as account" class="m-2 table">
-    <tbody>
-    <tr>
-        <td>User ID</td>
-        <td class="small">{{account.userId}}</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>Username</td>
-        <td>{{account.username}}</td>
-        <td>
-            <button class="btn btn-sm btn-outline-primary" (click)="modalService.open(changeUsernameContent)">
-                <i class="bi bi-pencil"></i>
-            </button>
-        </td>
-    </tr>
-    <tr>
-        <td>Password</td>
-        <td>*******</td>
-        <td>
-            <button class="btn btn-sm btn-outline-primary" (click)="modalService.open(changePasswordContent)">
-                <i class="bi bi-pencil"></i>
-            </button>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col col-md-6">
+            <table *ngIf="account$ | async as account" class="m-2 table">
+                <tbody>
+                <tr>
+                    <td>User ID</td>
+                    <td class="small">{{account.userId}}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Username</td>
+                    <td>{{account.username}}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"
+                                (click)="modalService.open(changeUsernameContent)">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Password</td>
+                    <td>*******</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"
+                                (click)="modalService.open(changePasswordContent)">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 <ng-template #changeUsernameContent let-usernameModal>
     <div class="modal-header">

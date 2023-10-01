@@ -1,22 +1,33 @@
-<app-navbar></app-navbar>
+<app-navbar [title]="'Flash Cards - Decks'"></app-navbar>
 
-<button class="m-2 btn btn-outline-primary" (click)="onClickAddDeck(content)">Create new deck</button>
-<ul class="m-2 list-group" *ngIf="decks$ | async as decks">
-    <li *ngFor="let deck of decks" class="list-group-item">
-        <div class="container text-start">
-            <div class="row justify-content-between">
-                <div class="col-2">{{ deck.name }}</div>
-                <div class="col-2">
-                    <div class="row">
-                        <i class="col-1 bi bi-book" (click)="onClickStudy(deck._id)"></i>
-                        <i class="col-1 bi bi-pencil" (click)="onClickEdit(deck._id)"></i>
-                        <i class="col-1 bi bi-trash" (click)="onClickDelete(removeContent, deck._id)"></i>
+<div class="container">
+    <div class="row row-cols-1 mt-4">
+        <div class="col">
+            <button class="btn btn-outline-primary " (click)="onClickAddDeck(content)">+ Create new deck</button>
+        </div>
+    </div>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mt-2" *ngIf="decks$ | async as decks">
+        <div class="col" *ngFor="let deck of decks">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ deck.name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">{{ deck.cards.length }} cards</h6>
+                    <div class="d-flex justify-content-end">
+                        <button class="m-2 btn btn-outline-primary" (click)="onClickStudy(deck._id)">
+                            <i class="col-1 bi bi-book"></i>
+                        </button>
+                        <button class="m-2 btn btn-outline-primary" (click)="onClickEdit(deck._id)">
+                            <i class="col-1 bi bi-pencil"></i>
+                        </button>
+                        <button class="m-2 btn btn-outline-primary" (click)="onClickDelete(removeContent, deck._id)">
+                            <i class="col-1 bi bi-trash"></i>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-    </li>
-</ul>
+    </div>
+</div>
 
 <ng-template #content let-modal>
     <div class="modal-header">
@@ -27,9 +38,12 @@
         <form class="col needs-validation" [formGroup]="form">
             <div class="mb-3">
                 <div class="input-group has-validation">
-                    <input class="form-control" [ngClass]="{ 'is-invalid': wasValidated && form.controls['name'].errors }"
+                    <input class="form-control"
+                           [ngClass]="{ 'is-invalid': wasValidated && form.controls['name'].errors }"
                            type="text" id="name" formControlName="name" placeholder="Deck name">
-                    <div *ngIf="form.controls['name'].errors?.['deckNameTaken']" class="invalid-feedback">You already have a deck with this name</div>
+                    <div *ngIf="form.controls['name'].errors?.['deckNameTaken']" class="invalid-feedback">You already
+                        have a deck with this name
+                    </div>
                 </div>
             </div>
         </form>
@@ -49,8 +63,12 @@
         Are you sure?
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" aria-label="Cancel" (click)="deleteModal.close('CANCEL')">Cancel</button>
-        <button type="button" class="btn btn-primary" aria-label="Confirm" (click)="deleteModal.close('CONFIRM')">Confirm</button>
+        <button type="button" class="btn btn-secondary" aria-label="Cancel" (click)="deleteModal.close('CANCEL')">
+            Cancel
+        </button>
+        <button type="button" class="btn btn-primary" aria-label="Confirm" (click)="deleteModal.close('CONFIRM')">
+            Confirm
+        </button>
 
     </div>
 </ng-template>

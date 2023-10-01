@@ -15,7 +15,7 @@ export class ReviewDeckComponent implements OnInit {
     currentCardIndex = 0;
 
     get currentCard() {
-        return this.deck?.cards[this.currentCardIndex];
+        return this.deck?.cards?.[this.currentCardIndex];
     }
 
     constructor(

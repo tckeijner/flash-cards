@@ -12,7 +12,7 @@ export interface UserModels {
 export interface Deck {
     _id?: mongodb.ObjectId;
     name: string;
-    cards?: Card[];
+    cards: Card[];
 }
 
 export interface Card {
