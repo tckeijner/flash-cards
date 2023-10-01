@@ -25,41 +25,38 @@ export class DecksComponent implements OnInit {
     constructor(
         private fb: FormBuilder,
         private decksService: DecksService,
-        private modalService: NgbModal,
+        protected modalService: NgbModal,
         private store: Store,
         private router: Router
     ) {
-        this.form = this.fb.group({
-            name: [null, [
-                Validators.required,
-            ], [
-                createIsDeckNameTakenValidator(decksService)
-            ]]
-        });
     };
 
     ngOnInit() {
         // Selector is an observable, will automatically update on changes/reload
         this.decks$ = this.store.select(selectDecks);
+        this.form = this.fb.group({
+            name: [null, [
+                Validators.required,
+                Validators.maxLength(40),
+            ], [
+                createIsDeckNameTakenValidator(this.decksService)
+            ]]
+        });
     }
 
-    onClickAddDeck(content: any) {
-        this.modalService.open(content, { ariaLabelledBy: 'add-deck-modal' }).result.then(
-            result => {
-                if (result === 'SAVE') {
-                    this.wasValidated = true;
-                    if (this.form.invalid) { return; }
-                    this.decksService.createDeck(this.form.value).subscribe({
-                        next: (res => {
-                            this.modalService.dismissAll(res);
-                            this.form.reset();
-                            this.toasts.push(res);
-                        }),
-                        error: (error: Error) => this.errorMessage = error.message
-                    });
-                }
-            }
-        )
+    onClickSave() {
+        this.wasValidated = true;
+        if (this.form.invalid) { return; }
+        this.decksService.createDeck(this.form.value).subscribe({
+            next: (res => {
+                this.modalService.dismissAll(res);
+                this.form.reset();
+                this.wasValidated = false;
+                this.toasts.push(res);
+            }),
+            error: (error: Error) => this.errorMessage = error.message
+        });
+
     }
 
     onClickDelete(content: any, id: string) {

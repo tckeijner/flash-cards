@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { Card, Deck } from "../deck.model";
 import { Store } from "@ngrx/store";
-import { selectDeckById } from "../../state/decks/decks.selectors";
+import { selectDeckById, selectDeckState } from "../../state/decks/decks.selectors";
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DecksActions } from "../../state/decks/decks.actions";
+import { filter, first } from "rxjs";
 
 @Component({
     selector: 'app-edit-deck',
@@ -77,6 +78,9 @@ export class EditDeckComponent implements OnInit {
     onClickSave() {
         const deck = { ...this.deck, ...this.form.value } as Deck;
         this.store.dispatch(DecksActions.updateDeck({ deck }));
+        this.store.select(selectDeckState).pipe(filter(state => state.loaded), first()).subscribe(() =>
+            this.router.navigate(['decks'])
+        )
     }
 
     /**

@@ -3,7 +3,7 @@
 <div class="container">
     <div class="row row-cols-1 mt-4">
         <div class="col">
-            <button class="btn btn-outline-primary " (click)="onClickAddDeck(content)">+ Create new deck</button>
+            <button class="btn btn-outline-primary " (click)="modalService.open(content)">+ Create new deck</button>
         </div>
     </div>
     <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mt-2" *ngIf="decks$ | async as decks">
@@ -39,17 +39,20 @@
             <div class="mb-3">
                 <div class="input-group has-validation">
                     <input class="form-control"
-                           [ngClass]="{ 'is-invalid': wasValidated && form.controls['name'].errors }"
+                           [ngClass]="{ 'is-invalid': form.controls['name'].touched && form.controls['name'].errors }"
                            type="text" id="name" formControlName="name" placeholder="Deck name">
-                    <div *ngIf="form.controls['name'].errors?.['deckNameTaken']" class="invalid-feedback">You already
-                        have a deck with this name
+                    <div *ngIf="form.controls['name'].errors?.['deckNameTaken']" class="invalid-feedback">
+                        You already have a deck with this name
+                    </div>
+                    <div *ngIf="form.controls['name'].errors?.['maxlength']" class="invalid-feedback">
+                        Maximum length for deck name is 40 characters.
                     </div>
                 </div>
             </div>
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="modal.close('SAVE')">Save</button>
+        <button type="button" class="btn btn-primary" (click)="onClickSave()">Save</button>
     </div>
 
 </ng-template>

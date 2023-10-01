@@ -11,7 +11,6 @@ export class CreateAccountComponent {
     form: FormGroup;
     accountCreatedMessage: null | string = null;
     accountCreated = false;
-    wasValidated = false;
     errorMessage: null | string = null;
 
     constructor(
@@ -40,7 +39,6 @@ export class CreateAccountComponent {
     }
 
     submitForm() {
-        this.wasValidated = true;
         // Cancel submission if form is invalid
         if (this.form.invalid) { return; }
         // disable the form before sending the request
