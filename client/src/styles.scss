@@ -1,11 +1,36 @@
-/* You can add global styles to this file, and also import other style files */
-
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-icons';
 
+// Custom styles that override bootstrap, to make it look less 'bootstrappy'
+.card {
+    border-radius: 2px;
+    box-shadow: 10px 10px $purple-200;
+}
 
-.routerLink {
-    text-decoration: none;
-    color: white;
+.btn, .btn:disabled, .btn-outline-primary:hover {
+    border-color: $indigo-300;
+    border-radius: 2px;
+}
+
+.btn-outline-primary, .btn-outline-primary:disabled {
+    color: $indigo-300;
+}
+
+.btn-primary, .btn-primary:disabled, .btn-outline-primary:hover {
+    background-color: $indigo-300;
+}
+
+.btn-primary:hover {
+    background-color: $indigo-400;
+    border-color: $indigo-400;
+}
+
+.form-control {
+    border-radius: 2px;
+    border: $indigo-700 solid ;
+}
+
+body {
+    background-color: $purple-100;
 }
