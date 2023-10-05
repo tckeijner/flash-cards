@@ -8,20 +8,26 @@
     box-shadow: 10px 10px $purple-200;
 }
 
-.btn, .btn:disabled, .btn-outline-primary:hover {
+.btn, .btn:disabled,
+.btn-outline-primary:hover {
     border-color: $indigo-300;
     border-radius: 2px;
 }
 
-.btn-outline-primary, .btn-outline-primary:disabled {
+.btn-outline-primary,
+.btn-outline-primary:disabled {
     color: $indigo-300;
 }
 
-.btn-primary, .btn-primary:disabled, .btn-outline-primary:hover {
+.btn-primary,
+.btn-primary:disabled,
+.btn-outline-primary:hover {
     background-color: $indigo-300;
 }
 
-.btn-primary:hover {
+.btn-primary:hover,
+.btn-outline-primary:not(:disabled):not(:disabled):active,
+.btn-primary:not(:disabled):not(:disabled):active {
     background-color: $indigo-400;
     border-color: $indigo-400;
 }
@@ -29,6 +35,10 @@
 .form-control {
     border-radius: 2px;
     border: $indigo-700 solid ;
+}
+
+.modal-content {
+    border-radius: 2px;
 }
 
 body {
