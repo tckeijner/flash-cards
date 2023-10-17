@@ -48,22 +48,6 @@ deckRouter.post('/', async (req, res) => {
     }
 })
 
-deckRouter.get('/checkAvailability/:name', async (req, res) => {
-    try {
-        const { name } = req?.params;
-        const token = req?.headers.authorization;
-        const user = await collections.users.findOne({ token });
-        if (!user) {
-            res.status(401).send(StatusMessage.Unauthorized);
-        } else {
-            const isDecknameTaken = user.decks?.some(deck => deck.name === name);
-            res.status(200).send(!isDecknameTaken);
-        }
-    } catch (error) {
-        res.status(500).send(StatusMessage.InternalServerError);
-    }
-})
-
 deckRouter.delete('/:id', async (req, res) => {
     try {
         const token = req?.headers?.authorization;

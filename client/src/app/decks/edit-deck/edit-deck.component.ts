@@ -6,6 +6,7 @@ import { selectDeckById, selectDeckState } from "../../state/decks/decks.selecto
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DecksActions } from "../../state/decks/decks.actions";
 import { filter, first } from "rxjs";
+import { createIsDeckNameTakenValidator } from "../decks.validators";
 
 @Component({
     selector: 'app-edit-deck',
@@ -42,7 +43,10 @@ export class EditDeckComponent implements OnInit {
     private initForm() {
         this.form = this.fb.group({
             name: [this.deck?.name, [
-                Validators.required
+                Validators.required,
+                Validators.maxLength(40)
+            ], [
+                createIsDeckNameTakenValidator(this.store, this.deck?.name || '')
             ]],
             cards: this.fb.array([])
         })
@@ -76,6 +80,9 @@ export class EditDeckComponent implements OnInit {
      * it in the database
      */
     onClickSave() {
+        if (this.form.invalid) { return ; }
+        this.form.disable();
+
         const deck = { ...this.deck, ...this.form.value } as Deck;
         this.store.dispatch(DecksActions.updateDeck({ deck }));
         this.store.select(selectDeckState).pipe(filter(state => state.loaded), first()).subscribe(() =>

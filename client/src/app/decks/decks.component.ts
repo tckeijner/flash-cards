@@ -39,7 +39,7 @@ export class DecksComponent implements OnInit {
                 Validators.required,
                 Validators.maxLength(40),
             ], [
-                createIsDeckNameTakenValidator(this.decksService)
+                createIsDeckNameTakenValidator(this.store, '')
             ]]
         });
     }
