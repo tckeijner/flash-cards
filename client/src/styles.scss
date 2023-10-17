@@ -41,6 +41,10 @@
     border-radius: 2px;
 }
 
+.card-text {
+    white-space: pre-wrap;
+}
+
 body {
     background-color: $purple-100;
 }

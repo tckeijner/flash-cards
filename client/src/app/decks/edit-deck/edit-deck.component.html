@@ -32,11 +32,11 @@
                 <div *ngFor="let card of cards.controls; let i = index" class="mt-4 card">
                     <div [formGroupName]="i" class="container">
                         <label for="front-{{ i }}" class="m-2 form-label">Front</label>
-                        <input type="text" class="form-control" id="front-{{ i }}" placeholder="Front text"
-                               formControlName="front">
+                        <textarea type="text" class="form-control" id="front-{{ i }}" placeholder="Front text"
+                                  formControlName="front"></textarea>
                         <label for="back-{{ i }}" class="m-2 form-label">Back</label>
-                        <input type="text" class="form-control" id="back-{{ i }}" placeholder="Back text"
-                               formControlName="back">
+                        <textarea type="text" class="form-control" id="back-{{ i }}" placeholder="Back text"
+                               formControlName="back"></textarea>
                         <div class="d-flex justify-content-end">
                             <button class="m-2 btn btn-primary" (click)="deleteCard(i)"><i class="bi bi-trash"></i>
                             </button>
