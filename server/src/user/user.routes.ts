@@ -1,7 +1,9 @@
 import * as express from 'express';
 import { collections } from '../database/database';
-import * as crypto from 'crypto';
+import * as jwt from 'jsonwebtoken';
 import { StatusMessage } from "../enums";
+import { verifyJwt } from "../handlers";
+import { ObjectId } from "mongodb";
 
 export const userRouter = express.Router();
 userRouter.use(express.json());
@@ -51,8 +53,7 @@ userRouter.post('/login', async (req, res) => {
         } else if (user.password !== password) {
             res.status(401).send('Incorrect password.');
         } else if (user.password === password) {
-            const token = crypto.randomUUID().toString(); // TODO: implement JWT
-            await collections.users.updateOne({ username }, { $set: { token }})
+            const token = jwt.sign({ _id: user._id, username: user.username }, 'secretkey');
             res.cookie('token', token, {})
             res.status(200).send({ username: user.username, userId: user._id, token });
         } else {
@@ -86,10 +87,10 @@ userRouter.put('/logout', async (req, res) => {
 
 })
 
-userRouter.get('/isAuthenticated', async (req, res) => {
+userRouter.get('/isAuthenticated', verifyJwt, async (req, res) => {
     try {
-        const token = req?.headers.authorization;
-        const user = await collections.users.findOne({ token });
+        const _id = new ObjectId(req.body.user._id);
+        const user = await collections.users.findOne({ _id });
         if (user) {
             res.status(200).send(true);
             return;
@@ -101,11 +102,11 @@ userRouter.get('/isAuthenticated', async (req, res) => {
     }
 })
 
-userRouter.put('/updateUser', async (req, res) => {
+userRouter.put('/updateUser', verifyJwt, async (req, res) => {
     try {
         const { username, password } = req?.body;
-        const token = req?.headers.authorization;
-        const user = await collections.users.findOne({ token });
+        const _id = new ObjectId(req.body.user._id);
+        const user = await collections.users.findOne({ _id });
 
         if (!user._id) {
             res.status(400).send(StatusMessage.Unauthorized);
@@ -119,17 +120,23 @@ userRouter.put('/updateUser', async (req, res) => {
             await collections.users.updateOne({ _id: user._id }, { $set: { password } })
         }
 
-        res.status(200).send({ username: user.username });
+        const updatedUser = await collections.users.findOne({ _id });
+
+        // When the user data is updated, the old token is no longer valid, so we send a new token to the user:
+        const token = jwt.sign({ _id: updatedUser._id, username: updatedUser.username }, 'secretkey');
+        res.cookie('token', token, {})
+
+        res.status(200).send({ username: updatedUser.username, token });
     }
     catch (error) {
         res.status(500).send(StatusMessage.InternalServerError);
     }
 })
 
-userRouter.get('/getAccounData', async (req, res) => {
+userRouter.get('/getAccounData', verifyJwt, async (req, res) => {
     try {
-        const token = req?.headers.authorization;
-        const { username, _id} = await collections.users.findOne({ token });
+        const _id = new ObjectId(req.body.user._id);
+        const { username} = await collections.users.findOne({ _id });
 
         if (username || _id) {
             res.status(200).send({ username, _id });
