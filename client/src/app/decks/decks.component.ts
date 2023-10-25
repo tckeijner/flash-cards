@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { createIsDeckNameTakenValidator } from "./decks.validators";
-import { filter, first, Observable } from "rxjs";
+import { filter, first, Observable, tap } from "rxjs";
 import { Deck } from "./deck.model";
 import { Store } from "@ngrx/store";
 import { isDeckCreated, isDeckRemoved, selectDecks } from "../state/decks/decks.selectors";
@@ -20,6 +20,7 @@ export class DecksComponent implements OnInit {
     wasValidated = false;
     errorMessage: string | null;
     decks$: Observable<Deck[]>;
+    noDecks = false;
 
     constructor(
         private fb: FormBuilder,
@@ -32,7 +33,7 @@ export class DecksComponent implements OnInit {
 
     ngOnInit() {
         // Selector is an observable, will automatically update on changes/reload
-        this.decks$ = this.store.select(selectDecks);
+        this.decks$ = this.store.select(selectDecks).pipe(tap(decks => this.noDecks = !decks || decks?.length < 1));
         this.form = this.fb.group({
             name: [null, [
                 Validators.required,
