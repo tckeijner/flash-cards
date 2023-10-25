@@ -27,19 +27,18 @@ deckRouter.post('/', verifyJwt, async (req, res) => {
         const _id = new ObjectId(req.body.user._id);
         const user = await collections.users.findOne({ _id });
 
-        const { deck } = req?.body;
-        if (!deck.cards) {
-            deck.cards = [];
-        }
+        const { name } = req?.body;
+
         if (!user) {
             res.status(401).send(StatusMessage.Unauthorized);
         } else {
             const result = await collections.users.updateOne(
                 { _id: user._id },
-                { $push: { decks: { ...deck, _id: new ObjectId()} } }
+                { $push: { decks: { _id: new ObjectId(), name, cards: []} } }
             );
             if (result.acknowledged) {
-                res.status(200).send(StatusMessage.DeckCreated);
+                const updatedUser = await collections.users.findOne({ _id });
+                res.status(200).send(updatedUser.decks);
             } else {
                 res.status(500).send(StatusMessage.InternalServerError);
             }

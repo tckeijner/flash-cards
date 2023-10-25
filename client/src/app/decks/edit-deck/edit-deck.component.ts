@@ -87,7 +87,7 @@ export class EditDeckComponent implements OnInit {
         this.store.dispatch(DecksActions.updateDeck({ deck }));
         this.store.select(selectDeckState).pipe(filter(state => state.loaded), first()).subscribe(() =>
             this.router.navigate(['decks'])
-        )
+        );
     }
 
     /**

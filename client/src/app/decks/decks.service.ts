@@ -21,20 +21,12 @@ export class DecksService {
         return this.httpClient.get<Deck[]>(this.baseUrl, { responseType: 'json' })
     }
 
-    createDeck(deck: Deck) {
-        return this.httpClient.post(
+    createDeck(name: string) {
+        return this.httpClient.post<Deck[]>(
             this.baseUrl,
-            { deck },
-            { responseType: 'text' }
-        ).pipe(
-            tap(() => this.store.dispatch(DecksActions.loadDecks()))
-        )
-    }
-
-    isDecknameAvailable(deckname: string) {
-        return this.httpClient.get(
-            `${this.baseUrl}/checkAvailability/${deckname}`
-        )
+            { name },
+            { responseType: 'json' }
+        );
     }
 
     deleteDeck(id: string) {

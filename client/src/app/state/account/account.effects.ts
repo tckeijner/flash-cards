@@ -1,10 +1,11 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { AccountActions } from "./account.actions";
-import { catchError, exhaustMap, map, of, switchMap } from "rxjs";
+import { catchError, EMPTY, exhaustMap, map, of, switchMap } from "rxjs";
 import { AuthService, TOKEN_KEY } from "../../account/auth.service";
 import { HttpErrorResponse } from "@angular/common/http";
 import { AccountService } from "../../account/account.service";
+import { ToastsService } from "../../toasts/toasts.service";
 
 /**
  * Saves the retrieved token in the localStorage, if exists
@@ -16,6 +17,14 @@ const setToken = (token?: string) => {
     }
 }
 
+/**
+ * Effects are hooks that listen to specific actions and trigger an async side effect
+ * A typical best practice is to divide actions into an initiator action, and a success and failure action,
+ * for example: Login, LoginSucess and LoginFailure. The success or failure action is triggered
+ * based on the outcome of the async logic. This structure can be made very consistent and maintainable,
+ * while in the components it is very easy to subscribe to results.
+ * Reference: https://ngrx.io/guide/effects
+ */
 @Injectable()
 export class AccountEffects {
     unloadAccountData$ = createEffect(() =>
@@ -26,6 +35,10 @@ export class AccountEffects {
                     map(() => {
                         localStorage.removeItem(TOKEN_KEY);
                         return AccountActions.logoutComplete();
+                    }),
+                    catchError(({ error }: HttpErrorResponse) => {
+                        this.toastsService.addToastMessage(error);
+                        return of(AccountActions.loadAccountDataFailure({ error }))
                     })
                 ))
         )
@@ -41,9 +54,10 @@ export class AccountEffects {
                         setToken(result.token);
                         return AccountActions.loginSuccessful(result);
                     }),
-                    catchError((error: HttpErrorResponse) =>
-                        of(AccountActions.loginFailed({ error: error.error }))
-                    )
+                    catchError(({ error }: HttpErrorResponse) => {
+                        this.toastsService.addToastMessage(error);
+                        return of(AccountActions.loginFailed({ error }))
+                    })
                 )
             )
         )
@@ -56,8 +70,10 @@ export class AccountEffects {
                 .pipe(
                     map(result =>
                         AccountActions.loadAccountDataSuccess({ username: result.username, userId: result._id })),
-                    catchError((error: HttpErrorResponse) =>
-                        of(AccountActions.loadAccountDataFailure({ error: error.error })))
+                    catchError(({ error }: HttpErrorResponse) => {
+                        this.toastsService.addToastMessage(error);
+                        return of(AccountActions.loadAccountDataFailure({ error }))
+                    })
                 ))
         )
     );
@@ -72,8 +88,10 @@ export class AccountEffects {
                         setToken(result.token);
                         return AccountActions.updateUserSuccess({ username: result.username })
                     }),
-                    catchError((error: HttpErrorResponse) =>
-                        of(AccountActions.updateUserFailure({ error: error.error })))
+                    catchError(({ error }: HttpErrorResponse) => {
+                        this.toastsService.addToastMessage(error);
+                        return of(AccountActions.updateUserFailure({ error }))
+                    })
                 ))
         )
     );
@@ -81,6 +99,7 @@ export class AccountEffects {
     constructor(
         private actions$: Actions,
         private authService: AuthService,
-        private accountService: AccountService
+        private accountService: AccountService,
+        private toastsService: ToastsService
     ) {}
 }

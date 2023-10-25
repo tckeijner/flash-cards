@@ -6,6 +6,11 @@
             <button class="btn btn-outline-primary " (click)="modalService.open(content)">+ Create new deck</button>
         </div>
     </div>
+
+    <div *ngIf="errorMessage" class="alert alert-warning" role="alert">
+        {{ errorMessage }}
+    </div>
+
     <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mt-2" *ngIf="decks$ | async as decks">
         <div class="col" *ngFor="let deck of decks">
             <div class="card">
@@ -75,9 +80,3 @@
 
     </div>
 </ng-template>
-
-<ngb-toast class="m-2 position-fixed bottom-0 end-0"
-           *ngFor="let toast of toasts; let i = index"
-           [autohide]="true" [delay]="5000"
-           (hidden)="toasts.splice(i, 1)">{{toast}}
-</ngb-toast>

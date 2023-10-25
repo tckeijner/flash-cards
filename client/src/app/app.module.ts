@@ -22,6 +22,7 @@ import { Router } from "@angular/router";
 import { AccountEffects } from "./state/account/account.effects";
 import { AccountActions } from "./state/account/account.actions";
 import { selectAccount } from "./state/account/account.selectors";
+import { ToastsComponent } from './toasts/toasts.component';
 
 /**
  * This custom provider will perform an authentication check on init.
@@ -61,6 +62,7 @@ export function initAuthentication (authService: AuthService, store: Store, rout
 @NgModule({
     declarations: [
         AppComponent,
+        ToastsComponent,
     ],
     imports: [
         BrowserModule,
