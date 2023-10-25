@@ -4,7 +4,6 @@
     <form [formGroup]="form" class="needs-validation mb-4">
         <div class="row mt-4">
             <div class="col input-group has-validation">
-                <label for="name" class="form-label">Deck name</label>
                 <input type="text" class="form-control" id="name" placeholder="Enter deck name" formControlName="name"
                        [ngClass]="{ 'is-invalid': form.controls['name'].touched && form.controls['name'].errors }">
                 <div *ngIf="form.controls['name'].errors?.['deckNameTaken']" class="invalid-feedback">
