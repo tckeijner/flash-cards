@@ -7,6 +7,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { DecksActions } from "../../state/decks/decks.actions";
 import { filter, first } from "rxjs";
 import { createIsDeckNameTakenValidator } from "../decks.validators";
+import { ToastsService } from "../../toasts/toasts.service";
 
 @Component({
     selector: 'app-edit-deck',
@@ -21,6 +22,7 @@ export class EditDeckComponent implements OnInit {
         private router: Router,
         private store: Store,
         private fb: FormBuilder,
+        private toastsService: ToastsService
     ) {}
 
 
@@ -85,9 +87,13 @@ export class EditDeckComponent implements OnInit {
 
         const deck = { ...this.deck, ...this.form.value } as Deck;
         this.store.dispatch(DecksActions.updateDeck({ deck }));
-        this.store.select(selectDeckState).pipe(filter(state => state.loaded), first()).subscribe(() =>
-            this.router.navigate(['decks'])
-        );
+        this.store.select(selectDeckState).pipe(
+            filter(state => state.loaded),
+            first()
+        ).subscribe(() => {
+            this.toastsService.addToastMessage('Deck successfully saved');
+            this.router.navigate(['decks']);
+        });
     }
 
     /**
