@@ -21,4 +21,9 @@ export const isDecksLoaded = createSelector(
 export const isDeckCreated = createSelector(
     selectDeckState,
     state => state.deckCreated
-)
+);
+
+export const isDeckRemoved = createSelector(
+    selectDeckState,
+    state => state.deckRemoved
+);

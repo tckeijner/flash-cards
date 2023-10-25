@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { DecksService } from "./decks.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { createIsDeckNameTakenValidator } from "./decks.validators";
-import { filter, Observable } from "rxjs";
+import { filter, first, Observable } from "rxjs";
 import { Deck } from "./deck.model";
 import { Store } from "@ngrx/store";
-import { isDeckCreated, selectDecks } from "../state/decks/decks.selectors";
+import { isDeckCreated, isDeckRemoved, selectDecks } from "../state/decks/decks.selectors";
 import { DecksActions } from "../state/decks/decks.actions";
 import { Router } from "@angular/router";
 import { ToastsService } from "../toasts/toasts.service";
@@ -24,7 +23,6 @@ export class DecksComponent implements OnInit {
 
     constructor(
         private fb: FormBuilder,
-        private decksService: DecksService,
         protected modalService: NgbModal,
         private store: Store,
         private router: Router,
@@ -50,11 +48,14 @@ export class DecksComponent implements OnInit {
         if (this.form.invalid) { return; }
         const name = this.form.value.name;
         this.store.dispatch(DecksActions.createDeck({ name }));
-        this.store.select(isDeckCreated).pipe(filter((isCreated => isCreated))).subscribe(() => {
+        this.store.select(isDeckCreated).pipe(
+            filter((isCreated => isCreated)),
+            first()
+        ).subscribe(() => {
             this.modalService.dismissAll();
             this.form.reset();
             this.wasValidated = false;
-            this.toastsService.addToastMessage('Deck created');
+            this.toastsService.addToastMessage('Deck successfully created');
         });
     }
 
@@ -63,6 +64,12 @@ export class DecksComponent implements OnInit {
             result => {
                 if (result === 'CONFIRM') {
                     this.store.dispatch(DecksActions.removeDeck({ id }));
+                    this.store.select(isDeckRemoved).pipe(
+                        filter(isRemoved => isRemoved),
+                        first()
+                    ).subscribe(() => {
+                        this.toastsService.addToastMessage('Deck successfully removed')
+                    })
                 }
             }
         )

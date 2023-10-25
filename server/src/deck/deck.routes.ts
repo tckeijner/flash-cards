@@ -59,8 +59,8 @@ deckRouter.delete('/:id', verifyJwt, async (req, res) => {
                 {_id: user._id},
                 { $pull: { decks: { _id: deckId } } }
             );
-            const updatedUser = await collections.users.findOne({ _id })
             if (result) {
+                const updatedUser = await collections.users.findOne({ _id })
                 res.status(200).send(updatedUser.decks);
             }
         } else {

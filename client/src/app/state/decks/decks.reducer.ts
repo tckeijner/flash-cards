@@ -9,6 +9,8 @@ export interface DeckState {
     error: string | null;
     creatingDeck: boolean;
     deckCreated: boolean;
+    removingDeck: boolean;
+    deckRemoved: boolean;
 }
 
 export const initialState: DeckState = {
@@ -17,7 +19,9 @@ export const initialState: DeckState = {
     loaded: false,
     error: null,
     creatingDeck: false,
-    deckCreated: false
+    deckCreated: false,
+    removingDeck: false,
+    deckRemoved: false,
 };
 
 export const deckReducer = createReducer(
@@ -61,10 +65,10 @@ export const deckReducer = createReducer(
             deckCreated: false
         })
     }),
-    on(DecksActions.createDeckSuccess, (state, action) => {
+    on(DecksActions.createDeckSuccess, (state, { decks }) => {
         return ({
             ...state,
-            decks: action.decks,
+            decks,
             loading: false,
             loaded: true,
             error: null,
@@ -116,7 +120,9 @@ export const deckReducer = createReducer(
             ...state,
             loading: true,
             loaded: false,
-            error: null
+            error: null,
+            removingDeck: true,
+            deckRemoved: false
         })
     }),
     on(DecksActions.removeDeckSuccess, (state, { decks }) => {
@@ -125,7 +131,9 @@ export const deckReducer = createReducer(
             decks,
             loading: false,
             loaded: true,
-            error: null
+            error: null,
+            removingDeck: false,
+            deckRemoved: true
         })
     }),
     on(DecksActions.removeDeckFailed, (state, { error }) => {
@@ -133,6 +141,8 @@ export const deckReducer = createReducer(
             ...state,
             loading: false,
             loaded: false,
+            removingDeck: false,
+            deckRemoved: false,
             error
         })
     }),
