@@ -48,12 +48,6 @@ export class DecksComponent implements OnInit {
     onClickSave() {
         this.wasValidated = true;
         if (this.form.invalid) { return; }
-        // this.decksService.createDeck(this.form.value).subscribe(res => {
-        //     this.modalService.dismissAll(res);
-        //     this.form.reset();
-        //     this.wasValidated = false;
-        //     this.toastsService.addToastMessage(res);
-        // });
         const name = this.form.value.name;
         this.store.dispatch(DecksActions.createDeck({ name }));
         this.store.select(isDeckCreated).pipe(filter((isCreated => isCreated))).subscribe(() => {
