@@ -11,7 +11,7 @@
         {{ errorMessage }}
     </div>
 
-    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mt-2" *ngIf="decks$ | async as decks">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mt-2 mb-4" *ngIf="decks$ | async as decks">
         <div class="col" *ngFor="let deck of decks">
             <div class="card">
                 <div class="card-body">
