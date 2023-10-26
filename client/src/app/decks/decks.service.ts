@@ -24,6 +24,6 @@ export class DecksService {
     }
 
     updateDeck(deck: Deck): Observable<Deck[]> {
-        return this.httpClient.put<Deck[]>(`${this.baseUrl}`, deck, { responseType: 'json' });
+        return this.httpClient.put<Deck[]>(`${this.baseUrl}`, { deck }, { responseType: 'json' });
     }
 }

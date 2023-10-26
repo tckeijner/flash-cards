@@ -2,8 +2,7 @@ import * as express from 'express';
 import { collections } from '../database/database';
 import * as jwt from 'jsonwebtoken';
 import { StatusMessage } from "../enums";
-import { verifyJwt } from "../handlers";
-import { ObjectId } from "mongodb";
+import { getUserFromDecodedToken, verifyJwt } from "../handlers";
 
 export const userRouter = express.Router();
 userRouter.use(express.json());
@@ -65,32 +64,9 @@ userRouter.post('/login', async (req, res) => {
     }
 })
 
-userRouter.put('/logout', async (req, res) => {
+userRouter.get('/isAuthenticated', verifyJwt, getUserFromDecodedToken, async (req, res) => {
     try {
-        const token = req?.headers.authorization;
-        if (token) {
-            const result = await collections.users.updateOne(
-                { token },
-                { $unset: { token: '', tokenExpiresAt: '' } }
-            );
-            if (result) {
-                res.status(200).send('Logout successful');
-            } else {
-                res.status(200).send('Invalid token, user logged out.')
-            }
-            return;
-        }
-        res.status(400).send('Bad request');
-    } catch (error) {
-        res.status(500).send(StatusMessage.InternalServerError);
-    }
-
-})
-
-userRouter.get('/isAuthenticated', verifyJwt, async (req, res) => {
-    try {
-        const _id = new ObjectId(req.body.user._id);
-        const user = await collections.users.findOne({ _id });
+        const { user } = req.body;
         if (user) {
             res.status(200).send(true);
             return;
@@ -102,11 +78,10 @@ userRouter.get('/isAuthenticated', verifyJwt, async (req, res) => {
     }
 })
 
-userRouter.put('/updateUser', verifyJwt, async (req, res) => {
+userRouter.put('/updateUser', verifyJwt, getUserFromDecodedToken, async (req, res) => {
     try {
-        const { username, password } = req?.body;
-        const _id = new ObjectId(req.body.user._id);
-        const user = await collections.users.findOne({ _id });
+        const { username, password, user } = req?.body;
+        const { _id } = user;
 
         if (!user._id) {
             res.status(400).send(StatusMessage.Unauthorized);
@@ -133,10 +108,10 @@ userRouter.put('/updateUser', verifyJwt, async (req, res) => {
     }
 })
 
-userRouter.get('/getAccounData', verifyJwt, async (req, res) => {
+userRouter.get('/getAccounData', verifyJwt, getUserFromDecodedToken, async (req, res) => {
     try {
-        const _id = new ObjectId(req.body.user._id);
-        const { username} = await collections.users.findOne({ _id });
+        const { _id } = req.body.user;
+        const { username } = req.body;
 
         if (username || _id) {
             res.status(200).send({ username, _id });

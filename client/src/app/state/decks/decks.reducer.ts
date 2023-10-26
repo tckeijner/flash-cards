@@ -155,4 +155,7 @@ export const deckReducer = createReducer(
             error
         })
     }),
+    on(DecksActions.clearDeckState, state => {
+        return initialState;
+    })
 );

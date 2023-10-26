@@ -2,15 +2,14 @@ import * as express from 'express';
 import { collections } from '../database/database';
 import { ObjectId } from "mongodb";
 import { StatusMessage } from "../enums";
-import { verifyJwt } from "../handlers";
+import { getUserFromDecodedToken, verifyJwt } from "../handlers";
 
 export const deckRouter = express.Router();
 deckRouter.use(express.json());
 
-deckRouter.get('/', verifyJwt, async (req, res) => {
+deckRouter.get('/', verifyJwt, getUserFromDecodedToken, async (req, res) => {
     try {
-        const _id = new ObjectId(req.body.user._id);
-        const user = await collections.users.findOne({ _id });
+        const { user } = req?.body;
         if (!user) {
             res.status(401).send(StatusMessage.Unauthorized);
         } else {
@@ -22,18 +21,16 @@ deckRouter.get('/', verifyJwt, async (req, res) => {
     }
 });
 
-deckRouter.post('/', verifyJwt, async (req, res) => {
+deckRouter.post('/', verifyJwt, getUserFromDecodedToken, async (req, res) => {
     try {
-        const _id = new ObjectId(req.body.user._id);
-        const user = await collections.users.findOne({ _id });
-
-        const { name } = req?.body;
+        const { name, user } = req?.body;
+        const { _id } = user;
 
         if (!user) {
             res.status(401).send(StatusMessage.Unauthorized);
         } else {
             const result = await collections.users.updateOne(
-                { _id: user._id },
+                { _id },
                 { $push: { decks: { _id: new ObjectId(), name, cards: []} } }
             );
             if (result.acknowledged) {
@@ -49,14 +46,13 @@ deckRouter.post('/', verifyJwt, async (req, res) => {
     }
 })
 
-deckRouter.delete('/:id', verifyJwt, async (req, res) => {
+deckRouter.delete('/:id', verifyJwt, getUserFromDecodedToken, async (req, res) => {
     try {
-        const _id = new ObjectId(req.body.user._id);
-        const user = await collections.users.findOne({ _id });
+        const { _id } = req?.body?.user;
         const deckId = new ObjectId(req?.params?.id);
-        if (user) {
+        if (_id) {
             const result = await collections.users.updateOne(
-                {_id: user._id},
+                { _id },
                 { $pull: { decks: { _id: deckId } } }
             );
             if (result) {
@@ -73,15 +69,15 @@ deckRouter.delete('/:id', verifyJwt, async (req, res) => {
     }
 })
 
-deckRouter.put('/', verifyJwt, async (req, res) => {
+deckRouter.put('/', verifyJwt, getUserFromDecodedToken, async (req, res) => {
     try {
-        const _id = new ObjectId(req.body.user._id);
-        const user = await collections.users.findOne({ _id });
-        const deck = req.body;
+        const { _id } = req.body?.user
+        const { deck } = req.body;
         deck._id = new ObjectId(deck._id);
-        if (user) {
+
+        if (_id) {
             const result = await collections.users.updateOne(
-                { '_id': user._id },
+                { _id },
                 { $set: { 'decks.$[deck]': deck } },
                 { arrayFilters: [{ 'deck._id': new ObjectId(deck._id) }] }
             )

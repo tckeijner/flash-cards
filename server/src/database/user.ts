@@ -18,14 +18,6 @@ export async function applySchemaValidation(db: mongodb.Db) {
                     description: "'password' is required and is a string",
                     minLength: 5
                 },
-                token: {
-                    bsonType: 'string',
-                    description: 'Token for authentication'
-                },
-                tokenExpiresAt: {
-                    bsonType: 'string',
-                    description: 'Authentication token expiry date'
-                },
                 decks: {
                     bsonType: 'array',
                     description: 'list of decks',

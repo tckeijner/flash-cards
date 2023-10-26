@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { HttpErrorResponse } from "@angular/common/http";
-import { catchError, EMPTY, exhaustMap, map, of, switchMap } from "rxjs";
+import { catchError, exhaustMap, map, of, switchMap } from "rxjs";
 
 import { AccountActions } from "./account.actions";
 import { AuthService, TOKEN_KEY } from "../../account/auth.service";
@@ -28,23 +28,6 @@ const setToken = (token?: string) => {
  */
 @Injectable()
 export class AccountEffects {
-    unloadAccountData$ = createEffect(() =>
-        this.actions$.pipe(
-            ofType(AccountActions.logout),
-            exhaustMap(() => this.authService.logout()
-                .pipe(
-                    map(() => {
-                        // remove token from localstorage
-                        localStorage.removeItem(TOKEN_KEY);
-                        return AccountActions.logoutComplete();
-                    }),
-                    catchError(({ error }: HttpErrorResponse) => {
-                        this.toastsService.addToastMessage(error);
-                        return of(AccountActions.loadAccountDataFailure({ error }))
-                    })
-                ))
-        )
-    );
 
     login$ = createEffect(() =>
         this.actions$.pipe(

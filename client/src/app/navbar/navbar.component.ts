@@ -23,6 +23,6 @@ export class NavbarComponent {
         this.store.dispatch(AccountActions.logout());
         // Subscribe to result and navigate to login page
         this.store.select(isLoggedOut).pipe(filter(isLoggedOut => isLoggedOut))
-            .subscribe(() => this.router.navigate(['login']))
+            .subscribe(() => this.router.navigate(['/']))
     }
 }

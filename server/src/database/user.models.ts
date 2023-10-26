@@ -4,8 +4,6 @@ export interface UserModels {
     _id?: mongodb.ObjectId;
     username: string;
     password: string;
-    token?: string;
-    tokenExpiresAt?: Date;
     decks?: Deck[];
 }
 

@@ -32,11 +32,4 @@ export class AuthService {
     isAuthenticated() {
         return this.httpClient.get<boolean>(`${this.baseUrl}/isAuthenticated`, {});
     }
-
-    /**
-     * Sends a logout request to the server.
-     */
-    logout() {
-        return this.httpClient.put(`${this.baseUrl}/logout`, {}, { responseType: 'text'} );
-    }
 }

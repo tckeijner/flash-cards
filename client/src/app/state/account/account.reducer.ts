@@ -55,7 +55,7 @@ export const initialState: AccountState = {
              error
          })
      }),
-     on(AccountActions.logoutComplete, (state) => {
+     on(AccountActions.logout, (state) => {
          return ({
              ...state,
              ...initialState,
