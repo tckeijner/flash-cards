@@ -3,6 +3,7 @@ import { collections } from '../database/database';
 import * as jwt from 'jsonwebtoken';
 import { StatusMessage } from "../enums";
 import { getUserFromDecodedToken, verifyJwt } from "../handlers";
+import * as process from "process";
 
 export const userRouter = express.Router();
 userRouter.use(express.json());
@@ -52,7 +53,7 @@ userRouter.post('/login', async (req, res) => {
         } else if (user.password !== password) {
             res.status(401).send('Incorrect password.');
         } else if (user.password === password) {
-            const token = jwt.sign({ _id: user._id, username: user.username }, 'secretkey');
+            const token = jwt.sign({ _id: user._id, username: user.username }, process.env.JWT_SECRET_KEY);
             res.cookie('token', token, {})
             res.status(200).send({ username: user.username, userId: user._id, token });
         } else {

@@ -5,7 +5,10 @@ import cookieParser from 'cookie-parser';
 import { connectToDatabase } from './database/database';
 import { userRouter } from "./user/user.routes";
 import { deckRouter } from "./deck/deck.routes";
+import { setJwtSecret } from "./generateJwtSecret";
+import * as process from "process";
 
+setJwtSecret();
 dotenv.config();
 
 const { ATLAS_URI } = process.env;
