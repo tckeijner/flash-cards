@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { createIsDeckNameTakenValidator } from "./decks.validators";
-import { filter, first, Observable, tap } from "rxjs";
-import { Deck } from "./deck.model";
 import { Store } from "@ngrx/store";
+import { filter, first, Observable, tap } from "rxjs";
+import { Router } from "@angular/router";
+
+import { createIsDeckNameTakenValidator } from "./decks.validators";
+import { Deck } from "./deck.model";
 import { isDeckCreated, isDeckRemoved, selectDecks } from "../state/decks/decks.selectors";
 import { DecksActions } from "../state/decks/decks.actions";
-import { Router } from "@angular/router";
 import { ToastsService } from "../toasts/toasts.service";
 
 @Component({
@@ -34,6 +35,7 @@ export class DecksComponent implements OnInit {
     ngOnInit() {
         // Selector is an observable, will automatically update on changes/reload
         this.decks$ = this.store.select(selectDecks).pipe(tap(decks => this.noDecks = !decks || decks?.length < 1));
+        // Create the form group
         this.form = this.fb.group({
             name: [null, [
                 Validators.required,
@@ -45,10 +47,15 @@ export class DecksComponent implements OnInit {
     }
 
     onClickSave() {
+        // Set wasvalidatod to true is used for the bootstrap form functionality
         this.wasValidated = true;
+
+        // Break off early when form is invalid
         if (this.form.invalid) { return; }
         const name = this.form.value.name;
+        // Trigger createDeck action
         this.store.dispatch(DecksActions.createDeck({ name }));
+        // Subscribe to results of the action
         this.store.select(isDeckCreated).pipe(
             filter((isCreated => isCreated)),
             first()
@@ -61,10 +68,14 @@ export class DecksComponent implements OnInit {
     }
 
     onClickDelete(content: any, id: string) {
+        // Opens the modal, and wait for the close result CONFIRM to continue
         this.modalService.open(content, { ariaLabelledBy: 'delete-deck-modal' }).result.then(
             result => {
+                // If modal is closed with CONFIRM it will start the action
                 if (result === 'CONFIRM') {
+                    // Trigger remove deck action
                     this.store.dispatch(DecksActions.removeDeck({ id }));
+                    // Subscribe to result
                     this.store.select(isDeckRemoved).pipe(
                         filter(isRemoved => isRemoved),
                         first()

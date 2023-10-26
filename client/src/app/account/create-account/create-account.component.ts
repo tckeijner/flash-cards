@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+
 import { AccountService } from "../account.service";
 import { confirmPasswordValidator, createIsUsernameTakenValidator } from "../account.validators";
 
@@ -44,11 +45,14 @@ export class CreateAccountComponent {
         // disable the form before sending the request
         this.form.disable();
 
+        // When the form is valid, trigger a create user request.
         this.accountService.createUser(this.form.value).subscribe({
+            // successful:
             next: (() => {
                 this.accountCreatedMessage = `Account created with username ${this.form.value.username}`
                 this.accountCreated = true;
             }),
+            // unsuccessful:
             error: (error: Error) => {
                 this.errorMessage = error.message;
             }

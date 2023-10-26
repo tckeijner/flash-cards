@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastsService } from "./toasts.service";
 
+/**
+ * Toasts component is a general component that is visible anywhere in the application, showing popup messages.
+ */
 @Component({
     selector: 'app-toasts',
     template: `

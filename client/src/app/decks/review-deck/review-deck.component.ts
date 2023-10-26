@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Deck } from "../deck.model";
 import { ActivatedRoute } from "@angular/router";
 import { Store } from "@ngrx/store";
+
+import { Deck } from "../deck.model";
 import { selectDeckById } from "../../state/decks/decks.selectors";
 
 @Component({

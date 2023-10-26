@@ -20,6 +20,15 @@ export const initialState: AccountState = {
     loggedOut: false,
     error: null
 }
+
+/**
+ * the reducer is the collections functions which contain the logic that must be performed on the state.
+ * The general principle of the Redux pattern is that the state is immutable. We never edit the state directly. Instead,
+ * we make a copy of the state using the spread (...) operator and combining it with the updated properties. The internal
+ * logic then replaced the whole state with the updated state.
+ *
+ * The on() function indicated which logic must be peformed on which action
+ */
  export const accountReducer = createReducer(
      initialState,
      on(AccountActions.loadAccountData, (state) => {

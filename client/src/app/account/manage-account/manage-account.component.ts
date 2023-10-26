@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from "@ngrx/store";
-import { selectAccount } from "../../state/account/account.selectors";
-import { Observable, tap } from "rxjs";
-import { AccountState } from "../../state/account/account.reducer";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { Observable, tap } from "rxjs";
+
+import { selectAccount } from "../../state/account/account.selectors";
+import { AccountState } from "../../state/account/account.reducer";
 import { AccountActions } from "../../state/account/account.actions";
 import { confirmPasswordValidator, createIsUsernameTakenValidator } from "../account.validators";
 import { AccountService } from "../account.service";
@@ -28,8 +29,10 @@ export class ManageAccountComponent implements OnInit {
     }
 
     ngOnInit() {
+        // Subscribe to the account info from the store:
         this.account$ = this.store.select(selectAccount).pipe(
             tap(account => {
+                // Create a form with default value:
                 this.usernameForm = this.fb.group({
                     username: [account.username, [
                         Validators.required,
@@ -40,6 +43,7 @@ export class ManageAccountComponent implements OnInit {
                     ]]
                 });
 
+                // Password has no default value, since it shouldn't be stored locally
                 this.passwordForm = this.fb.group({
                     password: [null, [
                         Validators.required,
@@ -64,8 +68,12 @@ export class ManageAccountComponent implements OnInit {
 
     saveForm(form: FormGroup) {
         this.wasValidated = true;
+        // Break early when the form is invalid:
         if (form.invalid) { return; }
+
+        // Dispatch update user action:
         this.store.dispatch(AccountActions.updateUser(form.value));
+        // TODO subscribe to result
         this.modalService.dismissAll();
         this.wasValidated = false;
     }

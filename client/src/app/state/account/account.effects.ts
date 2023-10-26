@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { AccountActions } from "./account.actions";
-import { catchError, EMPTY, exhaustMap, map, of, switchMap } from "rxjs";
-import { AuthService, TOKEN_KEY } from "../../account/auth.service";
 import { HttpErrorResponse } from "@angular/common/http";
+import { catchError, EMPTY, exhaustMap, map, of, switchMap } from "rxjs";
+
+import { AccountActions } from "./account.actions";
+import { AuthService, TOKEN_KEY } from "../../account/auth.service";
 import { AccountService } from "../../account/account.service";
 import { ToastsService } from "../../toasts/toasts.service";
 
@@ -33,6 +34,7 @@ export class AccountEffects {
             exhaustMap(() => this.authService.logout()
                 .pipe(
                     map(() => {
+                        // remove token from localstorage
                         localStorage.removeItem(TOKEN_KEY);
                         return AccountActions.logoutComplete();
                     }),

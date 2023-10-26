@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { Card, Deck } from "../deck.model";
-import { Store } from "@ngrx/store";
-import { selectDeckById, selectDeckState } from "../../state/decks/decks.selectors";
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { DecksActions } from "../../state/decks/decks.actions";
+import { Store } from "@ngrx/store";
 import { filter, first } from "rxjs";
+
+import { selectDeckById, selectDeckState } from "../../state/decks/decks.selectors";
+import { DecksActions } from "../../state/decks/decks.actions";
 import { createIsDeckNameTakenValidator } from "../decks.validators";
 import { ToastsService } from "../../toasts/toasts.service";
 

@@ -10,6 +10,7 @@
                         <div *ngIf="form.controls['username'].errors?.['required']" class="invalid-feedback">
                             Username is required
                         </div>
+
                         <div *ngIf="form.controls['username'].errors?.['minlength'] || form.controls['username'].errors?.['maxlength']"
                              class="invalid-feedback">Username must be between 6 and 20 characters long
                         </div>
