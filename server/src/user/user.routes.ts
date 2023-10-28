@@ -44,6 +44,7 @@ userRouter.post('/', async (req, res) => {
     }
 });
 
+// POST to log the user in
 userRouter.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -57,14 +58,14 @@ userRouter.post('/login', async (req, res) => {
             res.cookie('token', token, {})
             res.status(200).send({ username: user.username, userId: user._id, token });
         } else {
-            res.status(500).send(StatusMessage.InternalServerError)
+            res.status(500).send(StatusMessage.InternalServerError);
         }
     } catch (error) {
-        console.log(error);
-        res.status(500).send(StatusMessage.InternalServerError)
+        res.status(500).send(StatusMessage.InternalServerError);
     }
 })
 
+// GET check if user is already authenticated
 userRouter.get('/isAuthenticated', verifyJwt, getUserFromDecodedToken, async (req, res) => {
     try {
         const { user } = req.body;
@@ -79,6 +80,7 @@ userRouter.get('/isAuthenticated', verifyJwt, getUserFromDecodedToken, async (re
     }
 })
 
+// PUT updated username and/or password
 userRouter.put('/updateUser', verifyJwt, getUserFromDecodedToken, async (req, res) => {
     try {
         const { username, password, user } = req?.body;
@@ -109,6 +111,7 @@ userRouter.put('/updateUser', verifyJwt, getUserFromDecodedToken, async (req, re
     }
 })
 
+// GET get account data for account page
 userRouter.get('/getAccounData', verifyJwt, getUserFromDecodedToken, async (req, res) => {
     try {
         const { _id } = req.body.user;

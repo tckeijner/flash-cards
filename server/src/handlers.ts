@@ -5,6 +5,11 @@ import { collections } from "./database/database";
 import * as process from "process";
 
 /**
+ * These handler functions are generic functions that can be added to any request method. They contain logic that is generic and used
+ * in most requests, like token verification, and getting user data from the DB
+ */
+
+/**
  * Request handler function that verifies the decoded token as user info to the request.
  * @param req
  * @param res
@@ -26,6 +31,12 @@ export const verifyJwt: RequestHandler = (req, res, next) => {
     }
 }
 
+/**
+ * Uses the decoded token to find the user in the DB and adds it to the request.
+ * @param req
+ * @param res
+ * @param next
+ */
 export const getUserFromDecodedToken: RequestHandler = async (req, res, next) => {
     try {
         const _id = new ObjectId(req.body.token._id);

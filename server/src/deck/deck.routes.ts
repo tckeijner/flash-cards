@@ -7,6 +7,7 @@ import { getUserFromDecodedToken, verifyJwt } from "../handlers";
 export const deckRouter = express.Router();
 deckRouter.use(express.json());
 
+// GET Get all decks belonging to a user
 deckRouter.get('/', verifyJwt, getUserFromDecodedToken, async (req, res) => {
     try {
         const { user } = req?.body;
@@ -21,6 +22,7 @@ deckRouter.get('/', verifyJwt, getUserFromDecodedToken, async (req, res) => {
     }
 });
 
+// POST Add a new deck to a user
 deckRouter.post('/', verifyJwt, getUserFromDecodedToken, async (req, res) => {
     try {
         const { name, user } = req?.body;
@@ -46,6 +48,7 @@ deckRouter.post('/', verifyJwt, getUserFromDecodedToken, async (req, res) => {
     }
 })
 
+// DELETE Delete specific deck
 deckRouter.delete('/:id', verifyJwt, getUserFromDecodedToken, async (req, res) => {
     try {
         const { _id } = req?.body?.user;
@@ -69,6 +72,7 @@ deckRouter.delete('/:id', verifyJwt, getUserFromDecodedToken, async (req, res) =
     }
 })
 
+// PUT Update a deck
 deckRouter.put('/', verifyJwt, getUserFromDecodedToken, async (req, res) => {
     try {
         const { _id } = req.body?.user

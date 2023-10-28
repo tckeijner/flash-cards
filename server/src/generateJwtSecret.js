@@ -16,7 +16,7 @@ export function setJwtSecret() {
         }
         console.log('No JWT secret found in .env. Setting a new secret. Existing tokens will be invalid');
         const secretKey = crypto.randomBytes(32).toString('hex');
-        fs.appendFileSync('.env', `JWT_SECRET_KEY=${secretKey}`);
+        fs.appendFileSync('.env', `\r\nJWT_SECRET_KEY=${secretKey}`);
         console.log('JWT secret generation successful.');
 
     } catch (e) {

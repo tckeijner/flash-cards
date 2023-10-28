@@ -1,5 +1,13 @@
 import * as mongodb from "mongodb";
 
+/**
+ * Manages the database instance. For this specific purpose, I have chosen for only one collection
+ * called User, where all other data is grouped under the user. Another possibility would have been to manage two
+ * collections (users and decks) and connect them with foreign IDs, but this is really only necessary for large collections
+ * of data, where for example decks can belong to multiple users. For smaller collections, this appears
+ * to be the best practice.
+ * @param db
+ */
 export async function applySchemaValidation(db: mongodb.Db) {
     const jsonSchema = {
         $jsonSchema: {
@@ -10,12 +18,12 @@ export async function applySchemaValidation(db: mongodb.Db) {
                 _id: {},
                 username: {
                     bsonType: 'string',
-                    description: "'username' is required and is a string",
+                    description: "username' is required and is a string",
                     minLength: 5
                 },
                 password: {
                     bsonType: 'string',
-                    description: "'password' is required and is a string",
+                    description: "password' is required and is a string",
                     minLength: 5
                 },
                 decks: {
@@ -24,7 +32,7 @@ export async function applySchemaValidation(db: mongodb.Db) {
                     minItems: 0,
                     items: {
                         bsonType: 'object',
-                        description: "'Deck' is required and is an object",
+                        description: "Deck' is required and is an object",
                         required: ['name'],
                         properties: {
                             _id: 'ObjectId',
