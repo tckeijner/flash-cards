@@ -1,20 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { Store } from "@ngrx/store";
-import { filter, first, Observable, tap } from "rxjs";
-import { Router } from "@angular/router";
-
-import { createIsDeckNameTakenValidator } from "./decks.validators";
-import { Deck } from "./deck.model";
-import { isDeckCreated, isDeckRemoved, selectDecks } from "../state/decks/decks.selectors";
-import { DecksActions } from "../state/decks/decks.actions";
-import { ToastsService } from "../toasts/toasts.service";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Store } from '@ngrx/store';
+import { filter, first, Observable, tap } from 'rxjs';
+import { DecksActions } from '../state/decks/decks.actions';
+import { isDeckCreated, isDeckRemoved, selectDecks } from '../state/decks/decks.selectors';
+import { ToastsService } from '../toasts/toasts.service';
+import { Deck } from './deck.model';
+import { createIsDeckNameTakenValidator } from './decks.validators';
 
 @Component({
     selector: 'app-decks',
     templateUrl: 'decks.component.html',
-    styleUrls: ['decks.component.scss']
+    styleUrls: ['decks.component.scss'],
 })
 export class DecksComponent implements OnInit {
     form: FormGroup;
@@ -28,7 +27,7 @@ export class DecksComponent implements OnInit {
         protected modalService: NgbModal,
         private store: Store,
         private router: Router,
-        private toastsService: ToastsService
+        private toastsService: ToastsService,
     ) {
     };
 
@@ -41,8 +40,8 @@ export class DecksComponent implements OnInit {
                 Validators.required,
                 Validators.maxLength(40),
             ], [
-                createIsDeckNameTakenValidator(this.store, '')
-            ]]
+                createIsDeckNameTakenValidator(this.store, ''),
+            ]],
         });
     }
 
@@ -51,14 +50,16 @@ export class DecksComponent implements OnInit {
         this.wasValidated = true;
 
         // Break off early when form is invalid
-        if (this.form.invalid) { return; }
+        if (this.form.invalid) {
+            return;
+        }
         const name = this.form.value.name;
         // Trigger createDeck action
         this.store.dispatch(DecksActions.createDeck({ name }));
         // Subscribe to results of the action
         this.store.select(isDeckCreated).pipe(
             filter((isCreated => isCreated)),
-            first()
+            first(),
         ).subscribe(() => {
             this.modalService.dismissAll();
             this.form.reset();
@@ -78,13 +79,13 @@ export class DecksComponent implements OnInit {
                     // Subscribe to result
                     this.store.select(isDeckRemoved).pipe(
                         filter(isRemoved => isRemoved),
-                        first()
+                        first(),
                     ).subscribe(() => {
-                        this.toastsService.addToastMessage('Deck successfully removed')
-                    })
+                        this.toastsService.addToastMessage('Deck successfully removed');
+                    });
                 }
-            }
-        )
+            },
+        );
     }
 
     onClickEdit(id: string) {

@@ -1,20 +1,21 @@
-import { NgModule } from "@angular/core";
-import { NavbarComponent } from "./navbar.component";
-import { CommonModule } from "@angular/common";
-import { StoreModule } from "@ngrx/store";
-import { RouterLink } from "@angular/router";
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { StoreModule } from '@ngrx/store';
+import { NavbarComponent } from './navbar.component';
 
 @NgModule({
     declarations: [
-        NavbarComponent
+        NavbarComponent,
     ],
     imports: [
         CommonModule,
         StoreModule,
-        RouterLink
+        RouterLink,
     ],
     exports: [
-        NavbarComponent
-    ]
+        NavbarComponent,
+    ],
 })
-export class NavbarModule {}
+export class NavbarModule {
+}

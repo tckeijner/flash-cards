@@ -1,18 +1,19 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { Deck } from "./deck.model";
+import { Observable } from 'rxjs';
+import { Deck } from './deck.model';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class DecksService {
     private baseUrl = 'http://localhost:5200/decks';
 
-    constructor(private httpClient: HttpClient) {}
+    constructor(private httpClient: HttpClient) {
+    }
 
     getAllDecks() {
-        return this.httpClient.get<Deck[]>(this.baseUrl, { responseType: 'json' })
+        return this.httpClient.get<Deck[]>(this.baseUrl, { responseType: 'json' });
     }
 
     createDeck(name: string) {

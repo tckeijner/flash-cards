@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from "@angular/router";
-import { Card, Deck } from "../deck.model";
-import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { Store } from "@ngrx/store";
-import { filter, first } from "rxjs";
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { filter, first } from 'rxjs';
+import { DecksActions } from '../../state/decks/decks.actions';
 
-import { selectDeckById, selectDeckState } from "../../state/decks/decks.selectors";
-import { DecksActions } from "../../state/decks/decks.actions";
-import { createIsDeckNameTakenValidator } from "../decks.validators";
-import { ToastsService } from "../../toasts/toasts.service";
+import { selectDeckById, selectDeckState } from '../../state/decks/decks.selectors';
+import { ToastsService } from '../../toasts/toasts.service';
+import { Card, Deck } from '../deck.model';
+import { createIsDeckNameTakenValidator } from '../decks.validators';
 
 @Component({
     selector: 'app-edit-deck',
-    templateUrl: 'edit-deck.component.html'
+    templateUrl: 'edit-deck.component.html',
 })
 export class EditDeckComponent implements OnInit {
     deck?: Deck;
@@ -23,8 +23,9 @@ export class EditDeckComponent implements OnInit {
         private router: Router,
         private store: Store,
         private fb: FormBuilder,
-        private toastsService: ToastsService
-    ) {}
+        private toastsService: ToastsService,
+    ) {
+    }
 
 
     ngOnInit() {
@@ -35,7 +36,7 @@ export class EditDeckComponent implements OnInit {
             this.store.select(selectDeckById(deckId)).subscribe(deck => {
                 this.deck = deck;
                 this.initForm();
-            })
+            });
         }
     }
 
@@ -47,12 +48,12 @@ export class EditDeckComponent implements OnInit {
         this.form = this.fb.group({
             name: [this.deck?.name, [
                 Validators.required,
-                Validators.maxLength(40)
+                Validators.maxLength(40),
             ], [
-                createIsDeckNameTakenValidator(this.store, this.deck?.name || '')
+                createIsDeckNameTakenValidator(this.store, this.deck?.name || ''),
             ]],
-            cards: this.fb.array([])
-        })
+            cards: this.fb.array([]),
+        });
 
         if (this.deck?.cards) {
             for (let card of this.deck?.cards) {
@@ -73,8 +74,8 @@ export class EditDeckComponent implements OnInit {
     addCard(card?: Card) {
         const cardForm = this.fb.group({
             front: [card?.front ?? null, [Validators.required]],
-            back: [card?.back ?? null, [Validators.required]]
-        })
+            back: [card?.back ?? null, [Validators.required]],
+        });
         this.cards.push(cardForm);
     }
 
@@ -83,14 +84,16 @@ export class EditDeckComponent implements OnInit {
      * it in the database
      */
     onClickSave() {
-        if (this.form.invalid) { return ; }
+        if (this.form.invalid) {
+            return;
+        }
         this.form.disable();
 
         const deck = { ...this.deck, ...this.form.value } as Deck;
         this.store.dispatch(DecksActions.updateDeck({ deck }));
         this.store.select(selectDeckState).pipe(
             filter(state => state.loaded),
-            first()
+            first(),
         ).subscribe(() => {
             this.toastsService.addToastMessage('Deck successfully saved');
             this.router.navigate(['decks']);

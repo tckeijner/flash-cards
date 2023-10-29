@@ -51,8 +51,8 @@
                 <div class="m-2">
                     <button class="btn btn-primary w-100" type="submit" [disabled]="accountCreated">Submit</button>
                 </div>
-                    <div class="m-2 alert alert-info" *ngIf="accountCreatedMessage">{{ accountCreatedMessage }}</div>
-                    <div class="m-2 alert alert-danger" *ngIf="errorMessage">{{ errorMessage }}</div>
+                <div class="m-2 alert alert-info" *ngIf="accountCreatedMessage">{{ accountCreatedMessage }}</div>
+                <div class="m-2 alert alert-danger" *ngIf="errorMessage">{{ errorMessage }}</div>
                 <div class="m-2">
                     <button routerLink="/login" *ngIf="accountCreated" class="btn btn-primary w-100" type="button">
                         Login

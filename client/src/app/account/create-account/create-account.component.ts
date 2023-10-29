@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { AccountService } from "../account.service";
-import { confirmPasswordValidator, createIsUsernameTakenValidator } from "../account.validators";
+import { AccountService } from '../account.service';
+import { confirmPasswordValidator, createIsUsernameTakenValidator } from '../account.validators';
 
 @Component({
     selector: 'app-create-account',
@@ -16,32 +16,34 @@ export class CreateAccountComponent {
 
     constructor(
         private accountService: AccountService,
-        private fb: FormBuilder
+        private fb: FormBuilder,
     ) {
         // Create a formgroup with the required validators
         this.form = this.fb.group({
             username: [null, [
                 Validators.required,
                 Validators.minLength(6),
-                Validators.maxLength(20)
+                Validators.maxLength(20),
             ], [
-                createIsUsernameTakenValidator(this.accountService)
+                createIsUsernameTakenValidator(this.accountService),
             ]],
             password: [null, [
                 Validators.required,
                 Validators.minLength(6),
-                Validators.maxLength(20)
+                Validators.maxLength(20),
             ]],
             passwordConfirm: [null, [
                 Validators.required,
-                confirmPasswordValidator
-            ]]
+                confirmPasswordValidator,
+            ]],
         });
     }
 
     submitForm() {
         // Cancel submission if form is invalid
-        if (this.form.invalid) { return; }
+        if (this.form.invalid) {
+            return;
+        }
         // disable the form before sending the request
         this.form.disable();
 
@@ -49,13 +51,13 @@ export class CreateAccountComponent {
         this.accountService.createUser(this.form.value).subscribe({
             // successful:
             next: (() => {
-                this.accountCreatedMessage = `Account created with username ${this.form.value.username}`
+                this.accountCreatedMessage = `Account created with username ${this.form.value.username}`;
                 this.accountCreated = true;
             }),
             // unsuccessful:
             error: (error: Error) => {
                 this.errorMessage = error.message;
-            }
-        })
+            },
+        });
     }
 }

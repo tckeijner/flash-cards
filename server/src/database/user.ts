@@ -1,4 +1,4 @@
-import * as mongodb from "mongodb";
+import * as mongodb from 'mongodb';
 
 /**
  * Manages the database instance. For this specific purpose, I have chosen for only one collection
@@ -22,13 +22,13 @@ export async function applySchemaValidation(db: mongodb.Db) {
                 },
                 username: {
                     bsonType: 'string',
-                    description: "username' is required and is a string",
-                    minLength: 5
+                    description: 'username\' is required and is a string',
+                    minLength: 5,
                 },
                 password: {
                     bsonType: 'string',
-                    description: "password' is required and is a string",
-                    minLength: 5
+                    description: 'password\' is required and is a string',
+                    minLength: 5,
                 },
                 decks: {
                     bsonType: 'array',
@@ -36,7 +36,7 @@ export async function applySchemaValidation(db: mongodb.Db) {
                     minItems: 0,
                     items: {
                         bsonType: 'object',
-                        description: "Deck' is required and is an object",
+                        description: 'Deck\' is required and is an object',
                         required: ['name'],
                         properties: {
                             _id: 'ObjectId',
@@ -55,28 +55,28 @@ export async function applySchemaValidation(db: mongodb.Db) {
                                         _id: 'ObjectId',
                                         front: {
                                             bsonType: 'string',
-                                            description: 'Front of the card'
+                                            description: 'Front of the card',
                                         },
                                         back: {
                                             bsonType: 'string',
-                                            description: 'Back of the card'
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                                            description: 'Back of the card',
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
     };
 
     await db.command({
         collMod: 'user',
-        validator: jsonSchema
+        validator: jsonSchema,
     }).catch(async (error: mongodb.MongoServerError) => {
         if (error.codeName === 'NamespaceNotFound') {
-            await db.createCollection('users', {validator: jsonSchema});
+            await db.createCollection('users', { validator: jsonSchema });
         }
     });
 }

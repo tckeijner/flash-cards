@@ -1,4 +1,4 @@
-import { createActionGroup, emptyProps, props } from "@ngrx/store";
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
 export const AccountActions = createActionGroup({
     source: 'Account',
@@ -14,5 +14,5 @@ export const AccountActions = createActionGroup({
         'Update User': props<{ username?: string, password?: string }>(),
         'Update User Success': props<{ username: string }>(),
         'Update User Failure': props<{ error: string }>(),
-    }
-})
+    },
+});

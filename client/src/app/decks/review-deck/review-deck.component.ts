@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from "@angular/router";
-import { Store } from "@ngrx/store";
-
-import { Deck } from "../deck.model";
-import { selectDeckById } from "../../state/decks/decks.selectors";
+import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { selectDeckById } from '../../state/decks/decks.selectors';
+import { Deck } from '../deck.model';
 
 @Component({
     selector: 'app-review-deck',
     templateUrl: 'review-deck.component.html',
-    styleUrls: ['review-deck.component.scss']
+    styleUrls: ['review-deck.component.scss'],
 })
 export class ReviewDeckComponent implements OnInit {
     deck?: Deck;
@@ -21,15 +20,16 @@ export class ReviewDeckComponent implements OnInit {
 
     constructor(
         private route: ActivatedRoute,
-        private store: Store
-    ) {}
+        private store: Store,
+    ) {
+    }
 
     ngOnInit() {
         const deckId = this.route.snapshot.paramMap.get('id');
         if (deckId) {
             this.store.select(selectDeckById(deckId)).subscribe(deck => {
                 this.deck = deck;
-            })
+            });
         }
     }
 
@@ -40,7 +40,7 @@ export class ReviewDeckComponent implements OnInit {
 
     previousCard() {
         this.currentCardIndex -= 1;
-        this.blur = true
+        this.blur = true;
     }
 
     toggleBlur() {

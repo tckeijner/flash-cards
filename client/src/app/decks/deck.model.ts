@@ -1,7 +1,7 @@
 export interface Deck {
     _id: string;
     name: string;
-    cards: Card[]
+    cards: Card[];
 }
 
 export interface Card {

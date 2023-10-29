@@ -1,8 +1,8 @@
-import { AbstractControl, AsyncValidatorFn } from "@angular/forms";
-import { first, map } from "rxjs";
-import { Store } from "@ngrx/store";
+import { AbstractControl, AsyncValidatorFn } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { first, map } from 'rxjs';
 
-import { selectDecks } from "../state/decks/decks.selectors";
+import { selectDecks } from '../state/decks/decks.selectors';
 
 /**
  * Factory function for a validator that returns a validation error deckNameTaken when the deckname
@@ -18,7 +18,7 @@ export const createIsDeckNameTakenValidator = (store: Store, originalName: strin
             // Checks if any of the decknames match the control value
             control.value !== originalName && decks.some(({ name }) => name === control.value)
                 ? { deckNameTaken: true }
-                : null
-        )
-    )
-}
+                : null,
+        ),
+    );
+};

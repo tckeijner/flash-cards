@@ -1,14 +1,15 @@
-import { HttpErrorResponse, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { TOKEN_KEY } from "../state/account/account.effects";
-import { catchError, exhaustMap, of, tap } from "rxjs";
-import { AuthService } from "./auth.service";
+import { HttpErrorResponse, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { catchError, exhaustMap, of, tap } from 'rxjs';
+import { TOKEN_KEY } from '../state/account/account.effects';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
     refreshingToken = false;
 
-    constructor(private authService: AuthService) {}
+    constructor(private authService: AuthService) {
+    }
 
     /**
      * This interceptor will automatically add the authentication token to the request headers. This token will be used
@@ -35,7 +36,7 @@ export class AuthInterceptor implements HttpInterceptor {
                     // Any other type of error must be passed normally, it will be handled later.
                     return of(error);
                 }
-            })
+            }),
         );
     };
 
@@ -47,7 +48,7 @@ export class AuthInterceptor implements HttpInterceptor {
     private addTokenToRequest(req: HttpRequest<any>): HttpRequest<any> {
         const token = localStorage.getItem(TOKEN_KEY);
         return token ? req.clone({
-            headers: req.headers.set('Token', token)
+            headers: req.headers.set('Token', token),
         }) : req;
     }
 }

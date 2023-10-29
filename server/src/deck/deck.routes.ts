@@ -1,7 +1,7 @@
 import * as express from 'express';
+import { ObjectId } from 'mongodb';
 import { collections } from '../database/database';
-import { ObjectId } from "mongodb";
-import { getUserFromDecodedTokenHandler, verifyAccessTokenHandler } from "../handlers";
+import { getUserFromDecodedTokenHandler, verifyAccessTokenHandler } from '../handlers';
 
 export const deckRouter = express.Router();
 deckRouter.use(express.json());
@@ -15,8 +15,7 @@ deckRouter.get('/', verifyAccessTokenHandler, getUserFromDecodedTokenHandler, as
         } else {
             res.status(200).send(user.decks ?? []);
         }
-    }
-    catch (error) {
+    } catch (error) {
         res.sendStatus(500);
     }
 });
@@ -32,7 +31,7 @@ deckRouter.post('/', verifyAccessTokenHandler, getUserFromDecodedTokenHandler, a
         } else {
             const result = await collections.users.updateOne(
                 { _id },
-                { $push: { decks: { _id: new ObjectId(), name, cards: []} } }
+                { $push: { decks: { _id: new ObjectId(), name, cards: [] } } },
             );
             if (result.acknowledged) {
                 const updatedUser = await collections.users.findOne({ _id });
@@ -41,11 +40,10 @@ deckRouter.post('/', verifyAccessTokenHandler, getUserFromDecodedTokenHandler, a
                 res.sendStatus(500);
             }
         }
-    }
-    catch (error) {
+    } catch (error) {
         res.status(500).send(error);
     }
-})
+});
 
 // DELETE Delete specific deck
 deckRouter.delete('/:id', verifyAccessTokenHandler, getUserFromDecodedTokenHandler, async (req, res) => {
@@ -55,26 +53,24 @@ deckRouter.delete('/:id', verifyAccessTokenHandler, getUserFromDecodedTokenHandl
         if (_id) {
             const result = await collections.users.updateOne(
                 { _id },
-                { $pull: { decks: { _id: deckId } } }
+                { $pull: { decks: { _id: deckId } } },
             );
             if (result) {
-                const updatedUser = await collections.users.findOne({ _id })
+                const updatedUser = await collections.users.findOne({ _id });
                 res.status(200).send(updatedUser.decks);
             }
         } else {
             res.sendStatus(401);
         }
-    }
-
-    catch (error) {
+    } catch (error) {
         res.status(500).send(error);
     }
-})
+});
 
 // PUT Update a deck
 deckRouter.put('/', verifyAccessTokenHandler, getUserFromDecodedTokenHandler, async (req, res) => {
     try {
-        const { _id } = req.body?.user
+        const { _id } = req.body?.user;
         const { deck } = req.body;
         deck._id = new ObjectId(deck._id);
 
@@ -82,9 +78,9 @@ deckRouter.put('/', verifyAccessTokenHandler, getUserFromDecodedTokenHandler, as
             const result = await collections.users.updateOne(
                 { _id },
                 { $set: { 'decks.$[deck]': deck } },
-                { arrayFilters: [{ 'deck._id': new ObjectId(deck._id) }] }
-            )
-            const updatedUser = await collections.users.findOne({ _id })
+                { arrayFilters: [{ 'deck._id': new ObjectId(deck._id) }] },
+            );
+            const updatedUser = await collections.users.findOne({ _id });
             if (result) {
                 res.status(200).send(updatedUser.decks);
                 return;
@@ -94,4 +90,4 @@ deckRouter.put('/', verifyAccessTokenHandler, getUserFromDecodedTokenHandler, as
     } catch (error) {
         res.status(500).send(error);
     }
-})
+});

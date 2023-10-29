@@ -1,15 +1,15 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from "@angular/forms";
-import { HttpClientModule } from "@angular/common/http";
-import { RouterLink } from "@angular/router";
+import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
+import { NavbarModule } from '../navbar/navbar.module';
+import { AccountService } from './account.service';
 
-import { CreateAccountComponent } from "./create-account/create-account.component";
-import { AccountService } from "./account.service";
+import { CreateAccountComponent } from './create-account/create-account.component';
 import { LoginComponent } from './login/login.component';
-import { WelcomeComponent } from './welcome/welcome.component';
 import { ManageAccountComponent } from './manage-account/manage-account.component';
-import { NavbarModule } from "../navbar/navbar.module";
+import { WelcomeComponent } from './welcome/welcome.component';
 
 
 @NgModule({
@@ -31,7 +31,8 @@ import { NavbarModule } from "../navbar/navbar.module";
     ],
     exports: [
         CreateAccountComponent,
-        LoginComponent
-    ]
+        LoginComponent,
+    ],
 })
-export class AccountModule { }
+export class AccountModule {
+}

@@ -1,11 +1,10 @@
-import { Injectable } from "@angular/core";
-import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { HttpErrorResponse } from "@angular/common/http";
-import { catchError, exhaustMap, map, of, switchMap } from "rxjs";
-
-import { DecksService } from "../../decks/decks.service";
-import { DecksActions } from "./decks.actions";
-import { ToastsService } from "../../toasts/toasts.service";
+import { HttpErrorResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { catchError, exhaustMap, map, of, switchMap } from 'rxjs';
+import { DecksService } from '../../decks/decks.service';
+import { ToastsService } from '../../toasts/toasts.service';
+import { DecksActions } from './decks.actions';
 
 /**
  * Effects are hooks that listen to specific actions and trigger an async side effect
@@ -25,11 +24,11 @@ export class DecksEffects {
                     map(decks => (DecksActions.loadDecksSuccess({ decks }))),
                     catchError(({ error }: HttpErrorResponse) => {
                         this.toastsService.addToastMessage(error);
-                        return of(DecksActions.loadDecksFailed({ error }))
-                    })
-                )
-            )
-        )
+                        return of(DecksActions.loadDecksFailed({ error }));
+                    }),
+                ),
+            ),
+        ),
     );
     createDeck$ = createEffect(() =>
         this.actions$.pipe(
@@ -39,11 +38,11 @@ export class DecksEffects {
                     map((decks) => (DecksActions.createDeckSuccess({ decks }))),
                     catchError(({ error }: HttpErrorResponse) => {
                         this.toastsService.addToastMessage(error);
-                        return of(DecksActions.updateDeckFailed({ error }))
-                    })
-                )
-            )
-        )
+                        return of(DecksActions.updateDeckFailed({ error }));
+                    }),
+                ),
+            ),
+        ),
     );
     updateDeck$ = createEffect(() =>
         this.actions$.pipe(
@@ -53,11 +52,11 @@ export class DecksEffects {
                     map(decks => (DecksActions.updateDeckSuccess({ decks }))),
                     catchError(({ error }: HttpErrorResponse) => {
                         this.toastsService.addToastMessage(error);
-                        return of(DecksActions.updateDeckFailed({ error }))
-                    })
-                )
-            )
-        )
+                        return of(DecksActions.updateDeckFailed({ error }));
+                    }),
+                ),
+            ),
+        ),
     );
     removeDeck$ = createEffect(() =>
         this.actions$.pipe(
@@ -67,16 +66,17 @@ export class DecksEffects {
                     map(decks => (DecksActions.removeDeckSuccess({ decks }))),
                     catchError(({ error }: HttpErrorResponse) => {
                         this.toastsService.addToastMessage(error);
-                        return of(DecksActions.removeDeckFailed({ error }))
-                    })
-                )
-            )
-        )
+                        return of(DecksActions.removeDeckFailed({ error }));
+                    }),
+                ),
+            ),
+        ),
     );
 
     constructor(
         private actions$: Actions,
         private decksService: DecksService,
-        private toastsService: ToastsService
-    ) {}
+        private toastsService: ToastsService,
+    ) {
+    }
 }

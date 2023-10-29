@@ -1,12 +1,12 @@
-import * as dotenv from 'dotenv';
-import cors from 'cors';
-import express from 'express';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import * as dotenv from 'dotenv';
+import express from 'express';
+import * as process from 'process';
 import { connectToDatabase } from './database/database';
-import { userRouter } from "./user/user.routes";
-import { deckRouter } from "./deck/deck.routes";
-import { setJwtSecret } from "./generateJwtSecret";
-import * as process from "process";
+import { deckRouter } from './deck/deck.routes';
+import { setJwtSecret } from './generateJwtSecret';
+import { userRouter } from './user/user.routes';
 
 setJwtSecret();
 dotenv.config();

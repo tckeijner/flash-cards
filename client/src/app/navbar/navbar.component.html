@@ -1,14 +1,15 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
         <a class="navbar-brand">{{ title }}</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <button aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+                data-bs-target="#navbar" data-bs-toggle="collapse" type="button">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbar">
             <div class="navbar-nav">
                 <a class="nav-link" routerLink="/decks"><i class="bi bi-stack"></i>&nbsp;Decks</a>
                 <a class="nav-link" routerLink="/account"><i class="bi bi-person-fill"></i>&nbsp;Account</a>
-                <a class="nav-link" href="#" (click)="logout()"><i class="bi bi-box-arrow-right"></i>&nbsp;Logout</a>
+                <a (click)="logout()" class="nav-link" href="#"><i class="bi bi-box-arrow-right"></i>&nbsp;Logout</a>
             </div>
         </div>
     </div>

@@ -1,7 +1,7 @@
-import { AbstractControl, AsyncValidatorFn, ValidatorFn } from "@angular/forms";
-import { map, of } from "rxjs";
+import { AbstractControl, AsyncValidatorFn, ValidatorFn } from '@angular/forms';
+import { map, of } from 'rxjs';
 
-import { AccountService } from "./account.service";
+import { AccountService } from './account.service';
 
 /**
  * Checks if the value in Confirm password is equal the to password field.
@@ -12,7 +12,7 @@ export const confirmPasswordValidator: ValidatorFn = (control: AbstractControl) 
         return { passwordNotEqual: true };
     }
     return null;
-}
+};
 
 /**
  * Factory function for a validator that asynchronously checks the availability of a username.
@@ -22,8 +22,10 @@ export const confirmPasswordValidator: ValidatorFn = (control: AbstractControl) 
  * @param currentUsername
  */
 export const createIsUsernameTakenValidator = (accountService: AccountService, currentUsername?: string | null): AsyncValidatorFn => (control: AbstractControl) => {
-    if (currentUsername && control.value === currentUsername) { return of(null) }
+    if (currentUsername && control.value === currentUsername) {
+        return of(null);
+    }
     return accountService.isUsernameAvailable(control.value).pipe(
-        map(result => !result ? { usernameTaken: true } : null)
+        map(result => !result ? { usernameTaken: true } : null),
     );
-}
+};

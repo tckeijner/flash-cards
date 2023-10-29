@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ToastsService } from "./toasts.service";
+import { ToastsService } from './toasts.service';
 
 /**
  * Toasts component is a general component that is visible anywhere in the application, showing popup messages.
@@ -12,12 +12,13 @@ import { ToastsService } from "./toasts.service";
                    [autohide]="true" [delay]="5000"
                    (hidden)="toasts.splice(i, 1)">{{toast}}
         </ngb-toast>
-    `
+    `,
 })
 export class ToastsComponent implements OnInit {
-    constructor(private toastsService: ToastsService) {}
-
     toasts: string[] = [];
+
+    constructor(private toastsService: ToastsService) {
+    }
 
     ngOnInit() {
         this.toasts = this.toastsService.toasts;

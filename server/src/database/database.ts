@@ -1,6 +1,6 @@
 import * as mongodb from 'mongodb';
-import { UserModels } from './user.models';
 import { applySchemaValidation } from './user';
+import { UserModels } from './user.models';
 
 export const collections: {
     users?: mongodb.Collection<UserModels>;

@@ -1,7 +1,6 @@
-import { createReducer, on } from "@ngrx/store";
-
-import { Deck } from "../../decks/deck.model";
-import { DecksActions } from "./decks.actions";
+import { createReducer, on } from '@ngrx/store';
+import { Deck } from '../../decks/deck.model';
+import { DecksActions } from './decks.actions';
 
 export interface DeckState {
     decks: Deck[];
@@ -42,8 +41,8 @@ export const deckReducer = createReducer(
             ...state,
             loading: true,
             loaded: false,
-            error: null
-        })
+            error: null,
+        });
     }),
     on(DecksActions.loadDecksSuccess, (state, { decks }) => {
         return ({
@@ -51,16 +50,16 @@ export const deckReducer = createReducer(
             decks,
             loading: false,
             loaded: true,
-            error: null
-        })
+            error: null,
+        });
     }),
     on(DecksActions.loadDecksFailed, (state, { error }) => {
         return ({
             ...state,
             loading: false,
             loaded: false,
-            error
-        })
+            error,
+        });
     }),
 
     // Reducers for Create Deck
@@ -71,8 +70,8 @@ export const deckReducer = createReducer(
             loaded: false,
             error: null,
             creatingDeck: true,
-            deckCreated: false
-        })
+            deckCreated: false,
+        });
     }),
     on(DecksActions.createDeckSuccess, (state, { decks }) => {
         return ({
@@ -82,8 +81,8 @@ export const deckReducer = createReducer(
             loaded: true,
             error: null,
             creatingDeck: false,
-            deckCreated: true
-        })
+            deckCreated: true,
+        });
     }),
     on(DecksActions.createDeckFailed, (state, { error }) => {
         return ({
@@ -92,8 +91,8 @@ export const deckReducer = createReducer(
             loaded: false,
             creatingDeck: false,
             deckCreated: false,
-            error
-        })
+            error,
+        });
     }),
 
     // Reducers for Update Deck
@@ -102,8 +101,8 @@ export const deckReducer = createReducer(
             ...state,
             loading: true,
             loaded: false,
-            error: null
-        })
+            error: null,
+        });
     }),
     on(DecksActions.updateDeckSuccess, (state, { decks }) => {
         return ({
@@ -111,16 +110,16 @@ export const deckReducer = createReducer(
             decks,
             loading: false,
             loaded: true,
-            error: null
-        })
+            error: null,
+        });
     }),
     on(DecksActions.updateDeckFailed, (state, { error }) => {
         return ({
             ...state,
             loading: false,
             loaded: false,
-            error
-        })
+            error,
+        });
     }),
 
     // Reducers for Remove Deck
@@ -131,8 +130,8 @@ export const deckReducer = createReducer(
             loaded: false,
             error: null,
             removingDeck: true,
-            deckRemoved: false
-        })
+            deckRemoved: false,
+        });
     }),
     on(DecksActions.removeDeckSuccess, (state, { decks }) => {
         return ({
@@ -142,8 +141,8 @@ export const deckReducer = createReducer(
             loaded: true,
             error: null,
             removingDeck: false,
-            deckRemoved: true
-        })
+            deckRemoved: true,
+        });
     }),
     on(DecksActions.removeDeckFailed, (state, { error }) => {
         return ({
@@ -152,10 +151,10 @@ export const deckReducer = createReducer(
             loaded: false,
             removingDeck: false,
             deckRemoved: false,
-            error
-        })
+            error,
+        });
     }),
-    on(DecksActions.clearDeckState, state => {
+    on(DecksActions.clearDeckState, () => {
         return initialState;
-    })
+    }),
 );

@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from "@ngrx/store";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { Observable, tap } from "rxjs";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Store } from '@ngrx/store';
+import { Observable, tap } from 'rxjs';
+import { AccountActions } from '../../state/account/account.actions';
+import { AccountState } from '../../state/account/account.reducer';
 
-import { selectAccount } from "../../state/account/account.selectors";
-import { AccountState } from "../../state/account/account.reducer";
-import { AccountActions } from "../../state/account/account.actions";
-import { confirmPasswordValidator, createIsUsernameTakenValidator } from "../account.validators";
-import { AccountService } from "../account.service";
+import { selectAccount } from '../../state/account/account.selectors';
+import { AccountService } from '../account.service';
+import { confirmPasswordValidator, createIsUsernameTakenValidator } from '../account.validators';
 
 @Component({
     selector: 'app-manage-account',
@@ -37,10 +37,10 @@ export class ManageAccountComponent implements OnInit {
                     username: [account.username, [
                         Validators.required,
                         Validators.minLength(6),
-                        Validators.maxLength(20)
+                        Validators.maxLength(20),
                     ], [
-                        createIsUsernameTakenValidator(this.accountService, account.username)
-                    ]]
+                        createIsUsernameTakenValidator(this.accountService, account.username),
+                    ]],
                 });
 
                 // Password has no default value, since it shouldn't be stored locally
@@ -48,28 +48,30 @@ export class ManageAccountComponent implements OnInit {
                     password: [null, [
                         Validators.required,
                         Validators.minLength(6),
-                        Validators.maxLength(20)
+                        Validators.maxLength(20),
                     ]],
                     passwordConfirm: [null, [
                         Validators.required,
                         Validators.minLength(6),
                         Validators.maxLength(20),
-                        confirmPasswordValidator
-                    ]]
+                        confirmPasswordValidator,
+                    ]],
                 });
 
                 // Disables the save button if the value in the username field == original name
                 this.usernameForm.valueChanges.subscribe(value =>
-                    this.disableSave = value.username === account.username
-                )
-            })
+                    this.disableSave = value.username === account.username,
+                );
+            }),
         );
     };
 
     saveForm(form: FormGroup) {
         this.wasValidated = true;
         // Break early when the form is invalid:
-        if (form.invalid) { return; }
+        if (form.invalid) {
+            return;
+        }
 
         // Dispatch update user action:
         this.store.dispatch(AccountActions.updateUser(form.value));

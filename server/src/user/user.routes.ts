@@ -1,15 +1,15 @@
 import * as express from 'express';
-import { collections } from '../database/database';
 import * as jwt from 'jsonwebtoken';
+import { ObjectId } from 'mongodb';
+import * as process from 'process';
+import { collections } from '../database/database';
 import {
     getUserFromDecodedTokenHandler,
-    verifyToken,
-    verifyAccessTokenHandler,
     signAccessToken,
-    signRefreshToken
-} from "../handlers";
-import * as process from "process";
-import { ObjectId } from "mongodb";
+    signRefreshToken,
+    verifyAccessTokenHandler,
+    verifyToken,
+} from '../handlers';
 
 export const userRouter = express.Router();
 userRouter.use(express.json());
@@ -66,7 +66,7 @@ userRouter.post('/login', async (req, res) => {
 
             // store the iat (issuedAt) of the refreshToken in the DB, for later verification
             const { iat } = verifyToken(refreshToken);
-            await collections.users.updateOne({ _id: user._id }, { '$set': { refreshTokenIssuedAt: iat }});
+            await collections.users.updateOne({ _id: user._id }, { '$set': { refreshTokenIssuedAt: iat } });
 
             // Send success status with user info and tokens
             res.status(200).send({ username: user.username, userId: user._id, token, refreshToken });
@@ -89,15 +89,15 @@ userRouter.post('/refreshToken', async (req, res) => {
 
         // Get the decoded information from the jwt token, find the user and also compare refresh token issue date for validity
         const { _id, username, iat } = verifyToken(refreshToken);
-        const user = await collections.users.findOne({ _id: new ObjectId(_id), username, refreshTokenIssuedAt: iat })
+        const user = await collections.users.findOne({ _id: new ObjectId(_id), username, refreshTokenIssuedAt: iat });
 
         if (user) {
             // Refresh tokens should be single use, so make a new token
-            const refreshToken = signRefreshToken({ username, _id })
+            const refreshToken = signRefreshToken({ username, _id });
 
             // store iat (issued at) with the user, so it can be compared again upon refresh
             const { iat } = verifyToken(refreshToken);
-            await collections.users.updateOne({ _id: user._id }, { '$set': { refreshTokenIssuedAt: iat }});
+            await collections.users.updateOne({ _id: user._id }, { '$set': { refreshTokenIssuedAt: iat } });
 
             // create a fresh access token
             const token = signAccessToken({ username, _id });
@@ -122,11 +122,10 @@ userRouter.get('/isAuthenticated', verifyAccessTokenHandler, getUserFromDecodedT
             return;
         }
         res.status(200).send(false);
-    }
-    catch (error) {
+    } catch (error) {
         res.status(500).send(error);
     }
-})
+});
 
 // PUT updated username and/or password
 userRouter.put('/updateUser', verifyAccessTokenHandler, getUserFromDecodedTokenHandler, async (req, res) => {
@@ -140,24 +139,23 @@ userRouter.put('/updateUser', verifyAccessTokenHandler, getUserFromDecodedTokenH
         }
 
         if (username) {
-            await collections.users.updateOne({ _id: user._id }, { $set: { username } })
+            await collections.users.updateOne({ _id: user._id }, { $set: { username } });
         }
         if (password) {
-            await collections.users.updateOne({ _id: user._id }, { $set: { password } })
+            await collections.users.updateOne({ _id: user._id }, { $set: { password } });
         }
 
         const updatedUser = await collections.users.findOne({ _id });
 
         // When the user data is updated, the old token is no longer valid, so we send a new token to the user:
         const token = jwt.sign({ _id: updatedUser._id, username: updatedUser.username }, process.env.JWT_SECRET_KEY);
-        res.cookie('token', token, {})
+        res.cookie('token', token, {});
 
         res.status(200).send({ username: updatedUser.username, token });
-    }
-    catch (error) {
+    } catch (error) {
         res.status(500).send(error);
     }
-})
+});
 
 // GET get account data for account page
 userRouter.get('/getAccountData', verifyAccessTokenHandler, getUserFromDecodedTokenHandler, async (req, res) => {
@@ -169,8 +167,7 @@ userRouter.get('/getAccountData', verifyAccessTokenHandler, getUserFromDecodedTo
             return;
         }
         res.sendStatus(404);
-    }
-    catch (error) {
+    } catch (error) {
         res.status(500).send(error);
     }
-})
+});

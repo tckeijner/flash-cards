@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
  * which component is visible.
  */
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class ToastsService {
     toasts: string[] = [];

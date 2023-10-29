@@ -1,12 +1,12 @@
-import { Injectable } from "@angular/core";
-import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { HttpErrorResponse } from "@angular/common/http";
-import { catchError, exhaustMap, map, of, switchMap } from "rxjs";
+import { HttpErrorResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { catchError, exhaustMap, map, of, switchMap } from 'rxjs';
+import { AccountService } from '../../account/account.service';
+import { AuthService } from '../../account/auth.service';
+import { ToastsService } from '../../toasts/toasts.service';
 
-import { AccountActions } from "./account.actions";
-import { AuthService } from "../../account/auth.service";
-import { AccountService } from "../../account/account.service";
-import { ToastsService } from "../../toasts/toasts.service";
+import { AccountActions } from './account.actions';
 
 export const TOKEN_KEY = 'authenticationToken';
 export const REFRESH_TOKEN_KEY = 'refreshToken';
@@ -32,11 +32,11 @@ export class AccountEffects {
                     }),
                     catchError(({ error }: HttpErrorResponse) => {
                         this.toastsService.addToastMessage(error);
-                        return of(AccountActions.loginFailed({ error }))
-                    })
-                )
-            )
-        )
+                        return of(AccountActions.loginFailed({ error }));
+                    }),
+                ),
+            ),
+        ),
     );
 
     loadAccountData$ = createEffect(() =>
@@ -48,10 +48,10 @@ export class AccountEffects {
                         AccountActions.loadAccountDataSuccess({ username: result.username, userId: result._id })),
                     catchError(({ error }: HttpErrorResponse) => {
                         this.toastsService.addToastMessage(error);
-                        return of(AccountActions.loadAccountDataFailure({ error }))
-                    })
-                ))
-        )
+                        return of(AccountActions.loadAccountDataFailure({ error }));
+                    }),
+                )),
+        ),
     );
 
     updateUser$ = createEffect(() =>
@@ -60,20 +60,21 @@ export class AccountEffects {
             switchMap(props => this.accountService.updateUser(props)
                 .pipe(
                     map(result => {
-                        return AccountActions.updateUserSuccess({ username: result.username })
+                        return AccountActions.updateUserSuccess({ username: result.username });
                     }),
                     catchError(({ error }: HttpErrorResponse) => {
                         this.toastsService.addToastMessage(error);
-                        return of(AccountActions.updateUserFailure({ error }))
-                    })
-                ))
-        )
+                        return of(AccountActions.updateUserFailure({ error }));
+                    }),
+                )),
+        ),
     );
 
     constructor(
         private actions$: Actions,
         private authService: AuthService,
         private accountService: AccountService,
-        private toastsService: ToastsService
-    ) {}
+        private toastsService: ToastsService,
+    ) {
+    }
 }

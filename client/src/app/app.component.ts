@@ -6,8 +6,7 @@ import { Component } from '@angular/core';
         <router-outlet></router-outlet>
         <app-toasts></app-toasts>
     `,
-    styles: []
+    styles: [],
 })
 export class AppComponent {
-    title = 'client';
 }

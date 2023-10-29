@@ -1,9 +1,9 @@
+import { RequestHandler } from 'express';
 import * as jwt from 'jsonwebtoken';
-import { RequestHandler } from "express";
-import { ObjectId } from "mongodb";
-import { collections } from "./database/database";
-import * as process from "process";
-import { TokenExpiredError, VerifyErrors } from "jsonwebtoken";
+import { TokenExpiredError, VerifyErrors } from 'jsonwebtoken';
+import { ObjectId } from 'mongodb';
+import * as process from 'process';
+import { collections } from './database/database';
 
 /**
  * These handler functions are generic functions that can be added to any request method. They contain logic that is generic and used
@@ -52,8 +52,7 @@ export const getUserFromDecodedTokenHandler: RequestHandler = async (req, res, n
         const _id = new ObjectId(req.body.token._id);
         req.body.user = await collections.users.findOne({ _id });
         next();
-    }
-    catch (e) {
+    } catch (e) {
         res.sendStatus(500);
     }
 };

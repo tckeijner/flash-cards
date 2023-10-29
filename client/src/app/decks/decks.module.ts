@@ -1,20 +1,19 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from "@angular/forms";
-import { RouterLink } from "@angular/router";
-import { NgbToast } from "@ng-bootstrap/ng-bootstrap";
-
+import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
+import { NgbToast } from '@ng-bootstrap/ng-bootstrap';
+import { NavbarModule } from '../navbar/navbar.module';
 import { DecksComponent } from './decks.component';
-import { EditDeckComponent } from "./edit-deck/edit-deck.component";
+import { EditDeckComponent } from './edit-deck/edit-deck.component';
 import { ReviewDeckComponent } from './review-deck/review-deck.component';
-import { NavbarModule } from "../navbar/navbar.module";
 
 
 @NgModule({
     declarations: [
         DecksComponent,
         EditDeckComponent,
-        ReviewDeckComponent
+        ReviewDeckComponent,
     ],
     imports: [
         CommonModule,
@@ -25,8 +24,8 @@ import { NavbarModule } from "../navbar/navbar.module";
     ],
     exports: [
         DecksComponent,
-        EditDeckComponent
-    ]
+        EditDeckComponent,
+    ],
 })
 export class DecksModule {
 }
