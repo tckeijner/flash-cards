@@ -4,19 +4,12 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { catchError, exhaustMap, map, of, switchMap } from "rxjs";
 
 import { AccountActions } from "./account.actions";
-import { AuthService, TOKEN_KEY } from "../../account/auth.service";
+import { AuthService } from "../../account/auth.service";
 import { AccountService } from "../../account/account.service";
 import { ToastsService } from "../../toasts/toasts.service";
 
-/**
- * Saves the retrieved token in the localStorage, if exists
- * @param token
- */
-const setToken = (token?: string) => {
-    if (token) {
-        localStorage.setItem(TOKEN_KEY, token);
-    }
-}
+export const TOKEN_KEY = 'authenticationToken';
+export const REFRESH_TOKEN_KEY = 'refreshToken';
 
 /**
  * Effects are hooks that listen to specific actions and trigger an async side effect
@@ -35,8 +28,6 @@ export class AccountEffects {
             switchMap(props => this.authService.login(props)
                 .pipe(
                     map(result => {
-                        // Gets the token from the response and stores it in local storage
-                        setToken(result.token);
                         return AccountActions.loginSuccessful(result);
                     }),
                     catchError(({ error }: HttpErrorResponse) => {
@@ -69,8 +60,6 @@ export class AccountEffects {
             switchMap(props => this.accountService.updateUser(props)
                 .pipe(
                     map(result => {
-                        // Gets the new token from the response and stores it in local storage
-                        setToken(result.token);
                         return AccountActions.updateUserSuccess({ username: result.username })
                     }),
                     catchError(({ error }: HttpErrorResponse) => {

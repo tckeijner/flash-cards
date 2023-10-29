@@ -1,22 +1,53 @@
-import { HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
+import { HttpErrorResponse, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-
-import { TOKEN_KEY } from "./auth.service";
+import { TOKEN_KEY } from "../state/account/account.effects";
+import { catchError, exhaustMap, of, tap } from "rxjs";
+import { AuthService } from "./auth.service";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
+    refreshingToken = false;
+
+    constructor(private authService: AuthService) {}
+
     /**
-     * This interceptor will automatically add the authentication token to the request headers,
-     * this token will be used to validate the logged in requests in the API
+     * This interceptor will automatically add the authentication token to the request headers. This token will be used
+     * to validate the logged in requests in the API. Also, it will monitor responses on 401 (Unauthorized) errors. This
+     * will usually mean the access token is expired. It will then request a new access token using the refresh token
+     * and try the request again.
      */
     intercept(req: HttpRequest<any>, next: HttpHandler) {
-        // if there is an authentication token present, set it to the Authorization header.
-        // Otherwise leave the request unchanged.
-        const token = localStorage.getItem(TOKEN_KEY);
-        const authReq = token ? req.clone({
-            headers: req.headers.set('Authorization', token)
-        }) : req;
+        return next.handle(this.addTokenToRequest(req)).pipe(
+            catchError(error => {
+                // If error is a 401 and the token is not already refreshing
+                if (error instanceof HttpErrorResponse && error.status === 401 && !this.refreshingToken && error.error === 'Expired') {
+                    this.refreshingToken = true;
+                    // Start refresh token request
+                    return this.authService.refreshToken().pipe(
+                        // On response, set refreshingToken flag back to false
+                        tap(() => this.refreshingToken = false),
+                        exhaustMap(() => {
+                            // It will then try the request again, using the fresh token
+                            return next.handle(this.addTokenToRequest(req));
+                        }),
+                    );
+                } else {
+                    // Any other type of error must be passed normally, it will be handled later.
+                    return of(error);
+                }
+            })
+        );
+    };
 
-        return next.handle(authReq);
+    /**
+     * Adds the current token from localstorage to the request
+     * @param req
+     * @private
+     */
+    private addTokenToRequest(req: HttpRequest<any>): HttpRequest<any> {
+        const token = localStorage.getItem(TOKEN_KEY);
+        return token ? req.clone({
+            headers: req.headers.set('Token', token)
+        }) : req;
     }
 }

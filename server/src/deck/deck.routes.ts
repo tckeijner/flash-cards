@@ -1,35 +1,34 @@
 import * as express from 'express';
 import { collections } from '../database/database';
 import { ObjectId } from "mongodb";
-import { StatusMessage } from "../enums";
-import { getUserFromDecodedToken, verifyJwt } from "../handlers";
+import { getUserFromDecodedTokenHandler, verifyAccessTokenHandler } from "../handlers";
 
 export const deckRouter = express.Router();
 deckRouter.use(express.json());
 
 // GET Get all decks belonging to a user
-deckRouter.get('/', verifyJwt, getUserFromDecodedToken, async (req, res) => {
+deckRouter.get('/', verifyAccessTokenHandler, getUserFromDecodedTokenHandler, async (req, res) => {
     try {
         const { user } = req?.body;
         if (!user) {
-            res.status(401).send(StatusMessage.Unauthorized);
+            res.sendStatus(401);
         } else {
             res.status(200).send(user.decks ?? []);
         }
     }
     catch (error) {
-        res.status(500).send(error.message);
+        res.sendStatus(500);
     }
 });
 
 // POST Add a new deck to a user
-deckRouter.post('/', verifyJwt, getUserFromDecodedToken, async (req, res) => {
+deckRouter.post('/', verifyAccessTokenHandler, getUserFromDecodedTokenHandler, async (req, res) => {
     try {
         const { name, user } = req?.body;
         const { _id } = user;
 
         if (!user) {
-            res.status(401).send(StatusMessage.Unauthorized);
+            res.sendStatus(401);
         } else {
             const result = await collections.users.updateOne(
                 { _id },
@@ -39,17 +38,17 @@ deckRouter.post('/', verifyJwt, getUserFromDecodedToken, async (req, res) => {
                 const updatedUser = await collections.users.findOne({ _id });
                 res.status(200).send(updatedUser.decks);
             } else {
-                res.status(500).send(StatusMessage.InternalServerError);
+                res.sendStatus(500);
             }
         }
     }
     catch (error) {
-        res.status(404).send(error.message);
+        res.status(500).send(error);
     }
 })
 
 // DELETE Delete specific deck
-deckRouter.delete('/:id', verifyJwt, getUserFromDecodedToken, async (req, res) => {
+deckRouter.delete('/:id', verifyAccessTokenHandler, getUserFromDecodedTokenHandler, async (req, res) => {
     try {
         const { _id } = req?.body?.user;
         const deckId = new ObjectId(req?.params?.id);
@@ -63,17 +62,17 @@ deckRouter.delete('/:id', verifyJwt, getUserFromDecodedToken, async (req, res) =
                 res.status(200).send(updatedUser.decks);
             }
         } else {
-            res.status(401).send(StatusMessage.Unauthorized);
+            res.sendStatus(401);
         }
     }
 
     catch (error) {
-        res.status(500).send(StatusMessage.InternalServerError);
+        res.status(500).send(error);
     }
 })
 
 // PUT Update a deck
-deckRouter.put('/', verifyJwt, getUserFromDecodedToken, async (req, res) => {
+deckRouter.put('/', verifyAccessTokenHandler, getUserFromDecodedTokenHandler, async (req, res) => {
     try {
         const { _id } = req.body?.user
         const { deck } = req.body;
@@ -90,9 +89,9 @@ deckRouter.put('/', verifyJwt, getUserFromDecodedToken, async (req, res) => {
                 res.status(200).send(updatedUser.decks);
                 return;
             }
-            res.status(500).send(StatusMessage.InternalServerError);
+            res.sendStatus(500);
         }
     } catch (error) {
-        res.status(500).send(StatusMessage.InternalServerError)
+        res.status(500).send(error);
     }
 })

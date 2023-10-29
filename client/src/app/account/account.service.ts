@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
+import { tap } from "rxjs";
+import { REFRESH_TOKEN_KEY, TOKEN_KEY } from "../state/account/account.effects";
 
 export interface UserAccount {
     username: string;
@@ -25,10 +27,15 @@ export class AccountService {
     };
 
     loadAccountData() {
-        return this.httpClient.get<{ username: string, _id: string }>(`${this.baseUrl}/getAccounData`, { responseType: 'json' });
+        return this.httpClient.get<{ username: string, _id: string }>(`${this.baseUrl}/getAccountData`, { responseType: 'json' });
     };
 
     updateUser(user: { username?: string, password?: string }) {
-        return this.httpClient.put<{username: string, token: string}>(`${this.baseUrl}/updateUser`, user, { responseType: 'json' });
+        return this.httpClient.put<{ username: string, token: string, refreshToken: string }>(
+            `${this.baseUrl}/updateUser`, user, { responseType: 'json' }
+        ).pipe(tap(res => {
+            localStorage.setItem(REFRESH_TOKEN_KEY, res.refreshToken);
+            localStorage.setItem(TOKEN_KEY, res.token)
+        }));
     };
 }

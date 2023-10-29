@@ -16,6 +16,10 @@ export async function applySchemaValidation(db: mongodb.Db) {
             additionalProperties: false,
             properties: {
                 _id: {},
+                refreshTokenIssuedAt: {
+                    bsonType: 'number',
+                    description: 'refresh token creation timestamp',
+                },
                 username: {
                     bsonType: 'string',
                     description: "username' is required and is a string",

@@ -20,7 +20,7 @@ import { selectAccount } from "./state/account/account.selectors";
 export function initAuthentication(authService: AuthService, store: Store, router: Router) {
     return () => new Promise(resolve => {
         // If there is no token, just navigate to the login (home) page:
-        if (!localStorage['authenticationToken']) {
+        if (!localStorage['refreshToken']) {
             router.navigateByUrl('/');
             resolve(true);
             return;

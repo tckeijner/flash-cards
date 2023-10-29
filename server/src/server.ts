@@ -21,7 +21,7 @@ if (!ATLAS_URI) {
 connectToDatabase(ATLAS_URI)
     .then(() => {
         const app = express();
-        app.use(cors());
+        app.use(cors({ credentials: true, origin: 'http://localhost:4200' }));
         app.use(cookieParser());
 
         app.use('/users', userRouter);
