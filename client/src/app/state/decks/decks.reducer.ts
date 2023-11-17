@@ -4,6 +4,7 @@ import { DecksActions } from './decks.actions';
 
 export interface DeckState {
     decks: Deck[];
+    selectedDeckId: string;
     loading: boolean;
     loaded: boolean;
     error: string | null;
@@ -15,6 +16,7 @@ export interface DeckState {
 
 export const initialState: DeckState = {
     decks: [],
+    selectedDeckId: '',
     loading: false,
     loaded: false,
     error: null,
@@ -157,4 +159,11 @@ export const deckReducer = createReducer(
     on(DecksActions.clearDeckState, () => {
         return initialState;
     }),
+
+    on(DecksActions.selectDeck, (state, { id }) => {
+        return ({
+            ...state,
+            selectedDeckId: id
+        })
+    })
 );

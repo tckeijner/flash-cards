@@ -10,9 +10,9 @@ export const selectDecks = createSelector(
 );
 
 // Select one deck by id
-export const selectDeckById = (id: string) => createSelector(
+export const selectedDeck = createSelector(
     selectDeckState,
-    state => state.decks.find(deck => deck._id === id),
+    state => state.decks.find(deck => deck._id === state.selectedDeckId),
 );
 
 // Emits true when deck creation is complete

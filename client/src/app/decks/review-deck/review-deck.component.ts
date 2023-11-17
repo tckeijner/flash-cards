@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { selectDeckById } from '../../state/decks/decks.selectors';
+import { DecksActions } from '../../state/decks/decks.actions';
+import { selectedDeck } from '../../state/decks/decks.selectors';
 import { Deck } from '../deck.model';
 
 @Component({
@@ -27,7 +28,8 @@ export class ReviewDeckComponent implements OnInit {
     ngOnInit() {
         const deckId = this.route.snapshot.paramMap.get('id');
         if (deckId) {
-            this.store.select(selectDeckById(deckId)).subscribe(deck => {
+            this.store.dispatch(DecksActions.selectDeck({ id: deckId }))
+            this.store.select(selectedDeck).subscribe(deck => {
                 this.deck = deck;
             });
         }

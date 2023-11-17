@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { filter, first } from 'rxjs';
 import { DecksActions } from '../../state/decks/decks.actions';
 
-import { selectDeckById, selectDeckState } from '../../state/decks/decks.selectors';
+import { selectDeckState, selectedDeck } from '../../state/decks/decks.selectors';
 import { ToastsService } from '../../toasts/toasts.service';
 import { Card, Deck } from '../deck.model';
 import { createIsDeckNameTakenValidator } from '../decks.validators';
@@ -33,7 +33,8 @@ export class EditDeckComponent implements OnInit {
         const deckId = this.route.snapshot.paramMap.get('id');
         if (deckId) {
             // Use the deckId to get the correct deck from the store
-            this.store.select(selectDeckById(deckId)).subscribe(deck => {
+            this.store.dispatch(DecksActions.selectDeck({ id: deckId }))
+            this.store.select(selectedDeck).subscribe(deck => {
                 this.deck = deck;
                 this.initForm();
             });
