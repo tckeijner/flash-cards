@@ -1,7 +1,8 @@
 # Flash Cards
 ## Installation instructions
 
-1. In the /server directory, create a file called .env and paste the provided database connection string in the file like so: `ATLAS_URI=xxxxxxxxxxxxxxxx`
+1. In the /server directory, create a file called .env and paste the provided database connection string in the file like so: `ATLAS_URI=xxxxxxxxxxxxxxxx`. 
+    > For security reasons, the key is provided in the PowerPoint fil
 2. Run `npm ci` in both the /client and the /server directory.
 3. Run `npm start` simultaneously in /client and /server.
 4. The application is now usable on http://localhost:4200/
@@ -31,3 +32,22 @@ managed under the deck route.
 The updated design looks like this:
 
 ![upd_diagram.png](upd_diagram.png)
+
+## Test Data / Test Cases
+I have made an account with an example card deck for showcase purposes. The account name and password are
+also provided in the PowerPoint presentation.
+
+You can test these functional flows:
+
+Logged out:
+- Log in with username and password
+- Create a new account
+
+Logged in:
+- Close the browser and open it again, to see the persistent login state functionality
+- Review a deck by clicking on the 'book' icon
+- Edit a deck by clicking the 'pencil' icon
+- Remove a deck by clicking the 'bin' icon
+- Create a new deck
+- Go to the account settings and edit username or password
+- Log out
