@@ -1,10 +1,11 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { REFRESH_TOKEN_KEY, TOKEN_KEY } from '../state/account/account.effects';
 
 import { AccountDataModel } from './account.model';
 import { UserAccount } from './account.service';
+import { BYPASS_REFRESH } from './auth.interceptor';
 
 
 @Injectable({
@@ -35,8 +36,8 @@ export class AuthService {
      * Sends the token to the server to check if it is still valid.
      */
     isAuthenticated() {
-        return this.httpClient.get<boolean>(`${this.baseUrl}/isAuthenticated`, {});
-    }
+        return this.httpClient.get<boolean>(`${this.baseUrl}/isAuthenticated`,
+            { context: new HttpContext().set(BYPASS_REFRESH, true) }) }
 
     /**
      * Request a new access token from the server when it is expired. Will also return a new refreshToken

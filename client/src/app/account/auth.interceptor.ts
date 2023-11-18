@@ -1,8 +1,16 @@
-import { HttpErrorResponse, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import {
+    HttpContextToken,
+    HttpErrorResponse,
+    HttpHandler,
+    HttpInterceptor,
+    HttpRequest,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, exhaustMap, of, tap } from 'rxjs';
 import { TOKEN_KEY } from '../state/account/account.effects';
 import { AuthService } from './auth.service';
+
+export const BYPASS_REFRESH = new HttpContextToken(() => false)
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -18,6 +26,11 @@ export class AuthInterceptor implements HttpInterceptor {
      * and try the request again.
      */
     intercept(req: HttpRequest<any>, next: HttpHandler) {
+        if (req.context.get(BYPASS_REFRESH)) {
+            // For some requests, for example isAuthenticated, we don't want to try a token refresh,
+            // then we add BYPASS_REFRESH in the request context
+            return next.handle(this.addTokenToRequest(req));
+        }
         return next.handle(this.addTokenToRequest(req)).pipe(
             catchError(error => {
                 // If error is a 401 and the token is not already refreshing

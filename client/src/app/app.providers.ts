@@ -26,19 +26,25 @@ export function initAuthentication(authService: AuthService, store: Store, route
             return;
         }
         // Otherwise, the isAuthenticated request will try to validate the token:
-        authService.isAuthenticated().subscribe(isAuthenticated => {
-            // If it is valid, it will load the decks
-            if (isAuthenticated) {
-                store.dispatch(DecksActions.loadDecks());
-                store.dispatch(AccountActions.loadAccountData());
-                combineLatest([
-                    store.select(selectDeckState).pipe(filter(({ loaded }) => loaded)),
-                    store.select(selectAccount).pipe(filter(({ loaded }) => loaded)),
-                ])
-                    .subscribe(() => {
+        authService.isAuthenticated().subscribe({
+            next: isAuthenticated => {
+                // If it is valid, it will load the decks
+                if (isAuthenticated) {
+                    store.dispatch(DecksActions.loadDecks());
+                    store.dispatch(AccountActions.loadAccountData());
+                    combineLatest([
+                        store.select(selectDeckState).pipe(filter(({ loaded }) => loaded)),
+                        store.select(selectAccount).pipe(filter(({ loaded }) => loaded)),
+                    ]).subscribe(() => {
+                        router.navigateByUrl('/decks');
                         resolve(true);
                     });
-            } else {
+                } else {
+                    router.navigateByUrl('/');
+                    resolve(true);
+                }
+            },
+            error: () => {
                 router.navigateByUrl('/');
                 resolve(true);
             }
