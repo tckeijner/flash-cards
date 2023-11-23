@@ -25,7 +25,7 @@ export class AuthService {
      */
     login(user: UserAccount): Observable<AccountDataModel> {
         return this.httpClient.post<AccountDataModel>(
-            `${this.baseUrl}/login`, user, { responseType: `json` },
+            `${this.baseUrl}/login`, user, { responseType: `json`, context: new HttpContext().set(BYPASS_REFRESH, true) },
         ).pipe(tap(res => {
             localStorage.setItem(TOKEN_KEY, res.token);
             localStorage.setItem(REFRESH_TOKEN_KEY, res.refreshToken);
