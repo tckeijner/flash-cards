@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { combineLatest, filter } from 'rxjs';
+import { combineLatest, filter, first } from 'rxjs';
 
 import { AuthService } from './account/auth.service';
 import { AccountActions } from './state/account/account.actions';
@@ -35,8 +35,7 @@ export function initAuthentication(authService: AuthService, store: Store, route
                     combineLatest([
                         store.select(selectDeckState).pipe(filter(({ loaded }) => loaded)),
                         store.select(selectAccount).pipe(filter(({ loaded }) => loaded)),
-                    ]).subscribe(() => {
-                        router.navigateByUrl('/decks');
+                    ]).pipe(first()).subscribe(() => {
                         resolve(true);
                     });
                 } else {

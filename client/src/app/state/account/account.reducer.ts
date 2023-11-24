@@ -38,10 +38,11 @@ export const accountReducer = createReducer(
             error: null,
         });
     }),
-    on(AccountActions.loadAccountDataSuccess, (state, accountData) => {
+    on(AccountActions.loadAccountDataSuccess, (state, { userId, username }) => {
         return ({
             ...state,
-            ...accountData,
+            userId,
+            username,
             loading: false,
             loaded: true,
             error: null,
@@ -76,6 +77,7 @@ export const accountReducer = createReducer(
             username,
             userId,
             loading: false,
+            loaded: true,
             loggedIn: true,
         });
     }),
