@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { NgbToast } from '@ng-bootstrap/ng-bootstrap';
+import { NgbToast, NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { NavbarModule } from '../navbar/navbar.module';
 import { DecksComponent } from './decks.component';
 import { EditDeckComponent } from './edit-deck/edit-deck.component';
@@ -21,6 +21,7 @@ import { ReviewDeckComponent } from './review-deck/review-deck.component';
         RouterLink,
         NgbToast,
         NavbarModule,
+        NgbTooltip,
     ],
     exports: [
         DecksComponent,

@@ -18,13 +18,13 @@
                     <h5 class="card-title">{{ deck.name }}</h5>
                     <h6 class="card-subtitle mb-2 text-body-secondary">{{ deck.cards.length }} cards</h6>
                     <div class="d-flex justify-content-end">
-                        <button class="m-2 btn btn-outline-primary" (click)="onClickStudy(deck._id)">
+                        <button class="m-2 btn btn-outline-primary" placement="top" ngbTooltip="Review" (click)="onClickStudy(deck._id)">
                             <i class="col-1 bi bi-book"></i>
                         </button>
-                        <button class="m-2 btn btn-outline-primary" (click)="onClickEdit(deck._id)">
+                        <button class="m-2 btn btn-outline-primary" placement="top" ngbTooltip="Edit"  (click)="onClickEdit(deck._id)">
                             <i class="col-1 bi bi-pencil"></i>
                         </button>
-                        <button class="m-2 btn btn-outline-primary" (click)="onClickDelete(removeContent, deck._id)">
+                        <button class="m-2 btn btn-outline-primary" placement="top" ngbTooltip="Delete"  (click)="onClickDelete(removeContent, deck._id)">
                             <i class="col-1 bi bi-trash"></i>
                         </button>
                     </div>
