@@ -14,8 +14,10 @@
 
 ## Design
 
-The original design was as follows:
+### Final design in phase 3
+![final_diagram.png](docs_phase3/final_diagram.png)
 
+The original design was as follows:
 ![orig_diagram.png](orig_diagram.png)
 
 During development a few design changed seemed to be appropriate. 
@@ -29,7 +31,7 @@ Also, when using node.js and express the term 'Controller' is not very appropria
 choose to keep working with two separate router (user and decks), but to remove the card routes, since all cards are
 managed under the deck route.
 
-The updated design looks like this:
+The updated design in phase 2 looks like this:
 
 ![upd_diagram.png](upd_diagram.png)
 
