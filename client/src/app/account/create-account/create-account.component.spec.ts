@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { of } from 'rxjs';
 import { AccountService } from '../account.service';
 import { CreateAccountComponent } from './create-account.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('CreateAccountComponent', () => {
     let component: CreateAccountComponent;
@@ -14,16 +15,15 @@ describe('CreateAccountComponent', () => {
     beforeEach(() => {
         mockAccountService = jasmine.createSpyObj(['isUsernameAvailable'])
         TestBed.configureTestingModule({
-            declarations: [CreateAccountComponent],
-            imports: [
-                CommonModule,
-                HttpClientTestingModule,
-                ReactiveFormsModule,
-            ],
-            providers: [
-                { provide: AccountService, useValue: mockAccountService }
-            ]
-        });
+    declarations: [CreateAccountComponent],
+    imports: [CommonModule,
+        ReactiveFormsModule],
+    providers: [
+        { provide: AccountService, useValue: mockAccountService },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+});
 
         fixture = TestBed.createComponent(CreateAccountComponent);
         component = fixture.componentInstance;

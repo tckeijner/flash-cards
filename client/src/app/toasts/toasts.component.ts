@@ -7,12 +7,13 @@ import { ToastsService } from './toasts.service';
 @Component({
     selector: 'app-toasts',
     template: `
-        <ngb-toast class="m-2 position-fixed top-0 end-0"
-                   *ngFor="let toast of toasts; let i = index"
-                   [autohide]="true" [delay]="5000"
-                   (hidden)="toasts.splice(i, 1)">{{toast}}
-        </ngb-toast>
-    `,
+        @for (toast of toasts; track toast; let i = $index) {
+          <ngb-toast class="m-2 position-fixed top-0 end-0"
+            [autohide]="true" [delay]="5000"
+            (hidden)="toasts.splice(i, 1)">{{toast}}
+          </ngb-toast>
+        }
+        `,
 })
 export class ToastsComponent implements OnInit {
     toasts: string[] = [];

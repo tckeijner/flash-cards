@@ -1,10 +1,4 @@
-import {
-    HttpContextToken,
-    HttpErrorResponse,
-    HttpHandler,
-    HttpInterceptor,
-    HttpRequest,
-} from '@angular/common/http';
+import { HttpContextToken, HttpErrorResponse, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, exhaustMap, of, tap } from 'rxjs';
 import { TOKEN_KEY } from '../state/account/account.effects';

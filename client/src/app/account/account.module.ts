@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -12,27 +12,21 @@ import { ManageAccountComponent } from './manage-account/manage-account.componen
 import { WelcomeComponent } from './welcome/welcome.component';
 
 
-@NgModule({
-    declarations: [
+@NgModule({ declarations: [
         CreateAccountComponent,
         LoginComponent,
         WelcomeComponent,
         ManageAccountComponent,
     ],
-    imports: [
-        CommonModule,
-        HttpClientModule,
-        ReactiveFormsModule,
-        RouterLink,
-        NavbarModule,
-    ],
-    providers: [
-        AccountService,
-    ],
     exports: [
         CreateAccountComponent,
         LoginComponent,
-    ],
-})
+    ], imports: [CommonModule,
+        ReactiveFormsModule,
+        RouterLink,
+        NavbarModule], providers: [
+        AccountService,
+        provideHttpClient(withInterceptorsFromDi()),
+    ] })
 export class AccountModule {
 }
