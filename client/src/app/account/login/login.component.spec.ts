@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
 import { AccountService } from '../account.service';
 import { LoginComponent } from './login.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('LoginComponent', () => {
     let component: LoginComponent;
@@ -15,18 +16,17 @@ describe('LoginComponent', () => {
     beforeEach(() => {
         mockAccountService = jasmine.createSpyObj(['isUsernameAvailable']);
         TestBed.configureTestingModule({
-            declarations: [LoginComponent],
-            imports: [
-                CommonModule,
-                HttpClientTestingModule,
-                ReactiveFormsModule,
-                RouterLink,
-                StoreModule.forRoot(),
-            ],
-            providers: [
-                { provide: AccountService, useValue: mockAccountService },
-            ],
-        });
+    declarations: [LoginComponent],
+    imports: [CommonModule,
+        ReactiveFormsModule,
+        RouterLink,
+        StoreModule.forRoot()],
+    providers: [
+        { provide: AccountService, useValue: mockAccountService },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+});
 
         fixture = TestBed.createComponent(LoginComponent);
         component = fixture.componentInstance;
