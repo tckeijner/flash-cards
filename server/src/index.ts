@@ -11,7 +11,7 @@ import { userRouter } from './user/user.routes';
 setJwtSecret();
 dotenv.config();
 
-const { ATLAS_URI } = process.env;
+const { ATLAS_URI, CORS_ORIGIN } = process.env;
 
 if (!ATLAS_URI) {
     console.error('ATLAS_URI not found in .env');
@@ -21,7 +21,7 @@ if (!ATLAS_URI) {
 connectToDatabase(ATLAS_URI)
     .then(() => {
         const app = express();
-        app.use(cors({ credentials: true, origin: 'http://localhost:4200' }));
+        app.use(cors({ credentials: true, origin: CORS_ORIGIN }));
         app.use(cookieParser());
 
         app.use('/users', userRouter);
