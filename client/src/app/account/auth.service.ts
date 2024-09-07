@@ -6,13 +6,14 @@ import { REFRESH_TOKEN_KEY, TOKEN_KEY } from '../state/account/account.effects';
 import { AccountDataModel } from './account.model';
 import { UserAccount } from './account.service';
 import { BYPASS_REFRESH } from './auth.interceptor';
+import {environment} from "../../environments/environment";
 
 
 @Injectable({
     providedIn: 'root',
 })
 export class AuthService {
-    private baseUrl = 'http://localhost:5200/users';
+    private baseUrl = environment.apiBaseUrl;
 
     constructor(
         private httpClient: HttpClient,

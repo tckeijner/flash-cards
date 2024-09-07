@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { tap } from 'rxjs';
 import { REFRESH_TOKEN_KEY, TOKEN_KEY } from '../state/account/account.effects';
+import {environment} from "../../environments/environment";
 
 export interface UserAccount {
     username: string;
@@ -12,7 +13,7 @@ export interface UserAccount {
     providedIn: 'root',
 })
 export class AccountService {
-    private baseUrl = 'http://localhost:5200/users';
+    private baseUrl = environment.apiBaseUrl;
 
     constructor(private httpClient: HttpClient) {
     }
