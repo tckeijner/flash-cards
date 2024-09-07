@@ -13,7 +13,7 @@ export interface UserAccount {
     providedIn: 'root',
 })
 export class AccountService {
-    private baseUrl = environment.apiBaseUrl;
+    private baseUrl = environment.apiBaseUrl + '/users';
 
     constructor(private httpClient: HttpClient) {
     }

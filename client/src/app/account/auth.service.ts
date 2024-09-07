@@ -13,7 +13,7 @@ import {environment} from "../../environments/environment";
     providedIn: 'root',
 })
 export class AuthService {
-    private baseUrl = environment.apiBaseUrl;
+    private baseUrl = environment.apiBaseUrl + '/users';
 
     constructor(
         private httpClient: HttpClient,

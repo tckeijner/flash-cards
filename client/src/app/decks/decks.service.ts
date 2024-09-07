@@ -8,7 +8,7 @@ import { environment } from "../../environments/environment";
     providedIn: 'root',
 })
 export class DecksService {
-    private baseUrl = environment.apiBaseUrl;
+    private baseUrl = environment.apiBaseUrl + '/decks';
 
     constructor(private httpClient: HttpClient) {
     }
