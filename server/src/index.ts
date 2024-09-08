@@ -11,7 +11,7 @@ import { userRouter } from './user/user.routes';
 setJwtSecret();
 dotenv.config();
 
-const { ATLAS_URI, CORS_ORIGIN } = process.env;
+const { ATLAS_URI, CORS_ORIGIN, PORT } = process.env;
 
 if (!ATLAS_URI) {
     console.error('ATLAS_URI not found in .env');
@@ -27,8 +27,8 @@ connectToDatabase(ATLAS_URI)
         app.use('/users', userRouter);
         app.use('/decks', deckRouter);
 
-        app.listen(5200, () => {
-            console.log(`Server running at http://localhost:5200...`);
+        app.listen(PORT, () => {
+            console.log(`Server running at port: ` + PORT);
         });
 
     })

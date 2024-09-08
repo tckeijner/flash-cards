@@ -1,0 +1,16 @@
+{
+  "name": "flash-cards",
+  "version": "1.0.0",
+  "description": "Flash Cards",
+  "main": "index.js",
+  "engines": {
+    "node": "20.9.0"
+  },
+  "scripts": {
+    "heroku-postbuild": "cd server && npm install && npm run build",
+    "start": "cd server && npm start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

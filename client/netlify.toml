@@ -1,0 +1,11 @@
+[build]
+base = "client"
+command = "npm run build-prod"
+publish = "/dist/client/browser"
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
+force = false
+conditions = { path = ":splat" }
