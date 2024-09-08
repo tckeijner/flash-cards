@@ -28,7 +28,7 @@ connectToDatabase(ATLAS_URI)
         app.use('/decks', deckRouter);
 
         app.listen(PORT, () => {
-            console.log(`Server running at http://localhost:5200...`);
+            console.log(`Server running at port: ` + PORT);
         });
 
     })
