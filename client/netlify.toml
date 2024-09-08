@@ -7,4 +7,5 @@ publish = "/dist/client/browser"
 from = "/*"
 to = "/index.html"
 status = 200
-query = { path = ":splat" }
+force = false
+conditions = { path = ":splat" }
