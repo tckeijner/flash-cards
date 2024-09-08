@@ -2,3 +2,4 @@
 /server/node_modules/
 /.idea/*
 /server/dist/
+node_modules
