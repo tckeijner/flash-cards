@@ -1,4 +1,4 @@
-import { Router } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { Store } from '@ngrx/store';
 import { combineLatest, filter, first } from 'rxjs';
 
@@ -16,6 +16,7 @@ import { selectDeckState } from './state/decks/decks.selectors';
  * @param authService
  * @param store
  * @param router
+ * @param route
  */
 export function initAuthentication(authService: AuthService, store: Store, router: Router) {
     return () => new Promise(resolve => {
