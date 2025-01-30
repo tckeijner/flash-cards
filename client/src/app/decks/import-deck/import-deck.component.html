@@ -1,0 +1,24 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="add-deck-modal">Create new deck</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.close('CANCEL')"></button>
+</div>
+<div class="modal-body">
+    <form class="col needs-validation" [formGroup]="form">
+        <div class="mb-3">
+            <div class="input-group has-validation">
+                      <textarea class="form-control"
+                                [ngClass]="{ 'is-invalid': form.controls['importText'].dirty && form.controls['importText'].errors }"
+                                type="text" id="importText" formControlName="importText" placeholder="Paste text here">
+                      </textarea>
+                @if (form.controls['importText'].errors?.['invalidJson']; as jsonError) {
+                    <div class="invalid-feedback">
+                        {{ jsonError }}
+                    </div>
+                }
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="onClickSave()">Save</button>
+</div>

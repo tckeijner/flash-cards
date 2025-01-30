@@ -3,13 +3,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
-import { filter, first, Observable, tap } from 'rxjs';
-import { DecksActions } from '../state/decks/decks.actions';
-import { isDeckCreated, isDeckRemoved, selectDecks } from '../state/decks/decks.selectors';
+import { Observable, tap } from 'rxjs';
+import { selectDecks } from '../state/decks/decks.selectors';
 import { ToastsService } from '../toasts/toasts.service';
 import { Deck } from './deck.model';
 import { createIsDeckNameTakenValidator } from './decks.validators';
 import { ImportDeckComponent } from './import-deck/import-deck.component';
+import { CreateDeckComponent } from './create-deck/create-deck.component';
+import { DeleteDeckComponent } from './delete-deck/delete-deck.component';
 
 @Component({
     selector: 'app-decks',
@@ -18,7 +19,6 @@ import { ImportDeckComponent } from './import-deck/import-deck.component';
 })
 export class DecksComponent implements OnInit {
     form: FormGroup;
-    wasValidated = false;
     errorMessage: string | null;
     decks$: Observable<Deck[]>;
     noDecks = false;
@@ -46,46 +46,25 @@ export class DecksComponent implements OnInit {
         });
     }
 
-    onClickSave() {
-        // Set wasvalidatod to true is used for the bootstrap form functionality
-        this.wasValidated = true;
-
-        // Break off early when form is invalid
-        if (this.form.invalid) {
-            return;
-        }
-        const deck = { name: this.form.value.name };
-        // Trigger createDeck action
-        this.store.dispatch(DecksActions.createDeck({ deck }));
-        // Subscribe to results of the action
-        this.store.select(isDeckCreated).pipe(
-            filter((isCreated => isCreated)),
-            first(),
-        ).subscribe(() => {
-            this.modalService.dismissAll();
-            this.form.reset();
-            this.wasValidated = false;
-            this.toastsService.addToastMessage('Deck successfully created');
-        });
-    }
-
-    onClickDelete(content: any, id: string) {
-        // Opens the modal, and wait for the close result CONFIRM to continue
-        this.modalService.open(content, { ariaLabelledBy: 'delete-deck-modal' }).result.then(
+    onClickDelete(id: string) {
+        const modalRef = this.modalService.open(DeleteDeckComponent);
+        modalRef.componentInstance.id = id;
+        modalRef.result.then(
             result => {
-                // If modal is closed with CONFIRM it will start the action
-                if (result === 'CONFIRM') {
-                    // Trigger remove deck action
-                    this.store.dispatch(DecksActions.removeDeck({ id }));
-                    // Subscribe to result
-                    this.store.select(isDeckRemoved).pipe(
-                        filter(isRemoved => isRemoved),
-                        first(),
-                    ).subscribe(() => {
-                        this.toastsService.addToastMessage('Deck successfully removed');
-                    });
+                if (result === 'OK') {
+                    this.toastsService.addToastMessage('Deck successfully removed');
                 }
             },
+        );
+    }
+
+    onClickCreate() {
+        this.modalService.open(CreateDeckComponent).result.then(
+            result => {
+                if (result === 'OK') {
+                    this.toastsService.addToastMessage('Deck successfully created');
+                }
+            }
         );
     }
 
@@ -93,7 +72,7 @@ export class DecksComponent implements OnInit {
         this.modalService.open(ImportDeckComponent).result.then(
             result => {
                 if (result === 'OK') {
-                    this.toastsService.addToastMessage('Deck successfully removed');
+                    this.toastsService.addToastMessage('Deck successfully imported');
                 }
             }
         );

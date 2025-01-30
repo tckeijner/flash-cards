@@ -1,0 +1,28 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="add-deck-modal">Create new deck</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.close('CANCEL')"></button>
+</div>
+<div class="modal-body">
+    <form class="col needs-validation" [formGroup]="form">
+        <div class="mb-3">
+            <div class="input-group has-validation">
+                <input class="form-control"
+                       [ngClass]="{ 'is-invalid': form.controls['name'].touched && form.controls['name'].errors }"
+                       type="text" id="name" formControlName="name" placeholder="Deck name">
+                @if (form.controls['name'].errors?.['deckNameTaken']) {
+                    <div class="invalid-feedback">
+                        You already have a deck with this name
+                    </div>
+                }
+                @if (form.controls['name'].errors?.['maxlength']) {
+                    <div class="invalid-feedback">
+                        Maximum length for deck name is 40 characters.
+                    </div>
+                }
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="onClickSave()">Save</button>
+</div>

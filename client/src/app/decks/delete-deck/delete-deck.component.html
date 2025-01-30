@@ -1,0 +1,17 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="delete-deck-modal">Delete deck</h4>
+    <button type="button" class="btn btn-close" aria-label="Close"
+            (click)="activeModal.close('CANCEL')"></button>
+</div>
+<div class="modal-body">
+    Are you sure?
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" aria-label="Cancel" (click)="activeModal.close('CANCEL')">
+        Cancel
+    </button>
+    <button type="button" class="btn btn-primary" aria-label="Confirm" (click)="onClickSave()">
+        Confirm
+    </button>
+
+</div>
