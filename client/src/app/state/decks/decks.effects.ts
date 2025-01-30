@@ -33,7 +33,7 @@ export class DecksEffects {
     createDeck$ = createEffect(() =>
         this.actions$.pipe(
             ofType(DecksActions.createDeck),
-            switchMap(action => this.decksService.createDeck(action.name)
+            switchMap(action => this.decksService.createDeck(action.deck)
                 .pipe(
                     map((decks) => (DecksActions.createDeckSuccess({ decks }))),
                     catchError(({ error }: HttpErrorResponse) => {

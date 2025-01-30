@@ -7,7 +7,7 @@ export const DecksActions = createActionGroup({
         'Load Decks': emptyProps(),
         'Load Decks Success': props<{ decks: Deck[] }>(),
         'Load Decks Failed': props<{ error: string }>(),
-        'Create Deck': props<{ name: string }>(),
+        'Create Deck': props<{ deck: Partial<Deck> }>(),
         'Create Deck Success': props<{ decks: Deck[] }>(),
         'Create Deck Failed': props<{ error: string }>(),
         'Update Deck': props<{ deck: Deck }>(),

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Deck } from './deck.model';
-import { environment } from "../../environments/environment";
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root',
@@ -17,8 +17,8 @@ export class DecksService {
         return this.httpClient.get<Deck[]>(this.baseUrl, { responseType: 'json' });
     }
 
-    createDeck(name: string) {
-        return this.httpClient.post<Deck[]>(this.baseUrl, { name }, { responseType: 'json' });
+    createDeck(deck: Partial<Deck>) {
+        return this.httpClient.post<Deck[]>(this.baseUrl, { deck }, { responseType: 'json' });
     }
 
     deleteDeck(id: string) {

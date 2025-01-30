@@ -2,8 +2,9 @@
 
 <div class="container">
   <div class="row row-cols-1 mt-4">
-    <div class="col">
-      <button class="btn btn-primary " (click)="modalService.open(content)">+ Create new deck</button>
+      <div class="d-flex">
+          <button class="ms-2 btn btn-primary " (click)="modalService.open(content)">+ Create new deck</button>
+          <button class="ms-2 btn btn-primary " (click)="onClickImport()">+ Import from text</button>
     </div>
   </div>
 

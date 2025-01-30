@@ -9,6 +9,7 @@ import { isDeckCreated, isDeckRemoved, selectDecks } from '../state/decks/decks.
 import { ToastsService } from '../toasts/toasts.service';
 import { Deck } from './deck.model';
 import { createIsDeckNameTakenValidator } from './decks.validators';
+import { ImportDeckComponent } from './import-deck/import-deck.component';
 
 @Component({
     selector: 'app-decks',
@@ -53,9 +54,9 @@ export class DecksComponent implements OnInit {
         if (this.form.invalid) {
             return;
         }
-        const name = this.form.value.name;
+        const deck = { name: this.form.value.name };
         // Trigger createDeck action
-        this.store.dispatch(DecksActions.createDeck({ name }));
+        this.store.dispatch(DecksActions.createDeck({ deck }));
         // Subscribe to results of the action
         this.store.select(isDeckCreated).pipe(
             filter((isCreated => isCreated)),
@@ -85,6 +86,16 @@ export class DecksComponent implements OnInit {
                     });
                 }
             },
+        );
+    }
+
+    onClickImport() {
+        this.modalService.open(ImportDeckComponent).result.then(
+            result => {
+                if (result === 'OK') {
+                    this.toastsService.addToastMessage('Deck successfully removed');
+                }
+            }
         );
     }
 

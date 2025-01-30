@@ -23,7 +23,8 @@ deckRouter.get('/', verifyAccessTokenHandler, getUserFromDecodedTokenHandler, as
 // POST Add a new deck to a user
 deckRouter.post('/', verifyAccessTokenHandler, getUserFromDecodedTokenHandler, async (req, res) => {
     try {
-        const { name, user } = req?.body;
+        const { deck, user } = req?.body;
+        deck._id = new ObjectId();
         const { _id } = user;
 
         if (!user) {
@@ -31,8 +32,9 @@ deckRouter.post('/', verifyAccessTokenHandler, getUserFromDecodedTokenHandler, a
         } else {
             const result = await collections.users.updateOne(
                 { _id },
-                { $push: { decks: { _id: new ObjectId(), name, cards: [] } } },
+                { $push: { decks: deck } }
             );
+
             if (result.acknowledged) {
                 const updatedUser = await collections.users.findOne({ _id });
                 res.status(200).send(updatedUser.decks);
