@@ -25,6 +25,7 @@ deckRouter.post('/', verifyAccessTokenHandler, getUserFromDecodedTokenHandler, a
     try {
         const { deck, user } = req?.body;
         deck._id = new ObjectId();
+        deck.cards = deck.cards?.length ? deck.cards : [];
         const { _id } = user;
 
         if (!user) {
