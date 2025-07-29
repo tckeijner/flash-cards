@@ -1,40 +1,40 @@
-/* Importing Bootstrap SCSS file. */
-@import 'bootstrap/scss/bootstrap';
-@import 'bootstrap-icons';
+/* Using Bootstrap SCSS with @use */
+@use 'bootstrap/scss/bootstrap' as bs;
+@use 'bootstrap-icons' as bi;
 
 // Custom styles that override bootstrap, to make it look less 'bootstrappy'
 .card {
     border-radius: 2px;
-    box-shadow: 10px 10px $purple-200;
+    box-shadow: 10px 10px bs.$purple-200;
 }
 
 .btn, .btn:disabled,
 .btn-outline-primary:hover {
-    border-color: $indigo-300;
+    border-color: bs.$indigo-300;
     border-radius: 2px;
 }
 
 .btn-outline-primary,
 .btn-outline-primary:disabled {
-    color: $indigo-300;
+    color: bs.$indigo-300;
 }
 
 .btn-primary,
 .btn-primary:disabled,
 .btn-outline-primary:hover {
-    background-color: $indigo-300;
+    background-color: bs.$indigo-300;
 }
 
 .btn-primary:hover,
 .btn-outline-primary:not(:disabled):not(:disabled):active,
 .btn-primary:not(:disabled):not(:disabled):active {
-    background-color: $indigo-400;
-    border-color: $indigo-400;
+    background-color: bs.$indigo-400;
+    border-color: bs.$indigo-400;
 }
 
 .form-control {
     border-radius: 2px;
-    border: $indigo-700 solid ;
+    border: bs.$indigo-700 solid;
 }
 
 .modal-content {
@@ -46,5 +46,5 @@
 }
 
 body {
-    background-color: $purple-100;
+    background-color: bs.$purple-100;
 }
