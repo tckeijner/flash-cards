@@ -12,6 +12,7 @@ import { DecksActions } from '../../state/decks/decks.actions';
     selector: 'app-login',
     templateUrl: 'login.component.html',
     styles: [],
+    standalone: false
 })
 export class LoginComponent {
     form: FormGroup;

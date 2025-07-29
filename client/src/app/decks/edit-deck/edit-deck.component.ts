@@ -13,6 +13,7 @@ import { createIsDeckNameTakenValidator } from '../decks.validators';
 @Component({
     selector: 'app-edit-deck',
     templateUrl: 'edit-deck.component.html',
+    standalone: false
 })
 export class EditDeckComponent implements OnInit {
     deck?: Deck;

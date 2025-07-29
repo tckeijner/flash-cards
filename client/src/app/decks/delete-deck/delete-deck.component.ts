@@ -6,7 +6,6 @@ import { filter, first } from 'rxjs';
 
 @Component({
     selector: 'app-delete-deck',
-    standalone: true,
     imports: [],
     templateUrl: 'delete-deck.component.html'
 })

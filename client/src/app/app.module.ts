@@ -1,5 +1,5 @@
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { APP_INITIALIZER, isDevMode, NgModule } from '@angular/core';
+import { isDevMode, NgModule, inject, provideAppInitializer } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -42,12 +42,10 @@ import { ToastsComponent } from './toasts/toasts.component';
             multi: true,
         },
         // Checks for authenticationtoken on initialization:
-        {
-            provide: APP_INITIALIZER,
-            useFactory: initAuthentication,
-            deps: [AuthService, Store, Router],
-            multi: true,
-        },
+        provideAppInitializer(() => {
+        const initializerFn = (initAuthentication)(inject(AuthService), inject(Store), inject(Router));
+        return initializerFn();
+      }),
     ],
     bootstrap: [AppComponent],
 })

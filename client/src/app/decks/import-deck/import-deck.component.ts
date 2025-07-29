@@ -10,7 +10,6 @@ import { BaseModal } from '../../modal/base-modal';
 
 @Component({
     selector: 'app-import-deck',
-    standalone: true,
     imports: [
         ReactiveFormsModule,
         NgClass

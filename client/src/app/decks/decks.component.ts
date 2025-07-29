@@ -14,6 +14,7 @@ import { DeleteDeckComponent } from './delete-deck/delete-deck.component';
     selector: 'app-decks',
     templateUrl: 'decks.component.html',
     styleUrls: ['decks.component.scss'],
+    standalone: false
 })
 export class DecksComponent implements OnInit {
     errorMessage: string | null;

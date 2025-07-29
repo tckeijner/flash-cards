@@ -9,6 +9,7 @@ import { isLoggedOut } from '../state/account/account.selectors';
 @Component({
     selector: 'app-navbar',
     templateUrl: 'navbar.component.html',
+    standalone: false
 })
 export class NavbarComponent {
     @Input() title = 'Flash Cards';

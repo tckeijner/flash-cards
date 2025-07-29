@@ -9,6 +9,7 @@ import { Deck } from '../deck.model';
     selector: 'app-review-deck',
     templateUrl: 'review-deck.component.html',
     styleUrls: ['review-deck.component.scss'],
+    standalone: false
 })
 export class ReviewDeckComponent implements OnInit {
     deck?: Deck;

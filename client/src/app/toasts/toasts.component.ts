@@ -14,6 +14,7 @@ import { ToastsService } from './toasts.service';
           </ngb-toast>
         }
         `,
+    standalone: false
 })
 export class ToastsComponent implements OnInit {
     toasts: string[] = [];

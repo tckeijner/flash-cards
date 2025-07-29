@@ -13,6 +13,7 @@ import { confirmPasswordValidator, createIsUsernameTakenValidator } from '../acc
 @Component({
     selector: 'app-manage-account',
     templateUrl: 'manage-account.component.html',
+    standalone: false
 })
 export class ManageAccountComponent implements OnInit {
     account$: Observable<AccountState>;

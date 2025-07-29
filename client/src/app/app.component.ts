@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
         <app-toasts></app-toasts>
     `,
     styles: [],
+    standalone: false
 })
 export class AppComponent {
 }

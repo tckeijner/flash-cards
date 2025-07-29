@@ -9,7 +9,6 @@ import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'app-create-deck',
-    standalone: true,
     imports: [
         ReactiveFormsModule,
         NgClass

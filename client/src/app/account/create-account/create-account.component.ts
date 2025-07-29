@@ -7,6 +7,7 @@ import { confirmPasswordValidator, createIsUsernameTakenValidator } from '../acc
 @Component({
     selector: 'app-create-account',
     templateUrl: 'create-account.component.html',
+    standalone: false
 })
 export class CreateAccountComponent {
     form: FormGroup;
